@@ -1,5 +1,6 @@
 import { useStore } from '@/store'
 import { useLoader } from '@react-three/fiber'
+import { useRouter } from 'next/router'
 import { TextureLoader, Vector3 } from 'three'
 
 export function Ghost(props: { position: Vector3 }) {
@@ -10,7 +11,8 @@ export function Ghost(props: { position: Vector3 }) {
   const floorAmbientOcclusionMap = useLoader(TextureLoader, `/textures/${store.material}/ambientOcclusion.jpg`)
   const v3 = new Vector3().copy(props.position)
   v3.y += store.geometry.y / 2
-  return (
+  const router = useRouter()
+  return router.query.selected ? null : (
     <mesh name='floor' type='floor' position={v3}>
       <boxBufferGeometry args={store.geometry.toArray()} />
       <meshStandardMaterial

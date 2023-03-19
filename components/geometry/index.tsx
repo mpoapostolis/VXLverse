@@ -9,9 +9,10 @@ export function Geometry() {
     store.setGeometry(v)
   }
   return (
-    <div>
-      <div className='grid grid-cols-1  p-2'>
-        <div className='w-ful4 mb-4'>
+    <div className=''>
+      <label className='label-text'>Transform</label>
+      <div className='grid grid-cols-3 gap-4'>
+        <div className=''>
           <label className='label-text-alt'>
             Width <span className=''>{store.geometry.x.toFixed(2)}</span>
           </label>
@@ -24,11 +25,11 @@ export function Geometry() {
               const value = parseFloat(evt.target.value)
               changeGeometry('x', value)
             }}
-            type='range'
-            className=' range   range-xs w-full focus:outline-none'
+            type='number'
+            className='input-bordered input  input-sm w-full'
           />
         </div>
-        <div className='w-ful4 mb-4'>
+        <div className=''>
           <label className='label-text-alt'>
             height <span className=''>{store.geometry.y.toFixed(2)}</span>
           </label>
@@ -40,11 +41,11 @@ export function Geometry() {
               const value = parseFloat(evt.target.value)
               changeGeometry('y', value)
             }}
-            type='range'
-            className=' range  range-xs w-full focus:outline-none'
+            type='number'
+            className='input-bordered input  input-sm w-full'
           />
         </div>
-        <div className='w-ful4 mb-4'>
+        <div className=''>
           <label className='label-text-alt'>
             Depth <span className=''>{store.geometry.z.toFixed(2)}</span>
           </label>
@@ -56,8 +57,8 @@ export function Geometry() {
               const value = parseFloat(evt.target.value)
               changeGeometry('z', value)
             }}
-            type='range'
-            className=' range  range-xs w-full focus:outline-none'
+            type='number'
+            className='input-bordered input  input-sm w-full'
           />
         </div>
       </div>
