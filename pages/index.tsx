@@ -16,7 +16,7 @@ const EditRoom = () => {
   const store = useStore()
   const t = useThree()
   const router = useRouter()
-  const { mode } = router.query
+  const { mode = 'create' } = router.query
 
   return (
     <>
@@ -24,7 +24,11 @@ const EditRoom = () => {
       <gridHelper
         position={[-0, 0, -0]}
         onPointerDown={(e) => {
-          if (e.button !== 0 || !p2 || !store.material || mode !== 'create') return
+          e.stopPropagation()
+
+          // @ts-ignore
+          if (mode !== 'create') return (t.controls.enabled = true)
+          if (e.button !== 0 || !p2 || !store.material) return
           // @ts-ignore
           t.controls.enabled = false
           const v3 = new Vector3().copy(p2)
@@ -38,6 +42,8 @@ const EditRoom = () => {
           t.controls.enabled = true
         }}
         onPointerMove={(e) => {
+          if (mode !== 'create') return
+
           const x = Math.ceil(e.point.x)
           const y = Math.ceil(0)
           const z = Math.ceil(e.point.z)
@@ -53,7 +59,8 @@ const EditRoom = () => {
 export default function Home() {
   const store = useStore()
   const router = useRouter()
-  const { mode } = router.query
+  const { mode = 'create' } = router.query
+  console.log(store.tiles)
   return (
     <main className='grid h-screen w-screen grid-cols-[20vw_1fr]'>
       <div className='fixed top-0 left-96 z-50 m-4  border border-base-300 bg-black'>
