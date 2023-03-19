@@ -77,7 +77,10 @@ export default function Home() {
           <Room key={i} p1={room.p1} p2={room.p2} />
         ))} */}
         {store.floors.map((floor, i) => (
-          <Floor key={i} position={floor.position} args={floor.args} />
+          <group key={i}>
+            <pointLight position={floor.position} intensity={0.2} />
+            <Floor position={floor.position} args={floor.args} />
+          </group>
         ))}
         {store.walls.map((wall, i) => (
           <Wall key={i} position={wall.position} args={wall.args} />
@@ -88,12 +91,13 @@ export default function Home() {
 
         <EditRoom />
         <OrbitControls
+          maxDistance={1000}
           position={[0, -5, 0]}
           makeDefault
           mouseButtons={{
             RIGHT: MOUSE.ROTATE,
             LEFT: MOUSE.PAN,
-            MIDDLE: MOUSE.PAN,
+            MIDDLE: MOUSE.DOLLY,
           }}
         />
       </Canvas>
