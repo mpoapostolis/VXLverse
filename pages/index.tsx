@@ -2,7 +2,7 @@ import Editor from '@/components/editor'
 import { Floor } from '@/components/floor'
 import { Wall } from '@/components/wall'
 import { GRID_SIZE, createFloor, useStore } from '@/store'
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, Preload } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { useState } from 'react'
 import { MOUSE, Vector3 } from 'three'
@@ -101,6 +101,7 @@ export default function Home() {
           }}
         />
       </Canvas>
+      <Preload all />
     </main>
   )
 }
