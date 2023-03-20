@@ -2,8 +2,9 @@ import { BoxGeometryProps } from '@react-three/fiber'
 import { Vector3 } from 'three'
 import { create } from 'zustand'
 
+export const PLANE_GEOMETRY = new Vector3(5, 1, 5)
+export const CUBE_GEOMETRY = new Vector3(5, 5, 5)
 export const GRID_SIZE = 80
-const WALL_HEIGHT = 40
 
 type Tile = {
   position: Vector3

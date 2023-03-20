@@ -1,15 +1,13 @@
 import Editor from '@/components/editor'
 import { Ghost } from '@/components/ghost'
+import Menu from '@/components/menu'
 import { Tile } from '@/components/tiles'
 import { GRID_SIZE, useStore } from '@/store'
 import { OrbitControls, Preload } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
-import clsx from 'clsx'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useState } from 'react'
-import { MOUSE, Vector3 } from 'three'
+import { useRef, useState } from 'react'
+import { Group, MOUSE, Vector3 } from 'three'
 
 const EditRoom = () => {
   const [p2, setP2] = useState<Vector3>()
@@ -34,6 +32,11 @@ const EditRoom = () => {
           const v3 = new Vector3().copy(p2)
           v3.y += store.geometry.y / 2
           store.addTile(v3)
+          router.push({
+            query: {
+              mode: undefined,
+            },
+          })
           setP2(undefined)
         }}
         onPointerUp={(e) => {
@@ -59,39 +62,20 @@ const EditRoom = () => {
 export default function Home() {
   const store = useStore()
   const router = useRouter()
-  const { mode = 'create' } = router.query
-  console.log(store.tiles)
+
+  const ref = useRef<Group>(null)
   return (
-    <main className='grid h-screen w-screen grid-cols-[20vw_1fr]'>
-      <div className='fixed top-0 left-96 z-50 m-4  border border-base-300 bg-black'>
-        <div className='grid grid-cols-2 '>
-          <Link
-            href='?mode=create'
-            className={clsx(' grid w-full place-items-center ', {
-              'bg-white p-2 underline  ': mode === 'create',
-            })}>
-            <Image src='/icons/create.png' alt='move' width={26} height={26} />
-          </Link>
-
-          <Link
-            href='?mode=edit'
-            className={clsx(' grid w-full place-items-center ', {
-              'bg-white p-2 underline  ': mode === 'edit',
-            })}>
-            <Image src='/icons/edit.png' alt='move' width={26} height={26} />
-          </Link>
-        </div>
-      </div>
-      <Editor />
-
+    <main className='grid h-screen w-screen grid-cols-[15vw_1fr_15vw]'>
+      <Menu />
       <Canvas>
         <color attach='background' args={['black']} />
         <directionalLight position={[0, 40, 2]} />
         <ambientLight intensity={0.5} />
-
-        {store.tiles.map((tile, i) => (
-          <Tile idx={i} key={i} {...tile} />
-        ))}
+        <group ref={ref}>
+          {store.tiles.map((tile, i) => (
+            <Tile idx={i} key={i} {...tile} />
+          ))}
+        </group>
 
         <EditRoom />
         <OrbitControls
@@ -106,6 +90,8 @@ export default function Home() {
         />
         <Preload all />
       </Canvas>
+      <Editor />
+
       {/* <Stats className='fixed right-0' /> */}
     </main>
   )

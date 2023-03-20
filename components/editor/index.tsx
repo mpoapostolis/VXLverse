@@ -1,16 +1,12 @@
 import { useStore } from '@/store'
 import clsx from 'clsx'
-import { Geometry } from '../geometry'
 
 export default function Editor() {
   const store = useStore()
   const materials = ['marble', 'woodPanel', 'wall']
   return (
-    <div className=' h-screen w-full  border-r-2 border-base-300 bg-base-100 p-4'>
-      <section>
-        <Geometry />
-      </section>
-
+    <div className=' h-screen w-full  border-l-2 border-base-300 bg-base-100 p-4'>
+      <label htmlFor=''>Inspector</label>
       <div className='divider'></div>
       <section>
         <label className='label-text text-lg'>Material</label>
