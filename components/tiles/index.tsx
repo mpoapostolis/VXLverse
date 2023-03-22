@@ -1,43 +1,45 @@
-import { useStore } from '@/store'
-import { PivotControls } from '@react-three/drei'
-import { BoxGeometryProps, useLoader } from '@react-three/fiber'
+import { Tile, useStore } from '@/store'
+import { Box } from '@react-three/drei'
+import { useLoader } from '@react-three/fiber'
 import { useRouter } from 'next/router'
-import { TextureLoader, Vector3 } from 'three'
+import { TextureLoader } from 'three'
 
-export function Tile(props: { idx: number; material: string; position: Vector3; args: BoxGeometryProps['args'] }) {
+export function Tile(props: Tile) {
   const floorBaseColorMap = useLoader(TextureLoader, `/textures/${props.material}/baseColor.jpg`)
   const floorRoughnessMap = useLoader(TextureLoader, `/textures/${props.material}/roughness.jpg`)
   const floorNormalMap = useLoader(TextureLoader, `/textures/${props.material}/normal.jpg`)
   const floorAmbientOcclusionMap = useLoader(TextureLoader, `/textures/${props.material}/ambientOcclusion.jpg`)
   const router = useRouter()
-  const { selected } = router.query
   const store = useStore()
+  // rotation deg to radians
+  console.log(props.args)
+  const rot = props.rotation
+  if (rot) rot.x = (rot.x * Math.PI) / 180
+  if (rot) rot.y = (rot.y * Math.PI) / 180
+  if (rot) rot.z = (rot.z * Math.PI) / 180
   return (
-    <PivotControls scale={5} visible={props.idx.toString() === selected} autoTransform anchor={[0, 0, 0]}>
-      <mesh
-        position={props.position}
-        onPointerDown={(e) => {
-          if (e.button !== 0) return
-          e.stopPropagation()
-          const v3 = new Vector3().copy(props.position)
-          store.setGeometry(v3)
-          store.setMaterial(props.material)
-          router.replace({
-            query: {
-              ...router.query,
-              mode: undefined,
-              selected: props.idx,
-            },
-          })
-        }}>
-        <boxBufferGeometry args={props.args} />
-        <meshStandardMaterial
-          map={floorBaseColorMap}
-          normalMap={floorNormalMap}
-          roughnessMap={floorRoughnessMap}
-          aoMap={floorAmbientOcclusionMap}
-        />
-      </mesh>
-    </PivotControls>
+    <Box
+      position={props.position}
+      // degress to radians
+      rotation={rot}
+      args={props.scale?.toArray()}
+      onClick={(e) => {
+        if (e.button !== 0) return
+        e.stopPropagation()
+        store.setMode('edit')
+        router.push({
+          query: {
+            ...router.query,
+            selected: props.id,
+          },
+        })
+      }}>
+      <meshStandardMaterial
+        map={floorBaseColorMap}
+        normalMap={floorNormalMap}
+        roughnessMap={floorRoughnessMap}
+        aoMap={floorAmbientOcclusionMap}
+      />
+    </Box>
   )
 }

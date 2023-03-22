@@ -1,5 +1,4 @@
-import { PLANE_GEOMETRY, useStore } from '@/store'
-import Link from 'next/link'
+import { defaultTile, useStore } from '@/store'
 
 export default function Menu() {
   const store = useStore()
@@ -7,18 +6,14 @@ export default function Menu() {
     <div className=' flex h-screen w-full flex-col  border-r-2 border-base-300 bg-base-100 p-4'>
       <label htmlFor=''>Menu</label>
       <div className='divider'></div>
-      <Link
+      <button
         className='btn mt-auto'
         onClick={() => {
-          store.setGeometry(PLANE_GEOMETRY)
-        }}
-        href={{
-          query: {
-            mode: 'create',
-          },
+          store.setMode('add')
+          store.setGhostTile(defaultTile)
         }}>
         Add new
-      </Link>
+      </button>
     </div>
   )
 }

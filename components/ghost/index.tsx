@@ -1,23 +1,21 @@
-import { useStore } from '@/store'
+import { Tile, useStore } from '@/store'
 import { useLoader } from '@react-three/fiber'
-import { useRouter } from 'next/router'
-import { TextureLoader, Vector3 } from 'three'
+import { TextureLoader } from 'three'
 
-export function Ghost(props: { position: Vector3 }) {
+export function Ghost() {
   const store = useStore()
-  const floorBaseColorMap = useLoader(TextureLoader, `/textures/${store.material}/baseColor.jpg`)
-  const floorRoughnessMap = useLoader(TextureLoader, `/textures/${store.material}/roughness.jpg`)
-  const floorNormalMap = useLoader(TextureLoader, `/textures/${store.material}/normal.jpg`)
-  const floorAmbientOcclusionMap = useLoader(TextureLoader, `/textures/${store.material}/ambientOcclusion.jpg`)
-  const v3 = new Vector3().copy(props.position)
-  v3.y += store.geometry.y / 2
-  const router = useRouter()
-  return router.query.selected ? null : (
-    <mesh name='floor' type='floor' position={v3}>
-      <boxBufferGeometry args={store.geometry.toArray()} />
+  const ghostTile = store.ghostTile as Tile
+  const floorBaseColorMap = useLoader(TextureLoader, `/textures/${ghostTile?.material}/baseColor.jpg`)
+  const floorRoughnessMap = useLoader(TextureLoader, `/textures/${ghostTile?.material}/roughness.jpg`)
+  const floorNormalMap = useLoader(TextureLoader, `/textures/${ghostTile?.material}/normal.jpg`)
+  const floorAmbientOcclusionMap = useLoader(TextureLoader, `/textures/${ghostTile?.material}/ambientOcclusion.jpg`)
+  return (
+    <mesh name='floor' type='floor' position={ghostTile.position}>
+      <boxBufferGeometry args={ghostTile.args} />
       <meshStandardMaterial
         opacity={0.5}
         transparent
+        // color={0x00ff00}
         map={floorBaseColorMap}
         normalMap={floorNormalMap}
         roughnessMap={floorRoughnessMap}
