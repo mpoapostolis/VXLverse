@@ -50,9 +50,8 @@ export default function Home() {
     <main className={clsx('grid h-screen w-screen grid-cols-[15vw_1fr_15vw]')}>
       <Menu />
       <Canvas>
-        <color attach='background' args={['black']} />
         <directionalLight position={[0, 40, 2]} />
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.5} position={[0, 5, 0]} />
         <group ref={ref}>
           <Selection>
             <EffectComposer multisampling={8} autoClear={false}>

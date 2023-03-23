@@ -1,8 +1,8 @@
 import { Tile, useStore } from '@/store'
-import { Box } from '@react-three/drei'
+import { Box, TransformControls } from '@react-three/drei'
 import { useLoader, useThree } from '@react-three/fiber'
-import { Select } from '@react-three/postprocessing'
-import { TextureLoader } from 'three'
+import { useState } from 'react'
+import { TextureLoader, Vector3 } from 'three'
 
 export function Tile(props: Tile) {
   const floorBaseColorMap = useLoader(TextureLoader, `/textures/${props.material}/baseColor.jpg`)
@@ -17,12 +17,32 @@ export function Tile(props: Tile) {
   if (rot) rot.z = (rot.z * Math.PI) / 180
 
   const t = useThree()
+  const [x, setX] = useState()
 
+  const update = (key: string, value: any) => {
+    const tiles = [...store.tiles]
+    const idx = tiles.findIndex((tile) => tile.id === props.id)
+    tiles[idx] = {
+      ...tiles[idx],
+      [key]: value,
+    }
+    store.setTiles(tiles)
+  }
+  console.log(x)
   return (
-    <Select enabled={isSelected}>
+    // <Select enabled={isSelected}>
+    <TransformControls
+      position={props.position}
+      enabled={isSelected}
+      showX={isSelected}
+      showY={isSelected}
+      showZ={isSelected}
+      onMouseUp={(e) => {
+        const [x, y, z] = e?.target?.object?.position?.toArray() ?? [0, 0, 0]
+        update('position', new Vector3(x, y, z))
+      }}>
       <Box
         name={props.id}
-        position={props.position}
         // degress to radians
         rotation={rot}
         scale={props.scale}
@@ -39,6 +59,7 @@ export function Tile(props: Tile) {
           aoMap={floorAmbientOcclusionMap}
         />
       </Box>
-    </Select>
+    </TransformControls>
+    // </Select>
   )
 }
