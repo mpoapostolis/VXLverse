@@ -12,6 +12,7 @@ import { Group, MOUSE, Vector3 } from 'three'
 
 const EditRoom = () => {
   const store = useStore()
+
   return (
     <>
       {store.ghostTile && <Ghost />}
@@ -65,6 +66,7 @@ export default function Home() {
         </group>
 
         <EditRoom />
+
         <OrbitControls
           maxDistance={1000}
           position={[0, -5, 0]}

@@ -23,6 +23,7 @@ export type Tile = {
   scale?: Vector3
   material: string
   id?: string
+  name?: string
 }
 
 export const defaultTile: Tile = {
@@ -33,7 +34,6 @@ export const defaultTile: Tile = {
 
 export type Mode = 'default' | 'add' | 'edit' | 'delete'
 export type Store = {
-  walls: Tile[]
   tiles: Tile[]
   mode: Mode
   setMode: (mode: Mode) => void
@@ -44,7 +44,7 @@ export type Store = {
   killGhostTile: () => void
   createTile: () => void
   selectedTile?: string
-  setSelectedTile: (id: string) => void
+  setSelectedTile: (id?: string) => void
 }
 
 function updateTile(tile: Partial<Tile>) {
@@ -55,7 +55,6 @@ function updateTile(tile: Partial<Tile>) {
 }
 
 export const useStore = create<Store>((set) => ({
-  walls: [],
   tiles: [],
   mode: 'default',
   setMode: (mode) => set({ mode }),

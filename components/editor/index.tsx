@@ -27,6 +27,21 @@ export default function Editor() {
       <div className='divider'></div>
       {obj && (
         <section>
+          <label className='label-text'>Name</label>
+
+          <input
+            onChange={(e) => {
+              const name = e.currentTarget.value
+              update('name', name)
+            }}
+            value={obj?.name}
+            className='input-bordered input  input-sm w-full'
+          />
+        </section>
+      )}
+      <div className='divider'></div>
+      {obj && (
+        <section>
           <label className='label-text text-lg'>Position</label>
           <div className='grid grid-cols-3 gap-1'>
             {arr.map((axis, idx) => (

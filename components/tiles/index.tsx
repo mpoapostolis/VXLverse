@@ -1,6 +1,6 @@
 import { Tile, useStore } from '@/store'
 import { Box } from '@react-three/drei'
-import { useLoader } from '@react-three/fiber'
+import { useLoader, useThree } from '@react-three/fiber'
 import { Select } from '@react-three/postprocessing'
 import { TextureLoader } from 'three'
 
@@ -15,9 +15,13 @@ export function Tile(props: Tile) {
   if (rot) rot.x = (rot.x * Math.PI) / 180
   if (rot) rot.y = (rot.y * Math.PI) / 180
   if (rot) rot.z = (rot.z * Math.PI) / 180
+
+  const t = useThree()
+
   return (
     <Select enabled={isSelected}>
       <Box
+        name={props.id}
         position={props.position}
         // degress to radians
         rotation={rot}
