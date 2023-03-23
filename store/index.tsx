@@ -42,16 +42,9 @@ export type Store = {
   ghostTile?: Partial<Tile>
   updateTile: (tile: Partial<Tile>) => void
   killGhostTile: () => void
-  createTile: () => void
+  createTile: (tile: Tile) => void
   selectedTile?: string
   setSelectedTile: (id?: string) => void
-}
-
-function updateTile(tile: Partial<Tile>) {
-  return {
-    ...defaultTile,
-    ...tile,
-  }
 }
 
 export const useStore = create<Store>((set) => ({
@@ -68,15 +61,18 @@ export const useStore = create<Store>((set) => ({
     set({
       ghostTile: undefined,
     }),
-  createTile: () =>
+  createTile: (ghostTile) =>
     set({
       mode: 'add',
-      ghostTile: defaultTile,
+      ghostTile,
     }),
 
   updateTile: (ghostTile) =>
     set((s) => ({
-      ghostTile: updateTile(ghostTile),
+      ghostTile: {
+        ...s.ghostTile,
+        ...ghostTile,
+      },
     })),
 
   addTile: (tile: Tile) => {

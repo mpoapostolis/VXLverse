@@ -12,7 +12,6 @@ import { Group, MOUSE, Vector3 } from 'three'
 
 const EditRoom = () => {
   const store = useStore()
-
   return (
     <>
       {store.ghostTile && <Ghost />}
@@ -29,9 +28,9 @@ const EditRoom = () => {
         onPointerMove={(e) => {
           e.stopPropagation()
 
-          if (store.mode !== 'add') return
+          if (store.mode !== 'add' || !store?.ghostTile?.position) return
           const x = Math.ceil(e.point.x)
-          const y = 0.25
+          const y = store.ghostTile.position.y
           const z = Math.ceil(e.point.z)
           const v3 = new Vector3(x, y, z)
           store.updateTile({
@@ -57,7 +56,7 @@ export default function Home() {
         <group ref={ref}>
           <Selection>
             <EffectComposer multisampling={8} autoClear={false}>
-              <Outline visibleEdgeColor={0xffff00} blur edgeStrength={1} />
+              <Outline visibleEdgeColor={0xffff00} blur edgeStrength={5} />
             </EffectComposer>
             {store.tiles.map((tile, i) => (
               <Tile key={tile.id} {...tile} />
