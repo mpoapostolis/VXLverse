@@ -1,4 +1,4 @@
-import { defaultTile, useStore } from '@/store'
+import { useStore } from '@/store'
 
 export default function Menu() {
   const store = useStore()
@@ -10,7 +10,7 @@ export default function Menu() {
         className='btn mt-auto'
         onClick={() => {
           store.setMode('add')
-          store.setGhostTile(defaultTile)
+          store.createTile()
         }}>
         Add new
       </button>

@@ -1,4 +1,5 @@
 import { Tile, useStore } from '@/store'
+import { Box } from '@react-three/drei'
 import { useLoader } from '@react-three/fiber'
 import { TextureLoader } from 'three'
 
@@ -10,8 +11,7 @@ export function Ghost() {
   const floorNormalMap = useLoader(TextureLoader, `/textures/${ghostTile?.material}/normal.jpg`)
   const floorAmbientOcclusionMap = useLoader(TextureLoader, `/textures/${ghostTile?.material}/ambientOcclusion.jpg`)
   return (
-    <mesh name='floor' type='floor' position={ghostTile.position}>
-      <boxBufferGeometry args={ghostTile.args} />
+    <Box scale={ghostTile.scale} name='floor' type='floor' position={ghostTile.position}>
       <meshStandardMaterial
         opacity={0.5}
         transparent
@@ -21,6 +21,6 @@ export function Ghost() {
         roughnessMap={floorRoughnessMap}
         aoMap={floorAmbientOcclusionMap}
       />
-    </mesh>
+    </Box>
   )
 }

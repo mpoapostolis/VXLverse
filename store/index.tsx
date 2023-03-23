@@ -1,4 +1,3 @@
-import { BoxGeometryProps } from '@react-three/fiber'
 import { Euler, Vector3 } from 'three'
 import { create } from 'zustand'
 
@@ -20,18 +19,18 @@ export const uuid = () => {
 
 export type Tile = {
   position: Vector3
-  args: BoxGeometryProps['args']
   rotation?: Euler
   scale?: Vector3
   material: string
-  id: string
+  id?: string
 }
 
-export const defaultTile = {
+export const defaultTile: Tile = {
   position: new Vector3(0, 0, 0),
-  args: PLANE_GEOMETRY.toArray(),
+  scale: PLANE_GEOMETRY,
   material: 'marble',
 }
+
 export type Mode = 'default' | 'add' | 'edit' | 'delete'
 export type Store = {
   walls: Tile[]
@@ -41,7 +40,18 @@ export type Store = {
   addTile: (tile: Tile) => void
   setTiles: (tiles: Tile[]) => void
   ghostTile?: Partial<Tile>
-  setGhostTile: (tile?: Partial<Tile>) => void
+  updateTile: (tile: Partial<Tile>) => void
+  killGhostTile: () => void
+  createTile: () => void
+  selectedTile?: string
+  setSelectedTile: (id: string) => void
+}
+
+function updateTile(tile: Partial<Tile>) {
+  return {
+    ...defaultTile,
+    ...tile,
+  }
 }
 
 export const useStore = create<Store>((set) => ({
@@ -50,28 +60,34 @@ export const useStore = create<Store>((set) => ({
   mode: 'default',
   setMode: (mode) => set({ mode }),
   setTiles: (tiles) => set({ tiles }),
-  setGhostTile: (ghostTile) => {
-    if (!ghostTile) {
-      set(() => {
-        return {
-          ghostTile: undefined,
-        }
-      })
-    } else
-      set((s) => {
-        return {
-          ghostTile: {
-            ...s.ghostTile,
-            ...ghostTile,
-          },
-        }
-      })
-  },
+  setSelectedTile: (id) =>
+    set({
+      mode: 'edit',
+      selectedTile: id,
+    }),
+  killGhostTile: () =>
+    set({
+      ghostTile: undefined,
+    }),
+  createTile: () =>
+    set({
+      mode: 'add',
+      ghostTile: defaultTile,
+    }),
+
+  updateTile: (ghostTile) =>
+    set((s) => ({
+      ghostTile: updateTile(ghostTile),
+    })),
 
   addTile: (tile: Tile) => {
     set((state) => {
+      const id = uuid()
       return {
-        tiles: [...state.tiles, { ...tile, id: uuid() }],
+        tiles: [...state.tiles, { ...tile, id }],
+        mode: 'edit',
+        ghostTile: undefined,
+        selectedTile: id,
       }
     })
   },

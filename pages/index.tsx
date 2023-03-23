@@ -5,6 +5,7 @@ import { Tile } from '@/components/tiles'
 import { GRID_SIZE, Tile as TileType, useStore } from '@/store'
 import { OrbitControls, Preload } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
+import { EffectComposer, Outline, Selection } from '@react-three/postprocessing'
 import clsx from 'clsx'
 import { useRef } from 'react'
 import { Group, MOUSE, Vector3 } from 'three'
@@ -22,8 +23,6 @@ const EditRoom = () => {
 
           if (store.mode === 'add') {
             store.addTile(store.ghostTile as TileType)
-            store.setGhostTile(undefined)
-            store.setMode('edit')
           }
         }}
         onPointerMove={(e) => {
@@ -34,7 +33,7 @@ const EditRoom = () => {
           const y = 0.25
           const z = Math.ceil(e.point.z)
           const v3 = new Vector3(x, y, z)
-          store.setGhostTile({
+          store.updateTile({
             position: v3,
           })
         }}
@@ -55,9 +54,14 @@ export default function Home() {
         <directionalLight position={[0, 40, 2]} />
         <ambientLight intensity={0.5} />
         <group ref={ref}>
-          {store.tiles.map((tile, i) => (
-            <Tile key={tile.id} {...tile} />
-          ))}
+          <Selection>
+            <EffectComposer multisampling={8} autoClear={false}>
+              <Outline visibleEdgeColor={0xffff00} blur edgeStrength={1} />
+            </EffectComposer>
+            {store.tiles.map((tile, i) => (
+              <Tile key={tile.id} {...tile} />
+            ))}
+          </Selection>
         </group>
 
         <EditRoom />

@@ -8,7 +8,7 @@ export default function Editor() {
   const materials = ['marble', 'woodPanel', 'wall']
   const arr = ['x', 'y', 'z']
   const router = useRouter()
-  const selected = router.query.selected as string
+  const selected = store.selectedTile
   const [obj] = store.tiles.filter((tile) => tile.id === selected)
 
   const update = (key: string, value: any) => {
@@ -86,7 +86,7 @@ export default function Editor() {
                     v3[idx] = Number(e.target.value)
                     update('scale', new Vector3(...v3))
                   }}
-                  value={obj.scale?.toArray()[idx]}
+                  value={obj.scale?.toArray()?.at(idx)}
                   className='input-bordered input input-xs w-full'
                   type='number'
                 />
