@@ -61,11 +61,20 @@ export default function Menu() {
   const store = useStore()
   const selectedTile = store.tiles.find((tile) => tile.id === store.selectedTile)
   return (
-    <div className='flex h-6  w-full  items-center gap-x-5 border-b border-base-300  bg-base-200 p-4 text-sm text-base-content'>
+    <div className='flex h-6  w-full  items-center border-b border-base-300  bg-base-200 p-4 text-sm text-base-content'>
       <DropDown label='File' items={['New', '.', 'Import', '.', 'Publish']} onChange={console.log} />
-      <DropDown label='File' items={geometries} onChange={console.log} />
+      <DropDown
+        label='Add'
+        items={geometries}
+        onChange={(type) => {
+          console.log(type)
+          store.addNode({
+            type,
+          })
+        }}
+      />
 
-      <button className='relative'>Play</button>
+      <button className='tab'>Play</button>
     </div>
   )
 }

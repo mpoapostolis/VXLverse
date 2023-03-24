@@ -1,4 +1,5 @@
-import { Euler, Vector3 } from 'three'
+import { Geometry } from '@/components/menu'
+import { Euler, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
 
 export const PLANE_GEOMETRY = new Vector3(5, 0.5, 5)
@@ -32,9 +33,15 @@ export const defaultTile: Tile = {
   material: 'marble',
 }
 
+type Node = Partial<Mesh> & {
+  type: Geometry
+}
+
 export type Mode = 'default' | 'add' | 'edit' | 'delete'
 export type Store = {
   tiles: Tile[]
+  nodes: Node[]
+  addNode: (node: Partial<Node>) => void
   mode: Mode
   setMode: (mode: Mode) => void
   addTile: (tile: Tile) => void
@@ -50,6 +57,12 @@ export type Store = {
 export const useStore = create<Store>((set) => ({
   tiles: [],
   mode: 'default',
+  nodes: [],
+  addNode(node) {
+    set((state) => ({
+      nodes: [...state.nodes, node],
+    }))
+  },
   setMode: (mode) => set({ mode }),
   setTiles: (tiles) => set({ tiles }),
   setSelectedTile: (id) =>

@@ -1,42 +1,72 @@
-import { Box } from '@react-three/drei'
-import { MeshProps } from '@react-three/fiber'
+import {
+  BoxGeometryProps,
+  CapsuleGeometryProps,
+  CircleGeometryProps,
+  CylinderGeometryProps,
+  DodecahedronGeometryProps,
+  IcosahedronGeometryProps,
+  MeshProps,
+  Object3DNode,
+  OctahedronGeometryProps,
+  PlaneGeometryProps,
+  RingGeometryProps,
+  SphereGeometryProps,
+  TetrahedronGeometryProps,
+  TorusGeometryProps,
+  TorusKnotGeometryProps,
+} from '@react-three/fiber'
 import { Geometry } from '../menu'
 
-function Geom(props: MeshProps & { item: Geometry }) {
-  switch (props.item) {
-    case 'Box':
-      return <boxGeometry args={[1, 1, 1]} />
-    case 'Capsule':
-      return <capsuleGeometry args={[1, 1, 1]} />
-    case 'Circle':
-      return <circleGeometry args={[1, 1, 1]} />
-    case 'Cylinder':
-      return <cylinderGeometry args={[1, 1, 1]} />
-    case 'Dodecahedron':
-      return <dodecahedronGeometry args={[1, 1]} />
-    case 'Icosahedron':
-      return <icosahedronGeometry args={[1, 1]} />
-    case 'Octahedron':
-      return <octahedronGeometry args={[1, 1]} />
-    case 'Plane':
-      return <planeGeometry args={[1, 1, 1]} />
-    case 'Ring':
-      return <ringGeometry args={[1, 1, 1]} />
-    case 'Sphere':
-      return <sphereGeometry args={[1, 1, 1]} />
-    case 'Tetrahedron':
-      return <tetrahedronGeometry args={[1, 1]} />
-    case 'Torus':
-      return <torusGeometry args={[1, 1, 1]} />
-    case 'TorusKnot':
-      return <torusKnotGeometry args={[1, 1, 1]} />
-    default:
-      break
-  }
-  return null
-}
+type x = Object3DNode<MeshProps, BoxGeometryProps>
 
-export function MeshGeometry(props: MeshProps & { item: Geometry }) {
-  const X = Box
-  return <X />
+export function MeshGeometry(
+  props:
+    | (BoxGeometryProps & { type: Geometry })
+    | (CapsuleGeometryProps & { type: Geometry })
+    | (CircleGeometryProps & { type: Geometry })
+    | (CylinderGeometryProps & { type: Geometry })
+    | (DodecahedronGeometryProps & { type: Geometry })
+    | (IcosahedronGeometryProps & { type: Geometry })
+    | (OctahedronGeometryProps & { type: Geometry })
+    | (PlaneGeometryProps & { type: Geometry })
+    | (RingGeometryProps & { type: Geometry })
+    | (SphereGeometryProps & { type: Geometry })
+    | (TetrahedronGeometryProps & { type: Geometry })
+    | (TorusGeometryProps & { type: Geometry })
+    | (TorusKnotGeometryProps & { type: Geometry }),
+) {
+  const { type, ...rest } = props
+
+  switch (props.type) {
+    case 'Box':
+      return <boxGeometry {...(rest as BoxGeometryProps)} />
+    case 'Capsule':
+      return <capsuleGeometry {...(rest as CapsuleGeometryProps)} />
+    case 'Circle':
+      return <circleGeometry {...(rest as CircleGeometryProps)} />
+    case 'Cylinder':
+      return <cylinderGeometry {...(rest as CylinderGeometryProps)} />
+    case 'Dodecahedron':
+      return <dodecahedronGeometry {...(rest as DodecahedronGeometryProps)} />
+    case 'Icosahedron':
+      return <icosahedronGeometry {...(rest as IcosahedronGeometryProps)} />
+    case 'Octahedron':
+      return <octahedronGeometry {...(rest as OctahedronGeometryProps)} />
+    case 'Plane':
+      return <planeGeometry {...(rest as PlaneGeometryProps)} />
+    case 'Ring':
+      return <ringGeometry {...(rest as RingGeometryProps)} />
+    case 'Sphere':
+      return <sphereGeometry {...(rest as SphereGeometryProps)} />
+
+    case 'Tetrahedron':
+      return <tetrahedronGeometry {...(rest as TetrahedronGeometryProps)} />
+    case 'Torus':
+      return <torusGeometry {...(rest as TorusGeometryProps)} />
+    case 'TorusKnot':
+      return <torusKnotGeometry {...(rest as TorusKnotGeometryProps)} />
+
+    default:
+      return null
+  }
 }

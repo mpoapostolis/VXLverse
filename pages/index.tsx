@@ -2,11 +2,9 @@ import Editor from '@/components/editor'
 import { Ghost } from '@/components/ghost'
 import Menu from '@/components/menu'
 import { MeshGeometry } from '@/components/meshGeometry'
-import { Tile } from '@/components/tiles'
 import { GRID_SIZE, Tile as TileType, useStore } from '@/store'
-import { OrbitControls, Preload } from '@react-three/drei'
+import { OrbitControls, Preload, TransformControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import { EffectComposer, Outline, Selection } from '@react-three/postprocessing'
 import clsx from 'clsx'
 import { useRef } from 'react'
 import { Group, Vector3 } from 'three'
@@ -47,30 +45,31 @@ const EditRoom = () => {
 export default function Home() {
   const store = useStore()
   const ref = useRef<Group>(null)
+  console.log(store.nodes)
   return (
     <main>
       <Menu />
-      <div className={clsx('grid h-full w-screen grid-cols-[1fr_20vw]')}>
+      <div className={clsx('grid h-full w-screen grid-cols-[1fr_15.5vw]')}>
         <Canvas>
           <color attach='background' args={['#999']} />
           <directionalLight position={[0, 40, 2]} />
           <ambientLight intensity={0.5} position={[0, 5, 0]} />
           <group ref={ref}>
-            <Selection>
-              <EffectComposer multisampling={8} autoClear={false}>
-                <Outline visibleEdgeColor={0xffff00} blur edgeStrength={5} />
-              </EffectComposer>
-              {store.tiles.map((tile, i) => (
-                <Tile key={tile.id} {...tile} />
-              ))}
-            </Selection>
+            {store.nodes.map((node, idx) =>
+              node.type ? (
+                <TransformControls key={idx}>
+                  <mesh onClick={(e) => console.log(e.object)}>
+                    <MeshGeometry type={node.type} />
+                  </mesh>
+                </TransformControls>
+              ) : null,
+            )}
           </group>
 
           <EditRoom />
 
           <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enablePan={false} enableDamping={false} />
           <Preload all />
-          <MeshGeometry args={[2, 3, 4]} type='Box' />
         </Canvas>
         <Editor />
       </div>
