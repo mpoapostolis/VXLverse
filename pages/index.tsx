@@ -1,6 +1,7 @@
 import Editor from '@/components/editor'
 import { Ghost } from '@/components/ghost'
 import Menu from '@/components/menu'
+import { MeshGeometry } from '@/components/meshGeometry'
 import { Tile } from '@/components/tiles'
 import { GRID_SIZE, Tile as TileType, useStore } from '@/store'
 import { OrbitControls, Preload } from '@react-three/drei'
@@ -8,7 +9,7 @@ import { Canvas } from '@react-three/fiber'
 import { EffectComposer, Outline, Selection } from '@react-three/postprocessing'
 import clsx from 'clsx'
 import { useRef } from 'react'
-import { Group, MOUSE, Vector3 } from 'three'
+import { Group, Vector3 } from 'three'
 
 const EditRoom = () => {
   const store = useStore()
@@ -47,37 +48,32 @@ export default function Home() {
   const store = useStore()
   const ref = useRef<Group>(null)
   return (
-    <main className={clsx('grid h-screen w-screen grid-cols-[15vw_1fr_15vw]')}>
+    <main>
       <Menu />
-      <Canvas>
-        <directionalLight position={[0, 40, 2]} />
-        <ambientLight intensity={0.5} position={[0, 5, 0]} />
-        <group ref={ref}>
-          <Selection>
-            <EffectComposer multisampling={8} autoClear={false}>
-              <Outline visibleEdgeColor={0xffff00} blur edgeStrength={5} />
-            </EffectComposer>
-            {store.tiles.map((tile, i) => (
-              <Tile key={tile.id} {...tile} />
-            ))}
-          </Selection>
-        </group>
+      <div className={clsx('grid h-full w-screen grid-cols-[1fr_20vw]')}>
+        <Canvas>
+          <color attach='background' args={['#999']} />
+          <directionalLight position={[0, 40, 2]} />
+          <ambientLight intensity={0.5} position={[0, 5, 0]} />
+          <group ref={ref}>
+            <Selection>
+              <EffectComposer multisampling={8} autoClear={false}>
+                <Outline visibleEdgeColor={0xffff00} blur edgeStrength={5} />
+              </EffectComposer>
+              {store.tiles.map((tile, i) => (
+                <Tile key={tile.id} {...tile} />
+              ))}
+            </Selection>
+          </group>
 
-        <EditRoom />
+          <EditRoom />
 
-        <OrbitControls
-          maxDistance={1000}
-          position={[0, -5, 0]}
-          makeDefault
-          mouseButtons={{
-            RIGHT: MOUSE.ROTATE,
-            LEFT: MOUSE.PAN,
-            MIDDLE: MOUSE.DOLLY,
-          }}
-        />
-        <Preload all />
-      </Canvas>
-      <Editor />
+          <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enablePan={false} enableDamping={false} />
+          <Preload all />
+          <MeshGeometry args={[2, 3, 4]} type='Box' />
+        </Canvas>
+        <Editor />
+      </div>
 
       {/* <Stats className='fixed right-0' /> */}
     </main>

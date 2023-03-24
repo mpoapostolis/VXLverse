@@ -22,7 +22,7 @@ export default function Editor() {
   }
 
   return (
-    <div className=' h-screen w-full  border-l-2 border-base-300 bg-base-100 p-4'>
+    <div className=' h-full w-full  border-l border-base-300 bg-base-200 p-4'>
       <label htmlFor=''>Inspector</label>
       <div className='divider'></div>
       {obj && (

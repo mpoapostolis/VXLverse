@@ -28,17 +28,19 @@ export function Tile(props: Tile) {
     }
     store.setTiles(tiles)
   }
-  console.log(x)
   return (
     // <Select enabled={isSelected}>
     <TransformControls
+      mode='scale'
       position={props.position}
       enabled={isSelected}
       showX={isSelected}
       showY={isSelected}
       showZ={isSelected}
       onMouseUp={(e) => {
-        const [x, y, z] = e?.target?.object?.position?.toArray() ?? [0, 0, 0]
+        const obj = e?.target.object
+        const [x, y, z] = obj?.position?.toArray() ?? [0, 0, 0]
+        console.log(obj.scale)
         update('position', new Vector3(x, y, z))
       }}>
       <Box
