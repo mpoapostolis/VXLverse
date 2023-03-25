@@ -36,13 +36,23 @@ export const defaultTile: Tile = {
 type Node = Partial<Mesh> & {
   type: Geometry
 }
+export type SceneType = 'color' | 'equirect'
+
+type Scene = {
+  type?: SceneType
+  color?: string
+  equirect?: string
+}
 
 export type Mode = 'default' | 'add' | 'edit' | 'delete'
 export type Store = {
   tiles: Tile[]
-  nodes: Node[]
+  nodes: Partial<Node>[]
+  scene?: Scene
+  setScene: (scene: Scene) => void
   addNode: (node: Partial<Node>) => void
   mode: Mode
+
   setMode: (mode: Mode) => void
   addTile: (tile: Tile) => void
   setTiles: (tiles: Tile[]) => void
@@ -58,10 +68,15 @@ export const useStore = create<Store>((set) => ({
   tiles: [],
   mode: 'default',
   nodes: [],
+  setScene: (scene) => set({ scene: scene }),
   addNode(node) {
     set((state) => ({
       nodes: [...state.nodes, node],
     }))
+  },
+  scene: {
+    type: 'color',
+    color: '#999',
   },
   setMode: (mode) => set({ mode }),
   setTiles: (tiles) => set({ tiles }),

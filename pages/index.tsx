@@ -3,11 +3,11 @@ import { Ghost } from '@/components/ghost'
 import Menu from '@/components/menu'
 import { MeshGeometry } from '@/components/meshGeometry'
 import { GRID_SIZE, Tile as TileType, useStore } from '@/store'
-import { OrbitControls, Preload, TransformControls } from '@react-three/drei'
+import { Environment, OrbitControls, Preload, TransformControls, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import clsx from 'clsx'
 import { useRef } from 'react'
-import { Group, Vector3 } from 'three'
+import { EquirectangularReflectionMapping, Group, Vector3, sRGBEncoding } from 'three'
 
 const EditRoom = () => {
   const store = useStore()
@@ -42,6 +42,16 @@ const EditRoom = () => {
   )
 }
 
+function Env() {
+  const store = useStore()
+  const texture = useTexture(store.scene?.equirect ?? '')
+  // texture equriectangular
+  texture.mapping = EquirectangularReflectionMapping
+  texture.encoding = sRGBEncoding
+
+  return <Environment background map={texture} />
+}
+
 export default function Home() {
   const store = useStore()
   const ref = useRef<Group>(null)
@@ -51,7 +61,7 @@ export default function Home() {
       <Menu />
       <div className={clsx('grid h-full w-screen grid-cols-[1fr_15.5vw]')}>
         <Canvas>
-          <color attach='background' args={['#999']} />
+          {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
           <directionalLight position={[0, 40, 2]} />
           <ambientLight intensity={0.5} position={[0, 5, 0]} />
           <group ref={ref}>
