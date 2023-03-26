@@ -2,7 +2,7 @@ import Editor from '@/components/editor'
 import Menu from '@/components/menu'
 import { Node } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
-import { Environment, OrbitControls, Preload, useTexture } from '@react-three/drei'
+import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import clsx from 'clsx'
 import { useRef } from 'react'
@@ -27,14 +27,15 @@ export default function Home() {
       <div className={clsx('grid h-full w-screen  lg:grid-cols-[1fr_16vw]')}>
         <Canvas>
           <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-
+          <GizmoHelper alignment='bottom-right' margin={[80, 80]}>
+            <GizmoViewport axisColors={['red', 'green', 'blue']} />
+          </GizmoHelper>{' '}
           {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
           <group ref={ref}>
             {store.nodes.map((node, idx) => (
               <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
             ))}
           </group>
-
           <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enablePan={false} enableDamping={false} />
           <Preload all />
         </Canvas>
