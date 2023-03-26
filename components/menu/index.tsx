@@ -73,7 +73,6 @@ export default function Menu() {
           })
         }}
       />
-
       <button>Play</button>
     </div>
   )

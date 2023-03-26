@@ -16,7 +16,6 @@ export default function Editor() {
         tabs={['Object', 'Material', 'Properties']}
         onChange={setObjectTab}
       />
-
       <ObjectSettings />
     </div>
   )

@@ -57,7 +57,7 @@ export function SceneSettings() {
               })
             }}
             type='color'
-            className=' p-0 '
+            className=' p-0'
           />
         ) : (
           <input
@@ -69,7 +69,7 @@ export function SceneSettings() {
               })
             }}
             type='file'
-            className='p-0 file:rounded-none file:border '
+            className='p-0 file:rounded-none file:border'
           />
         )}
       </div>

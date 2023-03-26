@@ -1,9 +1,25 @@
 import { useStore } from '@/store'
+import { useKeyboardControls } from '@react-three/drei'
 import clsx from 'clsx'
 import Image from 'next/image'
+import { useEffect } from 'react'
 
 export function Controls() {
   const store = useStore()
+  const translate = useKeyboardControls((state) => state.translate)
+  const rotate = useKeyboardControls((state) => state.rotate)
+  const scale = useKeyboardControls((state) => state.scale)
+  useEffect(() => {
+    console.log({
+      translate,
+      rotate,
+      scale,
+    })
+    if (translate) return store.setMode('translate')
+    if (rotate) return store.setMode('rotate')
+    if (scale) return store.setMode('scale')
+  }, [rotate, translate, scale])
+
   return (
     <div className='absolute top-4 left-4 z-40 grid h-fit w-fit'>
       <button

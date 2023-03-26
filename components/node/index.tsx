@@ -27,9 +27,9 @@ export function Node(
         }}>
         {props.type === 'GLTF' && props.object ? (
           <Gltf url={props.object} />
-        ) : (
-          props.type && <MeshGeometry type={props.type} />
-        )}
+        ) : props.type ? (
+          <MeshGeometry type={props.type} />
+        ) : null}
       </mesh>
     </TransformControls>
   )
