@@ -13,7 +13,12 @@ export function Node(
   const ref = useRef(null)
   useHelper(props.selected && ref.current && ref, BoxHelper, 'yellow')
   return (
-    <TransformControls enabled={props.selected} showX={props.selected} showY={props.selected} showZ={props.selected}>
+    <TransformControls
+      mode={store.mode}
+      enabled={props.selected}
+      showX={props.selected}
+      showY={props.selected}
+      showZ={props.selected}>
       <mesh
         ref={ref}
         onClick={() => {

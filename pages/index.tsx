@@ -1,3 +1,4 @@
+import { Controls } from '@/components/controls'
 import Editor from '@/components/editor'
 import Menu from '@/components/menu'
 import { Node } from '@/components/node'
@@ -22,23 +23,34 @@ export default function Home() {
   const store = useStore()
   const ref = useRef<Group>(null)
   return (
-    <main>
+    <main className='overflow-hidden'>
       <Menu />
       <div className={clsx('grid h-full w-screen  lg:grid-cols-[1fr_16vw]')}>
-        <Canvas>
-          <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-          <GizmoHelper alignment='bottom-right' margin={[80, 80]}>
-            <GizmoViewport axisColors={['red', 'green', 'blue']} />
-          </GizmoHelper>{' '}
-          {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
-          <group ref={ref}>
-            {store.nodes.map((node, idx) => (
-              <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
-            ))}
-          </group>
-          <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enablePan={false} enableDamping={false} />
-          <Preload all />
-        </Canvas>
+        <div className='relative'>
+          <Controls />
+
+          <Canvas>
+            <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
+            <GizmoHelper alignment='bottom-right' margin={[80, 80]}>
+              <GizmoViewport axisColors={['red', 'green', 'blue']} />
+            </GizmoHelper>{' '}
+            {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
+            <group ref={ref}>
+              {store.nodes.map((node, idx) => (
+                <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
+              ))}
+            </group>
+            <OrbitControls
+              maxDistance={1000}
+              position={[0, -5, 0]}
+              makeDefault
+              enablePan={false}
+              enableDamping={false}
+            />
+            <Preload all />
+          </Canvas>
+        </div>
+
         <Editor />
       </div>
 

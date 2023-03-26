@@ -32,7 +32,7 @@ type Scene = {
   equirect?: string
 }
 
-export type Mode = 'default' | 'add' | 'edit' | 'delete'
+export type Mode = 'translate' | 'rotate' | 'scale'
 export type Store = {
   nodes: Partial<Node>[]
   scene?: Scene
@@ -45,7 +45,7 @@ export type Store = {
 }
 
 export const useStore = create<Store>((set) => ({
-  mode: 'default',
+  mode: 'translate',
   nodes: [],
   selectNode: (uuid) => set({ selectedNode: uuid }),
   setScene: (scene) => set({ scene: scene }),
