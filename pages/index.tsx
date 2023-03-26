@@ -30,6 +30,7 @@ export default function Home() {
           <Controls />
 
           <Canvas>
+            <directionalLight />
             <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
             <GizmoHelper alignment='bottom-right' margin={[80, 80]}>
               <GizmoViewport axisColors={['red', 'green', 'blue']} />

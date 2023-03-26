@@ -23,6 +23,7 @@ export const defaultTile: Tile = {
 
 export type Node = Partial<Mesh> & {
   type: Geometry
+  object?: string
 }
 export type SceneType = 'color' | 'equirect'
 

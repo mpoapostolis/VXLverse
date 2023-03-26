@@ -2,6 +2,7 @@ import { Node, useStore } from '@/store'
 import { TransformControls, useHelper } from '@react-three/drei'
 import { useRef } from 'react'
 import { BoxHelper } from 'three'
+import { Gltf } from '../gltf'
 import { MeshGeometry } from '../meshGeometry'
 
 export function Node(
@@ -24,7 +25,11 @@ export function Node(
         onClick={() => {
           props.uuid && store.selectNode(props.uuid)
         }}>
-        {props.type && <MeshGeometry type={props.type} />}
+        {props.type === 'GLTF' && props.object ? (
+          <Gltf url={props.object} />
+        ) : (
+          props.type && <MeshGeometry type={props.type} />
+        )}
       </mesh>
     </TransformControls>
   )
