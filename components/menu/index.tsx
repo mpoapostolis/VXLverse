@@ -1,5 +1,5 @@
 import { useStore } from '@/store'
-import { Mesh } from 'three'
+import { Mesh, Vector3 } from 'three'
 import { DropDown } from '../dropdown'
 
 export type Geometry =
@@ -60,7 +60,6 @@ export const geometries = [
 
 export default function Menu() {
   const store = useStore()
-  const selectedTile = store.tiles.find((tile) => tile.id === store.selectedTile)
   return (
     <div className='flex h-6 w-full  items-center  gap-4 border-b border-base-300  bg-base-200 p-4 text-sm text-base-content'>
       <DropDown label='File' items={['New', '.', 'Import', '.', 'Publish']} onChange={console.log} />
@@ -68,10 +67,10 @@ export default function Menu() {
         label='Add'
         items={geometries}
         onChange={(type) => {
-          console.log(type)
           const mesh = new Mesh()
           store.addNode({
             ...mesh,
+            position: new Vector3(2, 3, 4),
             type,
           })
         }}

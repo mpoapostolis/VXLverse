@@ -1,46 +1,12 @@
 import Editor from '@/components/editor'
-import { Ghost } from '@/components/ghost'
 import Menu from '@/components/menu'
-import { MeshGeometry } from '@/components/meshGeometry'
-import { GRID_SIZE, Tile as TileType, useStore } from '@/store'
-import { Environment, OrbitControls, Preload, TransformControls, useTexture } from '@react-three/drei'
+import { Node } from '@/components/node'
+import { GRID_SIZE, useStore } from '@/store'
+import { Environment, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import clsx from 'clsx'
 import { useRef } from 'react'
-import { EquirectangularReflectionMapping, Group, Vector3, sRGBEncoding } from 'three'
-
-const EditRoom = () => {
-  const store = useStore()
-  return (
-    <>
-      {store.ghostTile && <Ghost />}
-      <gridHelper
-        position={[-0.5, 0, -0.5]}
-        onPointerDown={(e) => {
-          e.stopPropagation()
-          if (e.button !== 0 || !store.ghostTile) return
-
-          if (store.mode === 'add') {
-            store.addTile(store.ghostTile as TileType)
-          }
-        }}
-        onPointerMove={(e) => {
-          e.stopPropagation()
-
-          if (store.mode !== 'add' || !store?.ghostTile?.position) return
-          const x = Math.ceil(e.point.x)
-          const y = store.ghostTile.position.y
-          const z = Math.ceil(e.point.z)
-          const v3 = new Vector3(x, y, z)
-          store.updateTile({
-            position: v3,
-          })
-        }}
-        args={[GRID_SIZE, GRID_SIZE]}
-      />
-    </>
-  )
-}
+import { EquirectangularReflectionMapping, Group, sRGBEncoding } from 'three'
 
 function Env() {
   const store = useStore()
@@ -55,28 +21,19 @@ function Env() {
 export default function Home() {
   const store = useStore()
   const ref = useRef<Group>(null)
-  console.log(store.nodes)
   return (
     <main>
       <Menu />
-      <div className={clsx('grid h-full w-screen grid-cols-[1fr_15.5vw]')}>
+      <div className={clsx('grid h-full w-screen  lg:grid-cols-[1fr_16vw]')}>
         <Canvas>
-          {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
-          <directionalLight position={[0, 40, 2]} />
-          <ambientLight intensity={0.5} position={[0, 5, 0]} />
-          <group ref={ref}>
-            {store.nodes.map((node, idx) =>
-              node.type ? (
-                <TransformControls key={idx}>
-                  <mesh onClick={(e) => console.log(e.object)}>
-                    <MeshGeometry type={node.type} />
-                  </mesh>
-                </TransformControls>
-              ) : null,
-            )}
-          </group>
+          <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
 
-          <EditRoom />
+          {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
+          <group ref={ref}>
+            {store.nodes.map((node, idx) => (
+              <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
+            ))}
+          </group>
 
           <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enablePan={false} enableDamping={false} />
           <Preload all />
