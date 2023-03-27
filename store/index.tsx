@@ -43,6 +43,7 @@ export type Store = {
   setMode: (mode: Mode) => void
   selectedNode?: string
   selectNode: (uuid?: string) => void
+  deleteNode: () => void
 }
 
 export const useStore = create<Store>((set) => ({
@@ -50,6 +51,10 @@ export const useStore = create<Store>((set) => ({
   nodes: [],
   selectNode: (uuid) => set({ selectedNode: uuid }),
   setScene: (scene) => set({ scene: scene }),
+  deleteNode: () =>
+    set((state) => ({
+      nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
+    })),
   addNode(node) {
     set((state) => ({
       selectedNode: node.uuid,

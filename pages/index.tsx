@@ -25,6 +25,7 @@ export default function Home() {
     if (e.key.toLocaleLowerCase() === 'w') store.setMode('translate')
     if (e.key.toLocaleLowerCase() === 'e') store.setMode('rotate')
     if (e.key.toLocaleLowerCase() === 'r') store.setMode('scale')
+    if (e.key.toLocaleLowerCase() === 'delete') store.deleteNode()
   }
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown)
