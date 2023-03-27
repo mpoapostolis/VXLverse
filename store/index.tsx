@@ -1,4 +1,4 @@
-import { Geometry } from '@/components/menu'
+import { NodeType } from '@/components/menu'
 import { Euler, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
 
@@ -22,7 +22,7 @@ export const defaultTile: Tile = {
 }
 
 export type Node = Partial<Mesh> & {
-  type: Geometry
+  type: NodeType
   object?: string
 }
 export type SceneType = 'color' | 'equirect'

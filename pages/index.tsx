@@ -6,8 +6,8 @@ import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import clsx from 'clsx'
-import { useEffect, useRef } from 'react'
-import { EquirectangularReflectionMapping, Group, sRGBEncoding } from 'three'
+import { useEffect } from 'react'
+import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
 function Env() {
   const store = useStore()
@@ -21,7 +21,6 @@ function Env() {
 
 export default function Home() {
   const store = useStore()
-  const ref = useRef<Group>(null)
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key.toLocaleLowerCase() === 'w') store.setMode('translate')
     if (e.key.toLocaleLowerCase() === 'e') store.setMode('rotate')
@@ -31,7 +30,6 @@ export default function Home() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
-
   return (
     <main className='overflow-hidden'>
       <Menu />
@@ -39,24 +37,16 @@ export default function Home() {
         <div className='relative'>
           <Controls />
           <Canvas>
-            <directionalLight />
             <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-            <GizmoHelper alignment='bottom-right' margin={[80, 80]}>
-              <GizmoViewport axisColors={['red', 'green', 'blue']} />
+            <GizmoHelper alignment='top-right' margin={[80, 80]}>
+              <GizmoViewport axisColors={['#FF7F9A', '#C2EE00', '#73C5FF']} />
             </GizmoHelper>
             {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
-            <group ref={ref}>
-              {store.nodes.map((node, idx) => (
-                <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
-              ))}
-            </group>
-            <OrbitControls
-              maxDistance={1000}
-              position={[0, -5, 0]}
-              makeDefault
-              enablePan={false}
-              enableDamping={false}
-            />
+
+            {store.nodes.map((node, idx) => (
+              <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
+            ))}
+            <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enableDamping={false} />
             <Preload all />
           </Canvas>
         </div>
