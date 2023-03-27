@@ -1,6 +1,6 @@
 import { useStore } from '@/store'
 import { Mesh, Vector3 } from 'three'
-import { Geometry } from '../menu'
+import { NodeType } from '../menu'
 
 export function DropDown(props: { items: string[]; label: string; onChange: (value: string) => void }) {
   const store = useStore()
@@ -15,7 +15,7 @@ export function DropDown(props: { items: string[]; label: string; onChange: (val
             <div
               key={idx}
               className='relative cursor-pointer p-2 pl-4 text-left  hover:bg-base-300'
-              onClick={() => item !== 'Import' && props.onChange(item as Geometry)}>
+              onClick={() => item !== 'Import' && props.onChange(item as NodeType)}>
               {item === 'Import' && (
                 <input
                   onChange={(e) => {

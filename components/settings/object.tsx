@@ -22,6 +22,14 @@ export function ObjectSettings() {
       <Xyz label='Position' values={selected?.position?.toArray() ?? [0, 0, 0]} />
       <Xyz label='Rotation' values={[rot.x, rot.y, rot.z]} />
       <Xyz label='Scale' values={selected?.scale?.toArray() ?? [0, 0, 0]} />
+
+      <div className='label  mt-3 text-xs font-bold'>Animations</div>
+      {selected.type === 'GLTF' && (
+        <li className='flex w-full '>
+          <div className='label-text'>Running</div>
+          <button className='btn-sm btn ml-auto mr-2'>play</button>
+        </li>
+      )}
     </div>
   )
 }

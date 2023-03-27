@@ -47,7 +47,7 @@ export function SceneSettings() {
         <option value='equirect'>Equirect</option>
       </select>
 
-      {/* <div className='label-text mt-3 grid items-center gap-4'>
+      <div className='label-text mt-3 grid items-center gap-4'>
         {store.scene?.type === 'color' ? (
           <input
             onChange={(evt) => {
@@ -72,7 +72,7 @@ export function SceneSettings() {
             className='p-0 file:rounded-none file:border'
           />
         )}
-      </div> */}
+      </div>
     </div>
   )
 }

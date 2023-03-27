@@ -15,25 +15,25 @@ import {
   TorusGeometryProps,
   TorusKnotGeometryProps,
 } from '@react-three/fiber'
-import { Geometry } from '../menu'
+import { NodeType } from '../menu'
 
 type x = Object3DNode<MeshProps, BoxGeometryProps>
 
 export function MeshGeometry(
   props:
-    | (BoxGeometryProps & { type: Geometry })
-    | (CapsuleGeometryProps & { type: Geometry })
-    | (CircleGeometryProps & { type: Geometry })
-    | (CylinderGeometryProps & { type: Geometry })
-    | (DodecahedronGeometryProps & { type: Geometry })
-    | (IcosahedronGeometryProps & { type: Geometry })
-    | (OctahedronGeometryProps & { type: Geometry })
-    | (PlaneGeometryProps & { type: Geometry })
-    | (RingGeometryProps & { type: Geometry })
-    | (SphereGeometryProps & { type: Geometry })
-    | (TetrahedronGeometryProps & { type: Geometry })
-    | (TorusGeometryProps & { type: Geometry })
-    | (TorusKnotGeometryProps & { type: Geometry }),
+    | (BoxGeometryProps & { type: NodeType })
+    | (CapsuleGeometryProps & { type: NodeType })
+    | (CircleGeometryProps & { type: NodeType })
+    | (CylinderGeometryProps & { type: NodeType })
+    | (DodecahedronGeometryProps & { type: NodeType })
+    | (IcosahedronGeometryProps & { type: NodeType })
+    | (OctahedronGeometryProps & { type: NodeType })
+    | (PlaneGeometryProps & { type: NodeType })
+    | (RingGeometryProps & { type: NodeType })
+    | (SphereGeometryProps & { type: NodeType })
+    | (TetrahedronGeometryProps & { type: NodeType })
+    | (TorusGeometryProps & { type: NodeType })
+    | (TorusKnotGeometryProps & { type: NodeType }),
 ) {
   const { type, ...rest } = props
 
