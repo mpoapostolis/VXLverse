@@ -32,7 +32,7 @@ export default function Home() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
   return (
-    <main className='overflow-hidden'>
+    <main className='h-screen overflow-hidden'>
       <Menu />
       <div className={clsx('grid h-full w-screen  lg:grid-cols-[1fr_16vw]')}>
         <div className='relative'>

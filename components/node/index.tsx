@@ -16,9 +16,7 @@ export function Node(
 ) {
   const store = useStore()
   const ref = useRef(null)
-
   useHelper(props.selected && ref.current && ref, BoxHelper, 'yellow')
-
   return (
     <TransformControls
       mode={store.mode}
@@ -37,7 +35,9 @@ export function Node(
             onClick={() => {
               props.uuid && store.selectNode(props.uuid)
             }}>
-            {props.object && props.type === 'GLTF' && <Gltf url={props.object} />}
+            {props.object && props.uuid && props.type === 'GLTF' && (
+              <Gltf animation={props.animation} uuid={props.uuid} url={props.object} />
+            )}
             {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
             <meshStandardMaterial color={'red'} />
           </mesh>

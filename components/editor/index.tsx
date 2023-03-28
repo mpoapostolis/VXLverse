@@ -7,7 +7,7 @@ export default function Editor() {
   const [activeTab, setActiveTab] = useState(0)
   const [objectTab, setObjectTab] = useState(0)
   return (
-    <div className=' h-full  w-full  border-l border-base-300 bg-base-200 '>
+    <div className=' h-screen w-full  overflow-auto  border-l border-base-300 bg-base-200 '>
       <Tabs activeTab={activeTab} tabs={['Scene', 'Project', 'Settings']} onChange={setActiveTab} />
       <SceneSettings />
       <Tabs

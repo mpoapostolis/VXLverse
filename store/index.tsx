@@ -1,5 +1,5 @@
 import { NodeType } from '@/components/menu'
-import { Euler, Mesh, Vector3 } from 'three'
+import { AnimationAction, Euler, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
 
 export const PLANE_GEOMETRY = new Vector3(5, 0.5, 5)
@@ -24,6 +24,10 @@ export const defaultTile: Tile = {
 export type Node = Partial<Mesh> & {
   type: NodeType
   object?: string
+  animation?: string
+  actions?: {
+    [x: string]: AnimationAction | null
+  }
 }
 export type SceneType = 'color' | 'equirect'
 
@@ -43,6 +47,7 @@ export type Store = {
   setMode: (mode: Mode) => void
   selectedNode?: string
   selectNode: (uuid?: string) => void
+  updateNode: (uuid: string, node: Partial<Node>) => void
   deleteNode: () => void
 }
 
@@ -55,6 +60,13 @@ export const useStore = create<Store>((set) => ({
     set((state) => ({
       nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
     })),
+
+  updateNode: (uuid, node) => {
+    set((state) => ({
+      nodes: state.nodes.map((n) => (n.uuid === uuid ? { ...n, ...node } : n)),
+    }))
+  },
+
   addNode(node) {
     set((state) => ({
       selectedNode: node.uuid,

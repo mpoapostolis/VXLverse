@@ -1,5 +1,6 @@
 import { SceneType, useStore } from '@/store'
 import clsx from 'clsx'
+import { Upload } from '../upload'
 
 export function SceneSettings() {
   const store = useStore()
@@ -32,46 +33,47 @@ export function SceneSettings() {
       </div>
 
       <div className='label  mt-3 text-xs font-bold'>Scene background type</div>
-      <select
-        onChange={(evt) => {
-          const type = evt.target.value as SceneType
-          store.setScene({
-            ...store.scene,
-            equirect: type === 'equirect' ? store.scene?.equirect : undefined,
-            color: type === 'color' ? '#999' : undefined,
-            type,
-          })
-        }}
-        className='label-text select select-xs w-full'>
-        <option value='color'>Color</option>
-        <option value='equirect'>Equirect</option>
-      </select>
+      <div className='grid grid-cols-2 items-center '>
+        <select
+          onChange={(evt) => {
+            const type = evt.target.value as SceneType
+            store.setScene({
+              ...store.scene,
+              equirect: type === 'equirect' ? store.scene?.equirect : undefined,
+              color: type === 'color' ? '#999' : undefined,
+              type,
+            })
+          }}
+          className='label-text select select-xs w-full'>
+          <option value='color'>Color</option>
+          <option value='equirect'>Equirect</option>
+        </select>
 
-      <div className='label-text mt-3 grid items-center gap-4'>
-        {store.scene?.type === 'color' ? (
-          <input
-            onChange={(evt) => {
-              store.setScene({
-                ...store.scene,
-                color: evt.target.value,
-              })
-            }}
-            type='color'
-            className=' p-0'
-          />
-        ) : (
-          <input
-            onChange={(evt) => {
-              const file = evt.target?.files?.[0]
-              store.setScene({
-                ...store.scene,
-                equirect: file ? URL.createObjectURL(file) : undefined,
-              })
-            }}
-            type='file'
-            className='p-0 file:rounded-none file:border'
-          />
-        )}
+        <div className='label-text ml-auto flex items-center'>
+          {store.scene?.type === 'color' && (
+            <input
+              onChange={(evt) => {
+                store.setScene({
+                  ...store.scene,
+                  color: evt.target.value,
+                })
+              }}
+              type='color'
+              className=' p-0 file:hidden   file:text-end'
+            />
+          )}
+          {store?.scene?.type === 'equirect' && (
+            <Upload
+              className='h-10 w-10 border border-dashed border-black border-opacity-10  bg-base-300'
+              onChange={(equirect) =>
+                store.setScene({
+                  ...store.scene,
+                  equirect,
+                })
+              }
+            />
+          )}
+        </div>
       </div>
     </div>
   )

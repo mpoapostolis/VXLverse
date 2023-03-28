@@ -24,12 +24,20 @@ export function ObjectSettings() {
       <Xyz label='Scale' values={selected?.scale?.toArray() ?? [0, 0, 0]} />
 
       <div className='label  mt-3 text-xs font-bold'>Animations</div>
-      {selected.type === 'GLTF' && (
-        <li className='flex w-full '>
-          <div className='label-text'>Running</div>
-          <button className='btn-sm btn ml-auto mr-2'>play</button>
-        </li>
-      )}
+      {Object.keys(selected?.actions ?? {}).map((key) => (
+        <div key={key} className='grid grid-cols-2 '>
+          <label className='label-text'>{key}</label>
+          <button
+            onClick={() => {
+              if (!selected?.uuid) return
+
+              store.updateNode(selected.uuid, { animation: selected.animation === key ? undefined : key })
+            }}
+            className='btn-xs btn'>
+            {selected.animation === key ? 'Stop' : 'Play'}
+          </button>
+        </div>
+      ))}
     </div>
   )
 }
