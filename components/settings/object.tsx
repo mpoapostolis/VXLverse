@@ -14,9 +14,9 @@ export function ObjectSettings() {
         <label className='text-xs font-bold'>{selected.type}</label>
       </div>
 
-      <div className='grid grid-cols-[1fr_3fr] '>
-        <label className='label-text'>Name</label>
-        <input value={selected?.name ?? selected?.type} className='input input-xs focus:outline-none' />
+      <div className='grid grid-cols-2 '>
+        <div className='label-text w-full  '>Name</div>
+        <input value={selected?.name ?? selected?.type} className='input input-xs w-full focus:outline-none' />
       </div>
 
       <Xyz

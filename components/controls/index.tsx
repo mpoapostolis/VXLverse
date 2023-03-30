@@ -11,7 +11,9 @@ export function Controls() {
           'bg-base-300 hover:bg-base-100': store.mode !== 'translate',
           'bg-base-100 hover:bg-base-100': store.mode === 'translate',
         })}>
-        <img className='h-4 w-4' src='/icons/translate.svg' alt='translate' />
+        <picture>
+          <img className='h-4 w-4' src='/icons/translate.svg' alt='translate' />
+        </picture>
       </button>
 
       <button
@@ -20,7 +22,9 @@ export function Controls() {
           'bg-base-300 hover:bg-base-100': store.mode !== 'rotate',
           'bg-base-100 hover:bg-base-100': store.mode === 'rotate',
         })}>
-        <img className='h-4 w-4' src='/icons/rotate.svg' alt='rotate' />
+        <picture>
+          <img className='h-4 w-4' src='/icons/rotate.svg' alt='rotate' />
+        </picture>
       </button>
       <button
         onClick={() => store.setMode('scale')}
@@ -28,7 +32,9 @@ export function Controls() {
           'bg-base-300 hover:bg-base-100': store.mode !== 'scale',
           'bg-base-100 hover:bg-base-100': store.mode === 'scale',
         })}>
-        <img className='h-4 w-4' src='/icons/scale.svg' alt='scale' />
+        <picture>
+          <img className='h-4 w-4' src='/icons/scale.svg' alt='scale' />
+        </picture>
       </button>
     </div>
   )

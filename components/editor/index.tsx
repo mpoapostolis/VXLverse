@@ -8,7 +8,6 @@ export default function Editor() {
   const [objectTab, setObjectTab] = useState(0)
   return (
     <div className=' h-screen w-full  overflow-auto  border-l border-base-300 bg-base-200 '>
-      <Tabs activeTab={activeTab} tabs={['Scene', 'Project', 'Settings']} onChange={setActiveTab} />
       <SceneSettings />
       <Tabs
         className='my-3 border-t border-black border-opacity-10'

@@ -51,9 +51,13 @@ export type Store = {
   deleteNode: () => void
 }
 
+const light = new Mesh() as Node
+light.position?.set(5, 10, 0)
+light.type = 'DirectionalLight'
+
 export const useStore = create<Store>((set) => ({
   mode: 'translate',
-  nodes: [],
+  nodes: [light],
   selectNode: (uuid) => set({ selectedNode: uuid }),
   setScene: (scene) => set({ scene: scene }),
   deleteNode: () =>
