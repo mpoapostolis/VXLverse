@@ -1,6 +1,5 @@
 import { useStore } from '@/store'
 import clsx from 'clsx'
-import Image from 'next/image'
 
 export function Controls() {
   const store = useStore()
@@ -12,7 +11,7 @@ export function Controls() {
           'bg-base-300 hover:bg-base-100': store.mode !== 'translate',
           'bg-base-100 hover:bg-base-100': store.mode === 'translate',
         })}>
-        <Image width={16} height={16} src='/icons/translate.svg' alt='translate' />
+        <img className='h-4 w-4' src='/icons/translate.svg' alt='translate' />
       </button>
 
       <button
@@ -21,7 +20,7 @@ export function Controls() {
           'bg-base-300 hover:bg-base-100': store.mode !== 'rotate',
           'bg-base-100 hover:bg-base-100': store.mode === 'rotate',
         })}>
-        <Image width={16} height={16} src='/icons/rotate.svg' alt='rotate' />
+        <img className='h-4 w-4' src='/icons/rotate.svg' alt='rotate' />
       </button>
       <button
         onClick={() => store.setMode('scale')}
@@ -29,7 +28,7 @@ export function Controls() {
           'bg-base-300 hover:bg-base-100': store.mode !== 'scale',
           'bg-base-100 hover:bg-base-100': store.mode === 'scale',
         })}>
-        <Image width={16} height={16} src='/icons/scale.svg' alt='scale' />
+        <img className='h-4 w-4' src='/icons/scale.svg' alt='scale' />
       </button>
     </div>
   )

@@ -50,29 +50,29 @@ export function SceneSettings() {
         </select>
 
         <div className='label-text ml-auto flex items-center'>
-          {store.scene?.type === 'color' && (
-            <input
-              onChange={(evt) => {
-                store.setScene({
-                  ...store.scene,
-                  color: evt.target.value,
-                })
-              }}
-              type='color'
-              className=' p-0 file:hidden   file:text-end'
-            />
-          )}
-          {store?.scene?.type === 'equirect' && (
-            <Upload
-              className='h-10 w-10 border border-dashed border-black border-opacity-10  bg-base-300'
-              onChange={(equirect) =>
-                store.setScene({
-                  ...store.scene,
-                  equirect,
-                })
-              }
-            />
-          )}
+          <input
+            onChange={(evt) => {
+              store.setScene({
+                ...store.scene,
+                color: evt.target.value,
+              })
+            }}
+            type='color'
+            className={clsx(' p-0 file:hidden   file:text-end', {
+              hidden: store.scene?.type !== 'color',
+            })}
+          />
+          <Upload
+            className={clsx('h-10 w-10 border border-dashed border-black border-opacity-10  bg-base-300', {
+              hidden: store.scene?.type !== 'equirect',
+            })}
+            onChange={(equirect) =>
+              store.setScene({
+                ...store.scene,
+                equirect,
+              })
+            }
+          />
         </div>
       </div>
     </div>

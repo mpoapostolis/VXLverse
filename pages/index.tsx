@@ -34,7 +34,7 @@ export default function Home() {
   return (
     <main className='h-screen overflow-hidden'>
       <Menu />
-      <div className={clsx('grid h-full w-screen  lg:grid-cols-[1fr_16vw]')}>
+      <div className={clsx('grid h-full w-screen grid-cols-[1fr_16vw]')}>
         <div className='relative'>
           <Controls />
           <Canvas>

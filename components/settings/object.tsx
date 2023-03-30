@@ -1,5 +1,5 @@
 import { useStore } from '@/store'
-import { Euler } from 'three'
+import { Euler, Vector3 } from 'three'
 import { Xyz } from '../xyz'
 
 export function ObjectSettings() {
@@ -19,25 +19,57 @@ export function ObjectSettings() {
         <input value={selected?.name ?? selected?.type} className='input input-xs focus:outline-none' />
       </div>
 
-      <Xyz label='Position' values={selected?.position?.toArray() ?? [0, 0, 0]} />
-      <Xyz label='Rotation' values={[rot.x, rot.y, rot.z]} />
-      <Xyz label='Scale' values={selected?.scale?.toArray() ?? [0, 0, 0]} />
+      <Xyz
+        onChange={(val) => {
+          const [x, y, z] = val
+          const position = new Vector3(x, y, z)
+          if (!selected?.uuid || !position) return
+          console.log('position', position)
+          store.updateNode(selected.uuid, { position })
+        }}
+        label='Position'
+        values={selected?.position?.toArray() ?? [0, 0, 0]}
+      />
+      <Xyz
+        onChange={(val) => {
+          const [x, y, z] = val
+          const rotation = new Euler(x, y, z)
+          if (!selected?.uuid || !rotation) return
+          store.updateNode(selected.uuid, { rotation })
+        }}
+        label='Rotation'
+        values={[rot.x, rot.y, rot.z]}
+      />
+      <Xyz
+        onChange={(val) => {
+          const [x, y, z] = val
+          const scale = new Vector3(x, y, z)
+          if (!selected?.uuid || !scale) return
+          store.updateNode(selected.uuid, { scale })
+        }}
+        label='Scale'
+        values={selected?.scale?.toArray() ?? [0, 0, 0]}
+      />
 
-      <div className='label  mt-3 text-xs font-bold'>Animations</div>
-      {Object.keys(selected?.actions ?? {}).map((key) => (
-        <div key={key} className='grid grid-cols-2 '>
-          <label className='label-text'>{key}</label>
-          <button
-            onClick={() => {
-              if (!selected?.uuid) return
+      {selected.type === 'GLTF' && (
+        <div>
+          <div className='label  border-t border-black border-opacity-10 pt-3 text-xs font-bold'>Animations</div>
+          {Object.keys(selected?.actions ?? {}).map((key) => (
+            <div key={key} className='grid grid-cols-2 '>
+              <label className='label-text'>{key}</label>
+              <button
+                onClick={() => {
+                  if (!selected?.uuid) return
 
-              store.updateNode(selected.uuid, { animation: selected.animation === key ? undefined : key })
-            }}
-            className='btn-xs btn'>
-            {selected.animation === key ? 'Stop' : 'Play'}
-          </button>
+                  store.updateNode(selected.uuid, { animation: selected.animation === key ? undefined : key })
+                }}
+                className='btn-xs btn'>
+                {selected.animation === key ? 'Stop' : 'Play'}
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   )
 }
