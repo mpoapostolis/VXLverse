@@ -12,7 +12,7 @@ export function Xyz(props: { onChange: (val: number[]) => void; label: string; v
             }}
             type='number'
             className='input input-xs w-full text-blue-400 focus:outline-none'
-            value={value.toFixed(2)}
+            value={Number(value.toFixed(2))}
           />
         </div>
       ))}
