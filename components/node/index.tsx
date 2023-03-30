@@ -34,11 +34,27 @@ export function Node(
       onMouseUp={(e) => {
         const obj = e?.target.object
         if (obj && props.uuid) {
-          store.updateNode(props.uuid, {
-            position: obj.position,
-            rotation: obj.rotation,
-            scale: obj.scale,
-          })
+          if (store.mode === 'translate')
+            store.updateNode(props.uuid, {
+              position: obj.position,
+            })
+
+          if (store.mode === 'rotate') {
+            // rad to degress
+            const rotation = new Euler(
+              (obj.rotation.x * 180) / Math.PI,
+              (obj.rotation.y * 180) / Math.PI,
+              (obj.rotation.z * 180) / Math.PI,
+            )
+            store.updateNode(props.uuid, {
+              rotation,
+            })
+          }
+
+          if (store.mode === 'scale')
+            store.updateNode(props.uuid, {
+              scale: obj.scale,
+            })
         }
       }}
       enabled={props.selected}
