@@ -76,7 +76,7 @@ export function Node(
               <Gltf animation={props.animation} uuid={props.uuid} url={props.object} />
             )}
             {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
-            <meshStandardMaterial color={'red'} />
+            <meshStandardMaterial color={props.color} />
           </mesh>
         )}
       </>

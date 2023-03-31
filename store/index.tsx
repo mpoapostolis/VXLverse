@@ -25,6 +25,7 @@ export type Node = Partial<Mesh> & {
   type: NodeType
   object?: string
   animation?: string
+  color?: string
   actions?: {
     [x: string]: AnimationAction | null
   }

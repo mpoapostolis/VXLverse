@@ -9,14 +9,19 @@ export function ObjectSettings() {
 
   return !selected ? null : (
     <div className='grid gap-4 p-2'>
+      <div className='divider'>Transform</div>
+
       <div className='grid grid-cols-[1fr_3fr] '>
         <label className='label-text'>Type</label>
         <label className='text-xs font-bold'>{selected.type}</label>
       </div>
 
-      <div className='grid grid-cols-2 '>
+      <div className='grid grid-cols-[1fr_3fr] '>
         <div className='label-text w-full  '>Name</div>
-        <input value={selected?.name ?? selected?.type} className='input input-xs w-full focus:outline-none' />
+        <input
+          value={selected?.name ?? selected?.type}
+          className='input-bordered input input-xs w-full focus:outline-none'
+        />
       </div>
 
       <Xyz
@@ -50,10 +55,26 @@ export function ObjectSettings() {
         label='Scale'
         values={selected?.scale?.toArray() ?? [0, 0, 0]}
       />
-
+      {selected.type !== 'GLTF' && (
+        <>
+          <div className='divider'>Material</div>
+          <div className='grid grid-cols-[1fr_3fr]'>
+            <div className='label-text'>Color:</div>
+            <input
+              onChange={(evt) => {
+                if (!selected?.uuid) return
+                store.updateNode(selected.uuid, { color: evt.target.value })
+              }}
+              value={selected?.color ?? '#999'}
+              type='color'
+              className='ml-auto h-10 w-10'
+            />
+          </div>
+        </>
+      )}
       {selected.type === 'GLTF' && (
         <div>
-          <div className='label  border-t border-black border-opacity-10 pt-3 text-xs font-bold'>Animations</div>
+          <div className='divider'>Animations</div>
           {Object.keys(selected?.actions ?? {}).map((key) => (
             <div key={key} className='grid grid-cols-2 '>
               <label className='label-text'>{key}</label>
@@ -70,6 +91,21 @@ export function ObjectSettings() {
           ))}
         </div>
       )}
+      <div>
+        <div className='divider'>Game Properties</div>
+
+        <div className='form-control grid w-full max-w-xs grid-cols-[1fr_3fr] items-center'>
+          <label className='label'>
+            <span className='label-text'>On click</span>
+          </label>
+          <select className='select-bordered select select-xs focus:outline-none'>
+            <option selected>-</option>
+            <option>Add to inventory</option>
+            <option>Show Dialogue</option>
+            <option>Hit</option>
+          </select>
+        </div>
+      </div>
     </div>
   )
 }

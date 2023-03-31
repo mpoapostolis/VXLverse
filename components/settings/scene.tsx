@@ -43,7 +43,7 @@ export function SceneSettings() {
               type,
             })
           }}
-          className='label-text select select-xs w-full'>
+          className='label-text select-bordered select select-xs w-full'>
           <option value='color'>Color</option>
           <option value='equirect'>Equirect</option>
         </select>
