@@ -35,6 +35,7 @@ export default function Home() {
     <main className='h-screen overflow-hidden'>
       <Menu />
       <div className={clsx('grid h-full w-screen grid-cols-[1fr_16vw]')}>
+        {/* The button to open modal */}
         <div className='relative'>
           <Controls />
           <Canvas>

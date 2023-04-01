@@ -1,6 +1,7 @@
 import { NodeType } from '@/components/menu'
 import { AnimationAction, Euler, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
+import { demo } from './idb'
 
 export const PLANE_GEOMETRY = new Vector3(5, 0.5, 5)
 export const CUBE_GEOMETRY = new Vector3(5, 5, 5)
@@ -58,6 +59,7 @@ light.type = 'DirectionalLight'
 
 export const useStore = create<Store>((set) => ({
   mode: 'translate',
+
   nodes: [light],
   selectNode: (uuid) => set({ selectedNode: uuid }),
   setScene: (scene) => set({ scene: scene }),
@@ -84,3 +86,5 @@ export const useStore = create<Store>((set) => ({
   },
   setMode: (mode) => set({ mode }),
 }))
+
+demo()

@@ -1,5 +1,6 @@
 import { useStore } from '@/store'
 import { Euler, Vector3 } from 'three'
+import { DailogueEditor } from '../dialogueEditor'
 import { Xyz } from '../xyz'
 
 export function ObjectSettings() {
@@ -96,15 +97,17 @@ export function ObjectSettings() {
 
         <div className='form-control grid w-full max-w-xs grid-cols-[1fr_3fr] items-center'>
           <label className='label'>
-            <span className='label-text'>On click</span>
+            <span className='label-text'>Type:</span>
           </label>
           <select className='select-bordered select select-xs focus:outline-none'>
             <option selected>-</option>
-            <option>Add to inventory</option>
-            <option>Show Dialogue</option>
-            <option>Hit</option>
+            <option>Hero</option>
+            <option>Npc</option>
+            <option>Enemy</option>
           </select>
         </div>
+
+        <DailogueEditor />
       </div>
     </div>
   )
