@@ -3,13 +3,30 @@ import { Euler, Vector3 } from 'three'
 import { DailogueEditor } from '../dialogueEditor'
 import { Xyz } from '../xyz'
 
+const opts = [
+  'Default',
+  'Click',
+  'Death',
+  'Spawn',
+  'Attack',
+  'Damage',
+  'Heal',
+  'Move',
+  'Idle',
+  'Press W',
+  'Press A',
+  'Press S',
+  'Press D',
+  'Press Space',
+]
+
 export function ObjectSettings() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
 
   return !selected ? null : (
-    <div className='grid gap-4 p-2'>
+    <div className='grid gap-4 p-2 pb-12'>
       <div className='divider'>Transform</div>
 
       <div className='grid grid-cols-[1fr_3fr] '>
@@ -77,8 +94,8 @@ export function ObjectSettings() {
         <div>
           <div className='divider'>Animations</div>
           {Object.keys(selected?.actions ?? {}).map((key) => (
-            <div key={key} className='grid grid-cols-2 '>
-              <label className='label-text'>{key}</label>
+            <div key={key} className='grid grid-cols-3 '>
+              <label className='label-text truncate'>{key}</label>
               <button
                 onClick={() => {
                   if (!selected?.uuid) return
@@ -88,6 +105,16 @@ export function ObjectSettings() {
                 className='btn-xs btn'>
                 {selected.animation === key ? 'Stop' : 'Play'}
               </button>
+
+              <select className='select-ghost select-xs focus:outline-none'>
+                <option selected disabled>
+                  -
+                </option>
+
+                {opts.map((opt) => (
+                  <option key={opt}>{opt}</option>
+                ))}
+              </select>
             </div>
           ))}
         </div>

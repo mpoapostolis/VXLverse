@@ -1,3 +1,4 @@
+import { useStore } from '@/store'
 import clsx from 'clsx'
 import { useState } from 'react'
 
@@ -11,6 +12,7 @@ const defaultDialogue = {
 export function DailogueEditor() {
   const [open, setOpen] = useState(false)
   const [dialogue, setDialogue] = useState([defaultDialogue])
+  const store = useStore()
 
   return (
     <>
@@ -37,7 +39,12 @@ export function DailogueEditor() {
               <>
                 <input placeholder='Title' type='text' className='input-bordered input input-sm' />
                 <select placeholder='Required Item' className='select-bordered select select-sm'>
-                  <option>Item</option>
+                  <option value=''>None</option>
+                  {store.nodes.map((node) => (
+                    <option key={node.uuid} value={node.uuid}>
+                      {node?.name === '' ? node?.type : node?.name}
+                    </option>
+                  ))}
                 </select>
                 <input placeholder='Text' className='input-bordered input input-sm ' />
                 <input placeholder='Completed Text' className='input-bordered input input-sm' />
