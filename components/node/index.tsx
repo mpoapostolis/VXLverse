@@ -72,8 +72,8 @@ export function Node(
             onClick={() => {
               props.uuid && store.selectNode(props.uuid)
             }}>
-            {props.object && props.uuid && props.type === 'GLTF' && (
-              <Gltf animation={props.animation} uuid={props.uuid} url={props.object} />
+            {props.url && props.uuid && props.type === 'GLTF' && (
+              <Gltf animation={props.animation} uuid={props.uuid} url={props.url} />
             )}
             {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
             <meshStandardMaterial color={props.color} />

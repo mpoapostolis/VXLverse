@@ -1,30 +1,26 @@
 import { NodeType } from '@/components/menu'
-import { AnimationAction, Euler, Mesh, Vector3 } from 'three'
+import { openDB } from 'idb'
+import { AnimationAction, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
-import { demo } from './idb'
 
 export const PLANE_GEOMETRY = new Vector3(5, 0.5, 5)
 export const CUBE_GEOMETRY = new Vector3(5, 5, 5)
 export const GRID_SIZE = 80
 
-export type Tile = {
-  position: Vector3
-  rotation?: Euler
-  scale?: Vector3
-  material: string
-  id?: string
-  name?: string
-}
-
-export const defaultTile: Tile = {
-  position: new Vector3(0, 0, 0),
-  scale: PLANE_GEOMETRY,
-  material: 'marble',
+async function initDb() {
+  return openDB('vxlverse', 1, {
+    upgrade(db) {
+      db.createObjectStore('store', {
+        autoIncrement: true,
+      })
+    },
+  })
 }
 
 export type Node = Partial<Mesh> & {
   type: NodeType
-  object?: string
+  url?: string
+  blob?: Blob
   animation?: string
   color?: string
   actions?: {
@@ -59,8 +55,7 @@ light.type = 'DirectionalLight'
 
 export const useStore = create<Store>((set) => ({
   mode: 'translate',
-
-  nodes: [light],
+  nodes: [],
   selectNode: (uuid) => set({ selectedNode: uuid }),
   setScene: (scene) => set({ scene: scene }),
   deleteNode: () =>
@@ -87,4 +82,56 @@ export const useStore = create<Store>((set) => ({
   setMode: (mode) => set({ mode }),
 }))
 
-demo()
+function meshToJson(mesh: Partial<Node>) {
+  return {
+    name: mesh.name,
+    position: mesh.position?.toArray(),
+    rotation: mesh.rotation?.toArray(),
+    scale: mesh.scale?.toArray(),
+    type: mesh.type,
+    blob: mesh.blob,
+    animation: mesh.animation,
+    color: mesh.color,
+    actions: mesh.actions,
+  }
+}
+
+function jsonToMesh(json: Node) {
+  const v3 = (json?.position ?? [0, 0, 0]) as number[]
+  const e3 = (json.rotation ?? [0, 0, 0]) as number[]
+  const s3 = (json.scale ?? [0, 0, 0]) as number[]
+
+  const mesh = new Mesh() as Node
+  mesh.position?.set(v3[0], v3[1], v3[2]),
+    mesh.rotation?.set(e3[0], e3[1], e3[2]),
+    mesh.scale?.set(s3[0], s3[1], s3[2]),
+    (mesh.type = json.type)
+  mesh.blob = json.blob
+  mesh.name = json.name
+  mesh.url = json.blob ? URL.createObjectURL(json.blob) : undefined
+  mesh.animation = json.animation
+  mesh.color = json.color
+  mesh.actions = json.actions
+  return mesh
+}
+
+useStore.subscribe(async (state) => {
+  const db = await initDb()
+  const nodes = state.nodes.map(meshToJson)
+  db.put(
+    'store',
+    {
+      nodes,
+      scene: state.scene,
+    },
+    0,
+  )
+})
+
+initDb().then(async (s) => {
+  const [store] = await s.getAll('store')
+  useStore.setState({
+    nodes: store.nodes.map(jsonToMesh),
+    scene: store.scene,
+  })
+})

@@ -47,7 +47,6 @@ export function ObjectSettings() {
           const [x, y, z] = val
           const position = new Vector3(x, y, z)
           if (!selected?.uuid || !position) return
-          console.log('position', position)
           store.updateNode(selected.uuid, { position })
         }}
         label='Position'

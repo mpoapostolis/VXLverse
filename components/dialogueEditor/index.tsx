@@ -1,6 +1,6 @@
 import { useStore } from '@/store'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { Fragment, useState } from 'react'
 
 const defaultDialogue = {
   title: '',
@@ -36,7 +36,7 @@ export function DailogueEditor() {
             <div>Completed Text </div>
             <div> </div>
             {dialogue.map((d, idx) => (
-              <>
+              <Fragment key={idx}>
                 <input placeholder='Title' type='text' className='input-bordered input input-sm' />
                 <select placeholder='Required Item' className='select-bordered select select-sm'>
                   <option value=''>None</option>
@@ -70,7 +70,7 @@ export function DailogueEditor() {
                     </button>
                   )}
                 </div>
-              </>
+              </Fragment>
             ))}
           </div>
 

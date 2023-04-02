@@ -20,15 +20,24 @@ export function DropDown(props: { items: string[]; label: string; onChange: (val
                 <input
                   onChange={(e) => {
                     const file = e.target.files?.[0]
-                    const mesh = new Mesh()
                     if (!file) return
-                    store.addNode({
-                      ...mesh,
-                      object: URL.createObjectURL(file),
-                      name: file.name,
-                      position: new Vector3(2, 3, 4),
-                      type: 'GLTF',
-                    })
+
+                    const reader = new FileReader()
+                    reader.onload = (e) => {
+                      const buffer = reader.result as ArrayBuffer
+                      const blob = new Blob([buffer], { type: 'application/octet-stream' })
+                      const mesh = new Mesh()
+                      store.addNode({
+                        ...mesh,
+                        url: URL.createObjectURL(blob),
+                        blob,
+                        name: file.name,
+                        position: new Vector3(2, 3, 4),
+                        type: 'GLTF',
+                      })
+                    }
+                    reader.readAsArrayBuffer(file)
+
                     e.target.value = ''
                   }}
                   type='file'

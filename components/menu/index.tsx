@@ -1,4 +1,5 @@
 import { Node, useStore } from '@/store'
+import Link from 'next/link'
 import { Mesh, Vector3 } from 'three'
 import { DropDown } from '../dropdown'
 
@@ -70,7 +71,9 @@ export default function Menu() {
           })
         }}
       />
-      <button>Play</button>
+      <Link target='__blank' href={'/game'}>
+        Play
+      </Link>
     </div>
   )
 }
