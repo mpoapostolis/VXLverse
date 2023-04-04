@@ -16,13 +16,14 @@ async function initDb() {
     },
   })
 }
-
+export type GameType = 'hero' | 'enemy' | 'npc'
 export type Node = Partial<Mesh> & {
   type: NodeType
   url?: string
   blob?: Blob
   animation?: string
   color?: string
+  gameType?: GameType
   actions?: {
     [x: string]: AnimationAction | null
   }
@@ -92,7 +93,7 @@ function meshToJson(mesh: Partial<Node>) {
     blob: mesh.blob,
     animation: mesh.animation,
     color: mesh.color,
-    actions: mesh.actions,
+    gameType: mesh.gameType,
   }
 }
 
@@ -107,6 +108,7 @@ function jsonToMesh(json: Node) {
     mesh.scale?.set(s3[0], s3[1], s3[2]),
     (mesh.type = json.type)
   mesh.blob = json.blob
+  mesh.gameType = json.gameType
   mesh.name = json.name
   mesh.url = json.blob ? URL.createObjectURL(json.blob) : undefined
   mesh.animation = json.animation
@@ -118,14 +120,7 @@ function jsonToMesh(json: Node) {
 useStore.subscribe(async (state) => {
   const db = await initDb()
   const nodes = state.nodes.map(meshToJson)
-  db.put(
-    'store',
-    {
-      nodes,
-      scene: state.scene,
-    },
-    0,
-  )
+  db.put('store', { nodes, scene: state.scene }, 0)
 })
 
 initDb().then(async (s) => {

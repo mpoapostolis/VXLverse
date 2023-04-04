@@ -1,4 +1,4 @@
-import { useStore } from '@/store'
+import { GameType, useStore } from '@/store'
 import { Euler, Vector3 } from 'three'
 import { DailogueEditor } from '../dialogueEditor'
 import { Xyz } from '../xyz'
@@ -125,11 +125,18 @@ export function ObjectSettings() {
           <label className='label'>
             <span className='label-text'>Type:</span>
           </label>
-          <select className='select-bordered select select-xs focus:outline-none'>
+          <select
+            value={selected.gameType}
+            onChange={(evt) =>
+              store.updateNode(selected.uuid ?? '', {
+                gameType: evt.target.value as GameType,
+              })
+            }
+            className='select-bordered select select-xs focus:outline-none'>
             <option selected>-</option>
-            <option>Hero</option>
-            <option>Npc</option>
-            <option>Enemy</option>
+            <option value='hero'>Hero</option>
+            <option value='npc'>Npc</option>
+            <option value='enemy'>Enemy</option>
           </select>
         </div>
 

@@ -1,6 +1,8 @@
-import { Node } from '@/components/node'
+import { GameNode } from '@/components/gameNode'
+import { Light } from '@/components/lights'
+import { lights } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
-import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
+import { Environment, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
@@ -27,19 +29,29 @@ export default function Home() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
+  const hero = store.nodes.find((node) => node.gameType === 'hero')
   return (
     <main className='relative h-screen overflow-hidden'>
       <Canvas>
         <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-        <GizmoHelper alignment='top-right' margin={[80, 80]}>
-          <GizmoViewport axisColors={['#FF7F9A', '#C2EE00', '#73C5FF']} />
-        </GizmoHelper>
         {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
 
-        {store.nodes.map((node, idx) => (
-          <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
-        ))}
-        <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enableDamping={false} />
+        {store.nodes.map((node, idx) =>
+          lights.includes(node.type) ? (
+            <mesh key={node.uuid} position={node.position}>
+              <Light type={node?.type ?? 'DirectionalLight'} />
+            </mesh>
+          ) : (
+            <GameNode key={idx} {...node} />
+          ),
+        )}
+        <OrbitControls
+          target={hero?.position ?? [0, 10, 0]}
+          maxDistance={1000}
+          position={[0, -5, 0]}
+          makeDefault
+          enableDamping={false}
+        />
         <Preload all />
       </Canvas>
     </main>
