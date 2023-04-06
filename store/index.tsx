@@ -34,6 +34,7 @@ type Scene = {
   type?: SceneType
   color?: HexColorString
   equirect?: string
+  blob?: Blob
 }
 
 export type Mode = 'translate' | 'rotate' | 'scale'
@@ -125,8 +126,14 @@ useStore.subscribe(async (state) => {
 
 initDb().then(async (s) => {
   const [store] = await s.getAll('store')
+  const equirect =
+    store.scene.blob && store.scene?.type === 'equirect' ? URL.createObjectURL(store.scene.blob) : undefined
+
   useStore.setState({
     nodes: store?.nodes?.map(jsonToMesh) ?? [],
-    scene: store.scene,
+    scene: { ...store?.scene, equirect } ?? {
+      type: 'color',
+      color: '#999',
+    },
   })
 })

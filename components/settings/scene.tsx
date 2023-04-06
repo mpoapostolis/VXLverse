@@ -66,9 +66,10 @@ export function SceneSettings() {
             className={clsx('h-10 w-10 border border-dashed border-black border-opacity-10  bg-base-300', {
               hidden: store.scene?.type !== 'equirect',
             })}
-            onChange={(equirect) =>
+            onChange={(blob, equirect) =>
               store.setScene({
                 ...store.scene,
+                blob,
                 equirect,
               })
             }

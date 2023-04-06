@@ -11,6 +11,7 @@ import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
 function Env() {
   const store = useStore()
+
   const texture = useTexture(store.scene?.equirect ?? '')
   // texture equriectangular
   texture.mapping = EquirectangularReflectionMapping
