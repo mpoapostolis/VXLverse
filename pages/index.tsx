@@ -43,6 +43,7 @@ export default function Home() {
             <GizmoHelper alignment='top-right' margin={[80, 80]}>
               <GizmoViewport axisColors={['#FF7F9A', '#C2EE00', '#73C5FF']} />
             </GizmoHelper>
+
             {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
 
             {store.nodes.map((node, idx) => (

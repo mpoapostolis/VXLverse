@@ -1,6 +1,6 @@
 import { NodeType } from '@/components/menu'
 import { openDB } from 'idb'
-import { AnimationAction, Mesh, Vector3 } from 'three'
+import { AnimationAction, HexColorString, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
 
 export const PLANE_GEOMETRY = new Vector3(5, 0.5, 5)
@@ -32,7 +32,7 @@ export type SceneType = 'color' | 'equirect'
 
 type Scene = {
   type?: SceneType
-  color?: string
+  color?: HexColorString
   equirect?: string
 }
 
@@ -126,7 +126,7 @@ useStore.subscribe(async (state) => {
 initDb().then(async (s) => {
   const [store] = await s.getAll('store')
   useStore.setState({
-    nodes: store.nodes.map(jsonToMesh),
+    nodes: store?.nodes?.map(jsonToMesh) ?? [],
     scene: store.scene,
   })
 })

@@ -1,5 +1,6 @@
 import { SceneType, useStore } from '@/store'
 import clsx from 'clsx'
+import { HexColorString } from 'three'
 import { Upload } from '../upload'
 
 export function SceneSettings() {
@@ -53,7 +54,7 @@ export function SceneSettings() {
             onChange={(evt) => {
               store.setScene({
                 ...store.scene,
-                color: evt.target.value,
+                color: evt.target.value as HexColorString,
               })
             }}
             type='color'
