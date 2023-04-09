@@ -5,12 +5,12 @@
 body {
   padding: 0%;
   margin: 0%;
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
 canvas {
   width: 100%;
-  height:  calc(100vh - 33px );
+  height: calc(100vh - 33px);
   z-index: -40;
 }
 
@@ -18,11 +18,10 @@ canvas {
   display: none;
 }
 
-.hover-trigger:hover  .hover-target {
+.hover-trigger:hover .hover-target {
   display: block;
 }
 
-.btn{
+.btn {
   @apply rounded
 }
-

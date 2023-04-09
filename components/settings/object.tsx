@@ -3,28 +3,10 @@ import { Euler, Vector3 } from 'three'
 import { DailogueEditor } from '../dialogueEditor'
 import { Xyz } from '../xyz'
 
-const opts = [
-  'Default',
-  'Click',
-  'Death',
-  'Spawn',
-  'Attack',
-  'Damage',
-  'Heal',
-  'Move',
-  'Idle',
-  'Press W',
-  'Press A',
-  'Press S',
-  'Press D',
-  'Press Space',
-]
-
 export function ObjectSettings() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
-
   return !selected ? null : (
     <div className='grid gap-4 p-2 pb-12'>
       <div className='divider'>Transform</div>
@@ -37,6 +19,10 @@ export function ObjectSettings() {
       <div className='grid grid-cols-[1fr_3fr] '>
         <div className='label-text w-full  '>Name</div>
         <input
+          onChange={(evt) => {
+            if (!selected?.uuid) return
+            store.updateNode(selected.uuid, { name: evt.target.value })
+          }}
           value={selected?.name ?? selected?.type}
           className='input-bordered input input-xs w-full focus:outline-none'
         />
@@ -92,30 +78,98 @@ export function ObjectSettings() {
       {selected.type === 'GLTF' && (
         <div>
           <div className='divider'>Animations</div>
-          {Object.keys(selected?.actions ?? {}).map((key) => (
-            <div key={key} className='grid grid-cols-3 '>
-              <label className='label-text truncate'>{key}</label>
+
+          {Object.keys(selected?.actions ?? {}).map((animation) => (
+            <div key={animation} className='mb-1 grid grid-cols-3 '>
+              <label className='label-text truncate'>{animation}</label>
               <button
                 onClick={() => {
                   if (!selected?.uuid) return
 
-                  store.updateNode(selected.uuid, { animation: selected.animation === key ? undefined : key })
+                  store.updateNode(selected.uuid, {
+                    animation: selected.animation === animation ? undefined : animation,
+                  })
                 }}
                 className='btn-xs btn'>
-                {selected.animation === key ? 'Stop' : 'Play'}
+                {selected.animation === animation ? 'Stop' : 'Play'}
               </button>
 
-              <select className='select-ghost select-xs focus:outline-none'>
-                <option selected disabled>
-                  -
-                </option>
-
-                {opts.map((opt) => (
-                  <option key={opt}>{opt}</option>
-                ))}
-              </select>
+              <input
+                value={selected.keyBindings?.[animation] ?? ''}
+                className='input input-xs border border-base-300 bg-transparent focus:outline-none'
+                onKeyDown={(evt) => {
+                  evt.preventDefault()
+                  evt.stopPropagation()
+                  let key = ''
+                  if (evt.key === 'Backspace') {
+                    key = evt.currentTarget.value = ''
+                  } else if (evt.key === ' ') {
+                    key = evt.currentTarget.value = 'Space'
+                  } else {
+                    key = evt.currentTarget.value = evt.key
+                  }
+                  if (!selected?.uuid) return
+                  store.updateNode(selected.uuid, {
+                    keyBindings: {
+                      ...selected.keyBindings,
+                      [animation]: key,
+                    },
+                  })
+                }}
+              />
             </div>
           ))}
+          <div className='form-control grid w-full max-w-xs grid-cols-[2fr_1fr] items-center'>
+            <label className='label'>
+              <span className='label-text'>Default:</span>
+            </label>
+
+            <select
+              value={selected.keyBindings?.default ?? ''}
+              onChange={(evt) =>
+                store.updateNode(selected.uuid ?? '', {
+                  keyBindings: {
+                    ...selected.keyBindings,
+                    default: evt.target.value,
+                  },
+                })
+              }
+              className='select-bordered select select-xs   focus:outline-none'>
+              <option selected>-</option>
+
+              {Object.keys(selected?.actions ?? {}).map((animation) => (
+                <option key={animation} value={animation}>
+                  {animation}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className='form-control grid w-full max-w-xs grid-cols-[2fr_1fr] items-center'>
+            <label className='label'>
+              <span className='label-text'>on Click:</span>
+            </label>
+
+            <select
+              value={selected.keyBindings?.onClick ?? ''}
+              onChange={(evt) => {
+                store.updateNode(selected.uuid ?? '', {
+                  keyBindings: {
+                    ...selected.keyBindings,
+                    onClick: evt.target.value,
+                  },
+                })
+              }}
+              className='select-bordered select select-xs   focus:outline-none'>
+              <option selected>-</option>
+
+              {Object.keys(selected?.actions ?? {}).map((animation) => (
+                <option key={animation} value={animation}>
+                  {animation}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       )}
       <div>

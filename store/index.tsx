@@ -16,6 +16,11 @@ async function initDb() {
     },
   })
 }
+
+export type KeyBindings = {
+  onClick?: string
+  default?: string
+} & Record<string, string>
 export type GameType = 'hero' | 'enemy' | 'npc'
 export type Node = Partial<Mesh> & {
   type: NodeType
@@ -23,6 +28,7 @@ export type Node = Partial<Mesh> & {
   blob?: Blob
   animation?: string
   color?: string
+  keyBindings?: KeyBindings
   gameType?: GameType
   actions?: {
     [x: string]: AnimationAction | null
@@ -95,6 +101,7 @@ function meshToJson(mesh: Partial<Node>) {
     animation: mesh.animation,
     color: mesh.color,
     gameType: mesh.gameType,
+    keyBindings: mesh.keyBindings,
   }
 }
 
@@ -115,6 +122,7 @@ function jsonToMesh(json: Node) {
   mesh.animation = json.animation
   mesh.color = json.color
   mesh.actions = json.actions
+  mesh.keyBindings = json.keyBindings
   return mesh
 }
 
