@@ -6,6 +6,7 @@ export function Gltf(props: { animation?: string; uuid: string; url: string }) {
   const { scene, animations } = useGLTF(props.url)
   const { actions } = useAnimations(animations, scene)
   const store = useStore()
+
   useEffect(() => {
     store.updateNode(props.uuid, { actions })
     // eslint-disable-next-line react-hooks/exhaustive-deps

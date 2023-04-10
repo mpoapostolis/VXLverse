@@ -30,10 +30,12 @@ export function DailogueEditor() {
         })}>
         <div className='modal-box flex w-11/12 max-w-screen-xl flex-col bg-base-200 '>
           <div className='grid grid-cols-[1fr_1fr_1fr_1fr_60px] gap-4 p-4'>
-            <div>Title</div>
-            <div>Required Item</div>
-            <div>Text</div>
-            <div>Completed Text </div>
+            <div>Quest name</div>
+            <div>Inventory Item Required </div>
+            <div>Dialog before completing the quest:</div>
+
+            <div>Dialog after completing the quest:</div>
+
             <div> </div>
             {dialogue.map((d, idx) => (
               <Fragment key={idx}>
@@ -46,8 +48,14 @@ export function DailogueEditor() {
                     </option>
                   ))}
                 </select>
-                <input placeholder='Text' className='input-bordered input input-sm ' />
-                <input placeholder='Completed Text' className='input-bordered input input-sm' />
+                <input
+                  placeholder='I have a quest for you. Are you willing to listen?'
+                  className='input-bordered input input-sm '
+                />
+                <input
+                  placeholder='You have done well. I could not have completed the ritual without'
+                  className='input-bordered input input-sm'
+                />
                 <div className='flex gap-2'>
                   {dialogue.length > 1 && (
                     <button

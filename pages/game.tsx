@@ -1,11 +1,12 @@
+import { Dialogue } from '@/components/dialogue'
 import { GameNode } from '@/components/gameNode'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, OrbitControls, Preload, useTexture } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useEffect } from 'react'
-import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
+import { EquirectangularReflectionMapping, Vector3, sRGBEncoding } from 'three'
 
 function Env() {
   const store = useStore()
@@ -15,6 +16,21 @@ function Env() {
   texture.encoding = sRGBEncoding
 
   return <Environment background map={texture} />
+}
+
+function Orbit() {
+  const t = useThree()
+  const hero = t.scene.children.find((node) => node?.type === 'hero')
+
+  const v3 = new Vector3()
+  useFrame((t) => {
+    if (!hero) return
+    // @ts-ignore
+    t.controls.target = hero.position 
+  })
+  return (
+    <OrbitControls target={hero?.position} maxDistance={10.1} minDistance={4} position={[0, -5, 0]} makeDefault enableDamping={false} />
+  )
 }
 
 export default function Home() {
@@ -40,12 +56,11 @@ export default function Home() {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heroUUid, defaultAnimation])
-
   return (
-    <main className='relative h-screen overflow-hidden'>
+    <main className="relative h-screen overflow-hidden">
       <Canvas>
         <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-        {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
+        {store.scene?.equirect ? <Env /> : <color attach="background" args={[store.scene?.color ?? '#999']} />}
 
         {store.nodes.map((node, idx) =>
           lights.includes(node.type) ? (
@@ -56,15 +71,10 @@ export default function Home() {
             <GameNode key={idx} {...node} />
           ),
         )}
-        <OrbitControls
-          target={hero?.position ?? [0, 10, 0]}
-          maxDistance={1000}
-          position={[0, -5, 0]}
-          makeDefault
-          enableDamping={false}
-        />
+        <Orbit />
         <Preload all />
       </Canvas>
+      <Dialogue />
     </main>
   )
 }
