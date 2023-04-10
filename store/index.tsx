@@ -123,6 +123,8 @@ function jsonToMesh(json: Node) {
   mesh.color = json.color
   mesh.actions = json.actions
   mesh.keyBindings = json.keyBindings
+  // default animation
+  if (mesh.keyBindings?.default) mesh.animation = mesh.keyBindings?.default
   return mesh
 }
 

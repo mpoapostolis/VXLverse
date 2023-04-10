@@ -188,7 +188,9 @@ export function ObjectSettings() {
             }
             className='select-bordered select select-xs focus:outline-none'>
             <option selected>-</option>
-            <option value='hero'>Hero</option>
+            <option disabled={Boolean(store.nodes.find((e) => e.gameType === 'hero'))} value='hero'>
+              Hero
+            </option>
             <option value='npc'>Npc</option>
             <option value='enemy'>Enemy</option>
           </select>

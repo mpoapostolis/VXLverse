@@ -19,17 +19,28 @@ function Env() {
 
 export default function Home() {
   const store = useStore()
-  const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key.toLocaleLowerCase() === 'w') store.setMode('translate')
-    if (e.key.toLocaleLowerCase() === 'e') store.setMode('rotate')
-    if (e.key.toLocaleLowerCase() === 'r') store.setMode('scale')
-    if (e.key.toLocaleLowerCase() === 'delete') store.deleteNode()
-  }
-  useEffect(() => {
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
-  }, [])
+
   const hero = store.nodes.find((node) => node.gameType === 'hero')
+  const keyBindings = Object.entries(hero?.keyBindings ?? {})
+  const defaultAnimation = hero?.keyBindings?.default
+  const heroUUid = hero?.uuid
+
+  useEffect(() => {
+    if (!heroUUid) return
+    document.addEventListener('keydown', (e) => {
+      if (e.repeat) return
+      let keyPress = e.key === ' ' ? 'Space' : e.key
+      const action = keyBindings.find(([_, key]) => key === keyPress)?.[0]
+      if (!action || !heroUUid) return
+      store.updateNode(heroUUid, { animation: action })
+    })
+    document.addEventListener('keyup', (e) => {
+      if (e.repeat) return
+      store.updateNode(heroUUid, { animation: defaultAnimation })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [heroUUid, defaultAnimation])
+
   return (
     <main className='relative h-screen overflow-hidden'>
       <Canvas>
