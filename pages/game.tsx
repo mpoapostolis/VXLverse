@@ -26,10 +26,17 @@ function Orbit() {
   useFrame((t) => {
     if (!hero) return
     // @ts-ignore
-    t.controls.target = hero.position 
+    t.controls.target = hero.position
   })
   return (
-    <OrbitControls target={hero?.position} maxDistance={10.1} minDistance={4} position={[0, -5, 0]} makeDefault enableDamping={false} />
+    <OrbitControls
+      target={hero?.position}
+      maxDistance={10.1}
+      minDistance={4}
+      position={[0, -5, 0]}
+      makeDefault
+      enableDamping={false}
+    />
   )
 }
 
