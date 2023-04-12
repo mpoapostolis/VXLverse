@@ -1,8 +1,8 @@
 import clsx from 'clsx'
 import { useState } from 'react'
 
-export function Upload(props: { onChange: (e: Blob, equirect: string) => void; className?: string }) {
-  const [file, setFile] = useState<string | null>(null)
+export function Upload(props: { onChange: (e: Blob, equirect: string) => void; value?: string; className?: string }) {
+  const [file, setFile] = useState<string | null>(props.value ?? null)
   return (
     <div className={clsx('relative', props.className)}>
       <input
@@ -21,10 +21,10 @@ export function Upload(props: { onChange: (e: Blob, equirect: string) => void; c
           reader.readAsArrayBuffer(file)
           e.target.value = ''
         }}
-        className='absolute left-0 top-0 h-full w-full opacity-0'
-        type='file'
+        className="absolute left-0 top-0 h-full w-full opacity-0"
+        type="file"
       />
-      {file && <img className='h-full w-full object-fill' src={file} alt='' />}
+      {file && <img className="h-full w-full object-fill" src={file} alt="" />}
     </div>
   )
 }

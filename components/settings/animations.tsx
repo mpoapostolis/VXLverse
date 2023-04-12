@@ -1,5 +1,6 @@
 import { useStore } from '@/store'
 import * as Label from '@radix-ui/react-label'
+import * as Menubar from '@radix-ui/react-menubar'
 import clsx from 'clsx'
 
 export function Animations() {
@@ -7,6 +8,8 @@ export function Animations() {
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   return selected ? (
     <div>
+      <Menubar.Separator className="my-4  h-[1px] bg-violet6" />
+
       {Object.keys(selected?.actions ?? {}).map((animation) => (
         <div key={animation} className="mb-2 gap-2 grid grid-cols-3 ">
           <Label.Root className="text-black11 truncate w-full text-sm font-medium">{animation}</Label.Root>

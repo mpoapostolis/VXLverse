@@ -1,6 +1,7 @@
 import { useStore } from '@/store'
 import * as Label from '@radix-ui/react-label'
-import { Euler, Vector3 } from 'three'
+import * as Menubar from '@radix-ui/react-menubar'
+import { Euler, Mesh, Vector3 } from 'three'
 import { Xyz } from '../xyz'
 
 export function TransformSettings() {
@@ -10,6 +11,7 @@ export function TransformSettings() {
 
   return !selected ? null : (
     <>
+      <Menubar.Separator className="my-4  h-[1px] bg-violet6" />
       <div className="mb-2 grid grid-cols-[1fr_3fr] ">
         <Label.Root className="text-black11 w-full text-sm font-medium">Type</Label.Root>
         <Label.Root className="text-black11 w-full text-sm font-medium">
@@ -29,6 +31,39 @@ export function TransformSettings() {
           className="text-blackA11  rounded-none inline-flex h-6 w-full flex-1 items-center justify-center  pl-2.5 border-blackA7 border text-xs leading-none outline-none mb-2"
         />
       </div>
+
+      {['hero', 'enemy', 'npc'].includes(selected?.gameType ?? '') && (
+        <div className="grid grid-cols-[1fr_3fr] ">
+          <Label.Root className="text-black11 w-full text-sm font-medium">Gltf</Label.Root>
+          <input
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (!file) return
+
+              const reader = new FileReader()
+              reader.onload = (e) => {
+                if (!selected?.uuid) return
+                const buffer = reader.result as ArrayBuffer
+                const blob = new Blob([buffer], { type: 'application/octet-stream' })
+                const mesh = new Mesh()
+                store.updateNode(selected.uuid, {
+                  ...mesh,
+                  url: URL.createObjectURL(blob),
+                  blob,
+                  name: file.name,
+                  type: 'GLTF',
+                })
+              }
+              reader.readAsArrayBuffer(file)
+
+              e.target.value = ''
+            }}
+            type="file"
+            accept=".gltf,.glb"
+            className="text-blackA11  flex   rounded-none  h-6 w-full flex-1 items-center justify-center border p-1 border-blackA7  text-xs leading-none outline-none mb-2"
+          />
+        </div>
+      )}
 
       <Xyz
         onChange={(val) => {
