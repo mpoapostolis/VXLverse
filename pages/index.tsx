@@ -1,6 +1,6 @@
 import { Controls } from '@/components/controls'
 import Editor from '@/components/editor'
-import Menu from '@/components/menu'
+import { Menu } from '@/components/menu'
 import { Node } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
@@ -33,19 +33,19 @@ export default function Home() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
   return (
-    <main className='h-screen overflow-hidden'>
+    <main className="h-screen overflow-hidden">
       <Menu />
       <div className={clsx('grid h-full w-screen grid-cols-[1fr_16vw]')}>
         {/* The button to open modal */}
-        <div className='relative'>
+        <div className="relative">
           <Controls />
           <Canvas>
             <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-            <GizmoHelper alignment='top-right' margin={[80, 80]}>
+            <GizmoHelper alignment="top-right" margin={[80, 80]}>
               <GizmoViewport axisColors={['#FF7F9A', '#C2EE00', '#73C5FF']} />
             </GizmoHelper>
 
-            {store.scene?.equirect ? <Env /> : <color attach='background' args={[store.scene?.color ?? '#999']} />}
+            {store.scene?.equirect ? <Env /> : <color attach="background" args={[store.scene?.color ?? '#999']} />}
 
             {store.nodes.map((node, idx) => (
               <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />

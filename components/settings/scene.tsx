@@ -1,4 +1,5 @@
-import { SceneType, useStore } from '@/store'
+import { useStore } from '@/store'
+import * as Label from '@radix-ui/react-label'
 import clsx from 'clsx'
 import { HexColorString } from 'three'
 import { Upload } from '../upload'
@@ -6,75 +7,54 @@ import { Upload } from '../upload'
 export function SceneSettings() {
   const store = useStore()
   return (
-    <div className='p-2'>
-      <div className='relative h-40  overflow-auto border bg-white'>
-        <div
-          className={clsx('absolute  h-full w-full text-xs', {
-            hidden: store.nodes.length > 0,
-          })}>
-          <label className='flex h-full w-full items-center justify-center text-slate-400'>
-            Nodes will display here
-          </label>
-        </div>
-        {store.nodes.map((node, idx) => (
-          <button
-            onClick={() => store.selectNode(node.uuid)}
-            className={clsx(
-              'label-text flex w-full items-center border-b px-4 py-1 text-left text-xs text-base-content  hover:bg-slate-100',
-              {
-                'bg-yellow-100': `${node?.uuid}` === store.selectedNode,
-              },
-            )}
-            key={idx}>
-            <span className='mr-2 inline-block h-1.5 w-1.5 rounded-full bg-red-300' />
-            <span>{node?.name === '' ? node.type : node?.name} </span>
-          </button>
-        ))}
-      </div>
-
-      <div className='label  mt-3 text-xs font-bold'>Scene background type</div>
-      <div className='grid grid-cols-2 items-center '>
+    <div className="">
+      <div className="flex mb-2">
+        <Label.Root className="text-black11 w-full text-sm font-medium">Scene Background</Label.Root>
         <select
           onChange={(evt) => {
-            const type = evt.target.value as SceneType
             store.setScene({
-              ...store.scene,
-              equirect: type === 'equirect' ? store.scene?.equirect : undefined,
-              color: type === 'color' ? '#999' : undefined,
-              type,
+              type: evt.target.value as 'color' | 'equirect',
             })
           }}
-          className='label-text select-bordered select select-xs w-full'>
-          <option value='color'>Color</option>
-          <option value='equirect'>Equirect</option>
+          value={store?.scene?.type}
+        >
+          <option value="color">Color</option>
+          <option value="equirect">Equirect</option>
         </select>
+      </div>
 
-        <div className='label-text ml-auto flex items-center'>
-          <input
-            onChange={(evt) => {
-              store.setScene({
-                ...store.scene,
-                color: evt.target.value as HexColorString,
-              })
-            }}
-            type='color'
-            className={clsx(' p-0 file:hidden   file:text-end', {
-              hidden: store.scene?.type !== 'color',
-            })}
-          />
-          <Upload
-            className={clsx('h-10 w-10 border border-dashed border-black border-opacity-10  bg-base-300', {
-              hidden: store.scene?.type !== 'equirect',
-            })}
-            onChange={(blob, equirect) =>
-              store.setScene({
-                ...store.scene,
-                blob,
-                equirect,
-              })
-            }
-          />
-        </div>
+      <div className="grid grid-cols-[80px_1fr] items-center gap-4 ">
+        {store.scene?.type === 'color' && (
+          <>
+            <Label.Root className="text-black11 w-full text-sm font-medium">Color</Label.Root>
+
+            <input
+              onChange={(evt) => {
+                store.setScene({
+                  ...store.scene,
+                  color: evt.target.value as HexColorString,
+                })
+              }}
+              type="color"
+              className={clsx(' ml-auto w-20  p-0 file:hidden   file:text-end', {})}
+            />
+          </>
+        )}
+        {store.scene?.type === 'equirect' && (
+          <>
+            <Label.Root className="text-black11 w-fit text-sm font-medium">Equirect</Label.Root>
+            <Upload
+              className={clsx('bg-base-300 ml-auto h-20 w-20 min-w-[40px] border border-dashed border-mauve8  ', {})}
+              onChange={(blob, equirect) =>
+                store.setScene({
+                  ...store.scene,
+                  blob,
+                  equirect,
+                })
+              }
+            />
+          </>
+        )}
       </div>
     </div>
   )
