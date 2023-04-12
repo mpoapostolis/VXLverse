@@ -38,7 +38,7 @@ export function Menu() {
   }
 
   return (
-    <Menubar.Root className="flex rounded-md border-b border-blackA5 bg-mauve5 p-1">
+    <Menubar.Root className="flex  border-b border-blackA5 bg-mauve5 p-1">
       <Menubar.Menu>
         <Menubar.Trigger className="flex select-none items-center justify-between gap-[2px] rounded px-3 py-2 text-[13px] font-medium leading-none text-blackA12 outline-none data-[highlighted]:bg-violet4 data-[state=open]:bg-violet4">
           File

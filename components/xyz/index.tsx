@@ -14,7 +14,7 @@ export function Xyz(props: { onChange: (val: number[]) => void; label: string; v
             props.onChange(values)
           }}
           type="number"
-          className="text-black11 inline-flex h-6 w-full flex-1 items-center justify-center rounded px-2.5 text-[13px] leading-none shadow-[0_0_0_1px] shadow-violet7 outline-none focus:shadow-[0_0_0_2px] focus:shadow-violet8"
+          className="text-blackA11  rounded-none inline-flex h-6 w-full flex-1 items-center justify-center  pl-2.5 border-blackA7 border text-xs leading-none outline-none"
           value={Number(value.toFixed(2))}
         />
       ))}

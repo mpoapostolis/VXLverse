@@ -17,6 +17,7 @@ export function SceneSettings() {
             })
           }}
           value={store?.scene?.type}
+          className="rounded-none w-full  bg-white border-blackA7 border text-xs leading-none outline-none"
         >
           <option value="color">Color</option>
           <option value="equirect">Equirect</option>

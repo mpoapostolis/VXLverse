@@ -4,7 +4,7 @@ import clsx from 'clsx'
 export function Controls() {
   const store = useStore()
   return (
-    <div className="absolute left-3 top-3  z-10 grid h-fit w-fit">
+    <div className="absolute left-3 top-14  z-10 grid h-fit w-fit">
       <button
         onClick={() => store.setMode('translate')}
         className={clsx('rounded-t border-b border-black border-opacity-10 hover:bg-mauve3  p-2', {

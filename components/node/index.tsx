@@ -1,10 +1,9 @@
-import { Node, useStore } from '@/store'
+import { Node, NodeType, useStore } from '@/store'
 import { TransformControls, useHelper } from '@react-three/drei'
 import { useRef } from 'react'
 import { BoxHelper, Euler } from 'three'
 import { Gltf } from '../gltf'
 import { Light } from '../lights'
-import { NodeType } from '../menu'
 import { MeshGeometry } from '../meshGeometry'
 
 export const lights: any[] = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
@@ -60,7 +59,8 @@ export function Node(
       enabled={props.selected}
       showX={props.selected}
       showY={props.selected}
-      showZ={props.selected}>
+      showZ={props.selected}
+    >
       <>
         {lights.includes(props.type) ? (
           <Light type={props.type as NodeType} />
@@ -71,7 +71,8 @@ export function Node(
             ref={ref}
             onClick={() => {
               props.uuid && store.selectNode(props.uuid)
-            }}>
+            }}
+          >
             {props.url && props.uuid && props.type === 'GLTF' && (
               <Gltf animation={props.animation} uuid={props.uuid} url={props.url} />
             )}

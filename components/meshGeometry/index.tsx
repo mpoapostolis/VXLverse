@@ -1,3 +1,4 @@
+import { NodeType } from '@/store'
 import {
   BoxGeometryProps,
   CapsuleGeometryProps,
@@ -15,7 +16,6 @@ import {
   TorusGeometryProps,
   TorusKnotGeometryProps,
 } from '@react-three/fiber'
-import { NodeType } from '../menu'
 
 type x = Object3DNode<MeshProps, BoxGeometryProps>
 

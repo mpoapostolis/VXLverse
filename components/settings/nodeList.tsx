@@ -4,7 +4,7 @@ import clsx from 'clsx'
 export function NodeList() {
   const store = useStore()
   return (
-    <div className="relative h-40  overflow-auto border bg-white">
+    <div className="relative h-40 border-blackA6 overflow-auto border bg-white">
       <div
         className={clsx('absolute  h-full w-full text-xs', {
           hidden: store.nodes.length > 0,
