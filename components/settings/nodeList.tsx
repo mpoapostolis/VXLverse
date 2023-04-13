@@ -15,8 +15,7 @@ export function NodeList() {
       {store.nodes
         ?.filter((e) => {
           if (e.gameType === 'hero') return true
-          if (e.scene === store.currentScene) return true
-          return false
+          else return e.scene === store.currentScene
         })
         .map((node, idx) => (
           <button

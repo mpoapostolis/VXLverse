@@ -54,8 +54,7 @@ export default function Home() {
             {store.nodes
               ?.filter((e) => {
                 if (e.gameType === 'hero') return true
-                if (e.scene === store.currentScene) return true
-                return false
+                else return e.scene === store.currentScene
               })
               .map((node, idx) => (
                 <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />

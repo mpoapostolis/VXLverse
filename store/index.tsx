@@ -157,6 +157,7 @@ function jsonToMesh(json: Node) {
     mesh.scale?.set(s3[0], s3[1], s3[2]),
     (mesh.type = json.type)
   mesh.blob = json.blob
+  mesh.scene = json.scene
   mesh.gameType = json.gameType
   mesh.name = json.name
   mesh.url = json.blob ? URL.createObjectURL(json.blob) : undefined
