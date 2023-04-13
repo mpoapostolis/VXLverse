@@ -8,13 +8,11 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, Vector3, sRGBEncoding } from 'three'
 
-function Env() {
-  const store = useStore()
-  const texture = useTexture(store.scene?.equirect ?? '')
+function Env(props: { equirect: string }) {
+  const texture = useTexture(props.equirect ?? '')
   // texture equriectangular
   texture.mapping = EquirectangularReflectionMapping
   texture.encoding = sRGBEncoding
-
   return <Environment background map={texture} />
 }
 
@@ -63,11 +61,17 @@ export default function Home() {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heroUUid, defaultAnimation])
+  const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
+
   return (
     <main className="relative h-screen overflow-hidden">
       <Canvas>
         <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-        {store.scene?.equirect ? <Env /> : <color attach="background" args={[store.scene?.color ?? '#999']} />}
+        {selectedScene?.equirect ? (
+          <Env equirect={selectedScene.equirect} />
+        ) : (
+          <color attach="background" args={[selectedScene?.color ?? '#999']} />
+        )}
 
         {store.nodes.map((node, idx) =>
           lights.includes(node.type) ? (

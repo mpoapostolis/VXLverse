@@ -11,7 +11,7 @@ export function TransformSettings() {
 
   return !selected ? null : (
     <>
-      <Menubar.Separator className="my-4  h-[1px] bg-violet6" />
+      <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
       <div className="mb-2 grid grid-cols-[1fr_3fr] ">
         <Label.Root className="text-black11 w-full text-sm font-medium">Type</Label.Root>
         <Label.Root className="text-black11 w-full text-sm font-medium">

@@ -67,6 +67,8 @@ export type Node = Partial<Mesh> & {
 export type SceneType = 'color' | 'equirect'
 
 type Scene = {
+  uuid?: string
+  name?: string
   type?: SceneType
   color?: HexColorString
   equirect?: string
@@ -75,27 +77,32 @@ type Scene = {
 
 export type Mode = 'translate' | 'rotate' | 'scale'
 export type Store = {
+  currentScene?: string
+  setCurrentScene: (currentScene?: string) => void
+
   nodes: Partial<Node>[]
-  scene?: Scene
-  setScene: (scene: Scene) => void
+  scenes?: Scene[]
+  addScene: (scene: Scene) => void
   addNode: (node: Partial<Node>) => void
   mode: Mode
   setMode: (mode: Mode) => void
   selectedNode?: string
   selectNode: (uuid?: string) => void
   updateNode: (uuid: string, node: Partial<Node>) => void
+  updateScene: (uuid?: string, scene?: Partial<Scene>) => void
   deleteNode: () => void
 }
-
-const light = new Mesh() as Node
-light.position?.set(5, 10, 0)
-light.type = 'DirectionalLight'
 
 export const useStore = create<Store>((set) => ({
   mode: 'translate',
   nodes: [],
+  setCurrentScene: (currentScene) => set({ currentScene }),
   selectNode: (uuid) => set({ selectedNode: uuid }),
-  setScene: (scene) => set({ scene: scene }),
+  addScene: (scene) =>
+    set((s) => ({
+      currentScene: scene.uuid,
+      scenes: [...(s.scenes ?? []), scene],
+    })),
   deleteNode: () =>
     set((state) => ({
       nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
@@ -104,6 +111,11 @@ export const useStore = create<Store>((set) => ({
   updateNode: (uuid, node) => {
     set((state) => ({
       nodes: state.nodes.map((n) => (n.uuid === uuid ? { ...n, ...node } : n)),
+    }))
+  },
+  updateScene: (uuid, scene) => {
+    set((state) => ({
+      scenes: state.scenes?.map((s) => (s.uuid === uuid ? { ...s, ...scene } : s)),
     }))
   },
 
@@ -161,19 +173,16 @@ function jsonToMesh(json: Node) {
 useStore.subscribe(async (state) => {
   const db = await initDb()
   const nodes = state.nodes.map(meshToJson)
-  db.put('store', { nodes, scene: state.scene }, 0)
+  db.put('store', { nodes, scenes: state.scenes }, 0)
 })
 
 initDb().then(async (s) => {
   const [store] = await s.getAll('store')
-  const equirect =
-    store.scene.blob && store.scene?.type === 'equirect' ? URL.createObjectURL(store.scene.blob) : undefined
+  // const equirect =
+  //   store.scene.blob && store.scene?.type === 'equirect' ? URL.createObjectURL(store.scene.blob) : undefined
 
   useStore.setState({
     nodes: store?.nodes?.map(jsonToMesh) ?? [],
-    scene: { ...store?.scene, equirect } ?? {
-      type: 'color',
-      color: '#999',
-    },
+    scenes: [],
   })
 })

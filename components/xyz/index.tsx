@@ -1,7 +1,6 @@
 import * as Label from '@radix-ui/react-label'
 
 export function Xyz(props: { onChange: (val: number[]) => void; label: string; values: number[] }) {
-  console.log(props.values)
   return (
     <div className="mb-2 grid w-full  grid-cols-4 gap-2">
       <Label.Root className="text-black11 w-full text-sm font-medium">{props.label}</Label.Root>

@@ -2,6 +2,7 @@ import { Controls } from '@/components/controls'
 import Editor from '@/components/editor'
 import { Menu } from '@/components/menu'
 import { Node } from '@/components/node'
+import { SceneModal } from '@/components/sceneModal'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
@@ -9,14 +10,11 @@ import clsx from 'clsx'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
-function Env() {
-  const store = useStore()
-
-  const texture = useTexture(store.scene?.equirect ?? '')
+function Env(props: { equirect: string }) {
+  const texture = useTexture(props.equirect ?? '')
   // texture equriectangular
   texture.mapping = EquirectangularReflectionMapping
   texture.encoding = sRGBEncoding
-
   return <Environment background map={texture} />
 }
 
@@ -32,8 +30,10 @@ export default function Home() {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [])
+  const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
     <main className="h-screen overflow-hidden">
+      <SceneModal />
       <Menu />
       <div className={clsx('grid h-full w-screen grid-cols-[1fr_16vw]')}>
         {/* The button to open modal */}
@@ -45,7 +45,11 @@ export default function Home() {
               <GizmoViewport axisColors={['#FF7F9A', '#C2EE00', '#73C5FF']} />
             </GizmoHelper>
 
-            {store.scene?.equirect ? <Env /> : <color attach="background" args={[store.scene?.color ?? '#999']} />}
+            {selectedScene?.equirect ? (
+              <Env equirect={selectedScene.equirect} />
+            ) : (
+              <color attach="background" args={[selectedScene?.color ?? '#999']} />
+            )}
 
             {store.nodes.map((node, idx) => (
               <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />

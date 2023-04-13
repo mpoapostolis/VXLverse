@@ -8,7 +8,7 @@ export function Animations() {
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   return selected ? (
     <div>
-      <Menubar.Separator className="my-4  h-[1px] bg-violet6" />
+      <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
 
       {Object.keys(selected?.actions ?? {}).map((animation) => (
         <div key={animation} className="mb-2 gap-2 grid grid-cols-3 ">
