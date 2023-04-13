@@ -33,7 +33,11 @@ export function SceneModal() {
             <div className=" mb-2 ">
               <Label.Root className="text-black11 w-full text-sm font-medium">Name</Label.Root>
               <input
-                onChange={(evt) => {}}
+                onChange={(evt) => {
+                  store.updateScene(selectedScene?.uuid, {
+                    name: evt.target.value,
+                  })
+                }}
                 value={selectedScene?.name}
                 className="rounded-none w-full  bg-white border-blackA7 border p-2 text-xs leading-none outline-none"
               />

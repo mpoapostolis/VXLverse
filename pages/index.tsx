@@ -51,9 +51,15 @@ export default function Home() {
               <color attach="background" args={[selectedScene?.color ?? '#999']} />
             )}
 
-            {store.nodes.map((node, idx) => (
-              <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
-            ))}
+            {store.nodes
+              ?.filter((e) => {
+                if (e.gameType === 'hero') return true
+                if (e.scene === store.currentScene) return true
+                return false
+              })
+              .map((node, idx) => (
+                <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
+              ))}
             <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enableDamping={false} />
             <Preload all />
           </Canvas>

@@ -54,6 +54,7 @@ export type KeyBindings = {
 export type GameType = 'hero' | 'enemy' | 'npc'
 export type Node = Partial<Mesh> & {
   type: NodeType
+  scene?: string
   url?: string
   blob?: Blob
   animation?: string
@@ -81,7 +82,7 @@ export type Store = {
   setCurrentScene: (currentScene?: string) => void
 
   nodes: Partial<Node>[]
-  scenes?: Scene[]
+  scenes: Scene[]
   addScene: (scene: Scene) => void
   addNode: (node: Partial<Node>) => void
   mode: Mode
@@ -98,6 +99,7 @@ export const useStore = create<Store>((set) => ({
   nodes: [],
   setCurrentScene: (currentScene) => set({ currentScene }),
   selectNode: (uuid) => set({ selectedNode: uuid }),
+
   addScene: (scene) =>
     set((s) => ({
       currentScene: scene.uuid,
@@ -125,10 +127,7 @@ export const useStore = create<Store>((set) => ({
       nodes: [...state.nodes, node],
     }))
   },
-  scene: {
-    type: 'color',
-    color: '#999',
-  },
+  scenes: [],
   setMode: (mode) => set({ mode }),
 }))
 
@@ -176,13 +175,28 @@ useStore.subscribe(async (state) => {
   db.put('store', { nodes, scenes: state.scenes }, 0)
 })
 
-initDb().then(async (s) => {
-  const [store] = await s.getAll('store')
-  // const equirect =
-  //   store.scene.blob && store.scene?.type === 'equirect' ? URL.createObjectURL(store.scene.blob) : undefined
+const defaultScenes = [
+  {
+    uuid: 'default',
+    name: 'Default',
+    type: 'color',
+    color: '#999',
+  },
+]
 
+initDb().then(async (s) => {
+  const [store] = (await s.getAll('store')) as {
+    nodes: Node[]
+    scenes: Scene[]
+  }[]
+  const scenes =
+    store?.scenes?.map((obj) => ({
+      ...obj,
+      equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
+    })) ?? defaultScenes
   useStore.setState({
     nodes: store?.nodes?.map(jsonToMesh) ?? [],
-    scenes: [],
+    scenes,
+    currentScene: scenes?.at(0)?.uuid,
   })
 })

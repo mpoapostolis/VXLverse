@@ -2,11 +2,12 @@ import { useStore } from '@/store'
 import * as Label from '@radix-ui/react-label'
 import * as Menubar from '@radix-ui/react-menubar'
 import clsx from 'clsx'
+import { Select } from '../select'
 
 export function Animations() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
-  return selected ? (
+  return selected && selected.type === 'GLTF' ? (
     <div>
       <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
 
@@ -54,54 +55,42 @@ export function Animations() {
           />
         </div>
       ))}
+      <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
 
-      <div className="flex mb-2">
-        <Label.Root className="text-black11 w-full text-sm font-medium">Default Animation</Label.Root>
-        <select
-          value={selected.keyBindings?.default ?? ''}
-          onChange={(evt) =>
-            store.updateNode(selected.uuid ?? '', {
-              keyBindings: {
-                ...selected.keyBindings,
-                default: evt.target.value,
-              },
-            })
-          }
-          className="rounded-none w-full  bg-white border-blackA7 border text-xs leading-none outline-none"
-        >
-          <option selected>-</option>
+      <Select
+        classname="mb-4"
+        label="Default Animation"
+        options={Object.keys(selected?.actions ?? {}).map((animation) => ({
+          label: animation,
+          value: animation,
+        }))}
+        value={selected.keyBindings?.default ?? ''}
+        onChange={(val) =>
+          store.updateNode(selected.uuid ?? '', {
+            keyBindings: {
+              ...selected.keyBindings,
+              default: val,
+            },
+          })
+        }
+      />
 
-          {Object.keys(selected?.actions ?? {}).map((animation) => (
-            <option key={animation} value={animation}>
-              {animation}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div className="flex mb-2">
-        <Label.Root className="text-black11 w-full text-sm font-medium">On Click Animation</Label.Root>
-        <select
-          value={selected.keyBindings?.onClick ?? ''}
-          onChange={(evt) =>
-            store.updateNode(selected.uuid ?? '', {
-              keyBindings: {
-                ...selected.keyBindings,
-                onClick: evt.target.value,
-              },
-            })
-          }
-          className="rounded-none w-full  bg-white border-blackA7 border text-xs leading-none outline-none"
-        >
-          <option selected>-</option>
-
-          {Object.keys(selected?.actions ?? {}).map((animation) => (
-            <option key={animation} value={animation}>
-              {animation}
-            </option>
-          ))}
-        </select>
-      </div>
+      <Select
+        label="On Click Animation"
+        options={Object.keys(selected?.actions ?? {}).map((animation) => ({
+          label: animation,
+          value: animation,
+        }))}
+        value={selected.keyBindings?.onClick ?? ''}
+        onChange={(val) =>
+          store.updateNode(selected.uuid ?? '', {
+            keyBindings: {
+              ...selected.keyBindings,
+              onClick: val,
+            },
+          })
+        }
+      />
     </div>
   ) : null
 }
