@@ -44,7 +44,7 @@ export function Menu() {
     <Menubar.Root className="flex  border-b border-blackA5 bg-mauve5 p-1">
       <Menubar.Menu>
         <Menubar.Trigger className="flex select-none items-center justify-between gap-[2px] rounded px-3 py-2 text-[13px] font-medium leading-none text-blackA12 outline-none data-[highlighted]:bg-mauve4 data-[state=open]:bg-mauve4">
-          Scenes
+          Files
         </Menubar.Trigger>
         <Menubar.Portal>
           <Menubar.Content
@@ -53,57 +53,17 @@ export function Menu() {
             sideOffset={5}
             alignOffset={-3}
           >
-            <Link
-              href={{
-                hash: 'scene-modal',
-              }}
-            >
-              <Menubar.Item
-                onClick={() => {
-                  const mesh = new Mesh()
-                  store.addScene({
-                    uuid: mesh.uuid,
-                    type: 'color',
-                    name: 'New Scene',
-                    color: '#999',
-                  })
-                }}
-                className="group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none text-blackA12 outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:data-[state=open]:text-mauve1 data-[highlighted]:text-mauve1 data-[state=open]:text-blackA12"
-              >
-                New Scene
-                <div className="ml-auto pl-5 text-mauve9 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
-                  ⌘ T
-                </div>
-              </Menubar.Item>
-            </Link>
+            <Menubar.Item className="group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none text-blackA12 outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:data-[state=open]:text-mauve1 data-[highlighted]:text-mauve1 data-[state=open]:text-blackA12">
+              New Scene
+              <div className="ml-auto pl-5 text-mauve9 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
+                ⌘ T
+              </div>
+            </Menubar.Item>
 
             <Menubar.Sub>
               <Menubar.SubTrigger className="group  relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none text-blackA12 outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:data-[state=open]:text-mauve1 data-[highlighted]:text-mauve1 data-[state=open]:text-blackA12">
                 Edit Scene
-                <div className="ml-auto pl-5 text-mauve9 group-data-[disabled]:text-mauve8 group-data-[highlighted]:text-white">
-                  <ChevronRightIcon />
-                </div>
               </Menubar.SubTrigger>
-              <Menubar.Portal>
-                <Menubar.SubContent
-                  className="min-w-[220px] z-20 rounded-md bg-mauve5 p-[5px] shadow-[0px_10px_38px_-10px_rgba(22,_23,_24,_0.35),_0px_10px_20px_-15px_rgba(22,_23,_24,_0.2)] will-change-[transform,opacity] [animation-duration:_400ms] [animation-timing-function:_cubic-bezier(0.16,_1,_0.3,_1)]"
-                  alignOffset={-5}
-                >
-                  {store.scenes.map((scene) => (
-                    <Link
-                      onClick={() => store.setCurrentScene(scene.uuid)}
-                      href={{
-                        hash: 'scene-modal',
-                      }}
-                      key={scene?.uuid}
-                    >
-                      <Menubar.Item className="data-[highlighted]::to-mauve10 relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none text-blackA12 outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]:text-blackA8 data-[state=open]:text-mauve12">
-                        {scene.name}
-                      </Menubar.Item>
-                    </Link>
-                  ))}
-                </Menubar.SubContent>
-              </Menubar.Portal>
             </Menubar.Sub>
             <Menubar.Separator className="m-[5px] h-[1px] bg-mauve6" />
             <Menubar.Item className="group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none text-blackA12 outline-none data-[disabled]:pointer-events-none data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1">

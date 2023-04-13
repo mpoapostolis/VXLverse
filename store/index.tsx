@@ -92,6 +92,7 @@ export type Store = {
   updateNode: (uuid: string, node: Partial<Node>) => void
   updateScene: (uuid?: string, scene?: Partial<Scene>) => void
   deleteNode: () => void
+  deleteScene: (uuid?: string) => void
 }
 
 export const useStore = create<Store>((set) => ({
@@ -105,10 +106,20 @@ export const useStore = create<Store>((set) => ({
       currentScene: scene.uuid,
       scenes: [...(s.scenes ?? []), scene],
     })),
+
   deleteNode: () =>
     set((state) => ({
       nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
     })),
+
+  deleteScene: () =>
+    set((state) => {
+      const idx = state.scenes.findIndex((s) => s.uuid === state.currentScene)
+      return {
+        currentScene: state.scenes[idx - 1]?.uuid ?? undefined,
+        scenes: state.scenes.filter((scene) => scene.uuid !== state.currentScene),
+      }
+    }),
 
   updateNode: (uuid, node) => {
     set((state) => ({
