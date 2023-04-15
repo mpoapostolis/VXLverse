@@ -29,10 +29,19 @@ export default function Home() {
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown)
     return () => window.removeEventListener('keydown', onKeyDown)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
     <main className="h-screen overflow-hidden">
+      <h1
+        style={{
+          textShadow: '-1px -1px 2px #000, 1px 1px 1px #000',
+        }}
+        className="z-50 fixed left-4 bottom-4 text-white mb-2 font-bold text-4xl text-right"
+      >
+        {selectedScene?.name ?? '-'}
+      </h1>
       <SceneModal />
       <Menu />
       <div className={clsx('grid h-full w-screen grid-cols-[1fr_16vw]')}>

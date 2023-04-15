@@ -3,6 +3,7 @@ import clsx from 'clsx'
 
 export function NodeList() {
   const store = useStore()
+  const currentScene = store.scenes.find((scene) => scene.uuid === store.currentScene)
   return (
     <div className="relative h-40 border-blackA6 overflow-auto border bg-white">
       <div
@@ -12,6 +13,9 @@ export function NodeList() {
       >
         <label className="flex h-full w-full items-center justify-center text-slate-400">Nodes will display here</label>
       </div>
+      <div className="flex w-full items-center border-b pl-1 py-1 text-left text-xs ">
+        <span className="text-xs text-blackA10 ml-1">{currentScene?.name ?? 'Select scene'}</span>
+      </div>
       {store.nodes
         ?.filter((e) => {
           if (e.gameType === 'hero') return true
@@ -20,12 +24,9 @@ export function NodeList() {
         .map((node, idx) => (
           <button
             onClick={() => store.selectNode(node.uuid)}
-            className={clsx(
-              'label-text text-base-content flex w-full items-center border-b px-4 py-1 text-left text-xs  hover:bg-slate-100',
-              {
-                'bg-yellow-100': `${node?.uuid}` === store.selectedNode,
-              },
-            )}
+            className={clsx('flex w-full items-center border-b px-4 py-1 text-left text-xs  hover:bg-slate-100', {
+              'bg-yellow-100': `${node?.uuid}` === store.selectedNode,
+            })}
             key={idx}
           >
             <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-red-300" />

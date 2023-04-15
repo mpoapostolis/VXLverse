@@ -1,6 +1,6 @@
-import { openDB } from 'idb'
 import { AnimationAction, HexColorString, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
+import { defaultGameConf, subStore } from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -37,23 +37,12 @@ export const PLANE_GEOMETRY = new Vector3(5, 0.5, 5)
 export const CUBE_GEOMETRY = new Vector3(5, 5, 5)
 export const GRID_SIZE = 80
 
-async function initDb() {
-  return openDB('vxlverse', 1, {
-    upgrade(db) {
-      db.createObjectStore('store', {
-        autoIncrement: true,
-      })
-    },
-  })
-}
-
 export type KeyBindings = {
   onClick?: string
   default?: string
 } & Record<string, string>
 export type GameType = 'hero' | 'enemy' | 'npc'
 export type Node = Partial<Mesh> & {
-  type: NodeType
   scene?: string
   url?: string
   blob?: Blob
@@ -64,10 +53,11 @@ export type Node = Partial<Mesh> & {
   actions?: {
     [x: string]: AnimationAction | null
   }
+  type: NodeType
 }
 export type SceneType = 'color' | 'equirect'
 
-type Scene = {
+export type Scene = {
   uuid?: string
   name?: string
   type?: SceneType
@@ -80,7 +70,7 @@ export type Mode = 'translate' | 'rotate' | 'scale'
 export type Store = {
   currentScene?: string
   setCurrentScene: (currentScene?: string) => void
-
+  reset: () => void
   nodes: Partial<Node>[]
   scenes: Scene[]
   addScene: (scene: Scene) => void
@@ -102,11 +92,17 @@ export const useStore = create<Store>((set) => ({
   selectNode: (uuid) => set({ selectedNode: uuid }),
 
   addScene: (scene) =>
-    set((s) => ({
-      currentScene: scene.uuid,
-      scenes: [...(s.scenes ?? []), scene],
-    })),
+    set((s) => {
+      return {
+        currentScene: scene.uuid,
+        scenes: [...(s.scenes ?? []), scene],
+      }
+    }),
 
+  reset: () =>
+    set({
+      ...defaultGameConf,
+    }),
   deleteNode: () =>
     set((state) => ({
       nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
@@ -142,73 +138,4 @@ export const useStore = create<Store>((set) => ({
   setMode: (mode) => set({ mode }),
 }))
 
-function meshToJson(mesh: Partial<Node>) {
-  return {
-    name: mesh.name,
-    position: mesh.position?.toArray(),
-    rotation: mesh.rotation?.toArray(),
-    scale: mesh.scale?.toArray(),
-    type: mesh.type,
-    blob: mesh.blob,
-    animation: mesh.animation,
-    color: mesh.color,
-    gameType: mesh.gameType,
-    keyBindings: mesh.keyBindings,
-  }
-}
-
-function jsonToMesh(json: Node) {
-  const v3 = (json?.position ?? [0, 0, 0]) as number[]
-  const e3 = (json.rotation ?? [0, 0, 0]) as number[]
-  const s3 = (json.scale ?? [0, 0, 0]) as number[]
-
-  const mesh = new Mesh() as Node
-  mesh.position?.set(v3[0], v3[1], v3[2]),
-    mesh.rotation?.set(e3[0], e3[1], e3[2]),
-    mesh.scale?.set(s3[0], s3[1], s3[2]),
-    (mesh.type = json.type)
-  mesh.blob = json.blob
-  mesh.scene = json.scene
-  mesh.gameType = json.gameType
-  mesh.name = json.name
-  mesh.url = json.blob ? URL.createObjectURL(json.blob) : undefined
-  mesh.animation = json.animation
-  mesh.color = json.color
-  mesh.actions = json.actions
-  mesh.keyBindings = json.keyBindings
-  // default animation
-  if (mesh.keyBindings?.default) mesh.animation = mesh.keyBindings?.default
-  return mesh
-}
-
-useStore.subscribe(async (state) => {
-  const db = await initDb()
-  const nodes = state.nodes.map(meshToJson)
-  db.put('store', { nodes, scenes: state.scenes }, 0)
-})
-
-const defaultScenes = [
-  {
-    uuid: 'default',
-    name: 'Default',
-    type: 'color',
-    color: '#999',
-  },
-]
-
-initDb().then(async (s) => {
-  const [store] = (await s.getAll('store')) as {
-    nodes: Node[]
-    scenes: Scene[]
-  }[]
-  const scenes =
-    store?.scenes?.map((obj) => ({
-      ...obj,
-      equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
-    })) ?? defaultScenes
-  useStore.setState({
-    nodes: store?.nodes?.map(jsonToMesh) ?? [],
-    scenes,
-    currentScene: scenes?.at(0)?.uuid,
-  })
-})
+subStore()

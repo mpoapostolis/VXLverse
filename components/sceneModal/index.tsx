@@ -15,8 +15,9 @@ export function SceneModal() {
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const router = useRouter()
   const hash = router.asPath.split('#')[1]
-  const open = hash === 'scene-modal'
+  const open = hash === 'new-scene' || hash === 'edit-scene'
   const close = () => router.replace('/')
+
   return (
     <Dialog.Root open={open}>
       <Dialog.Portal>
@@ -96,12 +97,28 @@ export function SceneModal() {
                 </>
               )}
             </div>
+            <div className="flex justify-end gap-x-4 mt-4">
+              <button
+                onClick={() => {
+                  close()
+                }}
+                className="text-blackA111 hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={close}
+                className="text-blackA111 hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
+              >
+                Save
+              </button>
+            </div>
           </div>
 
           <Dialog.Close asChild>
             <button
               onClick={close}
-              className="text-violet11 hover:bg-violet4 focus:shadow-violet7 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded-full focus:shadow-[0_0_0_2px] focus:outline-none"
+              className="text-blackA11 hover:bg-blackA4  px-4 py-2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded focus:outline-none"
               aria-label="Close"
             >
               <Cross2Icon />
