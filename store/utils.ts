@@ -59,6 +59,7 @@ export function meshToJson(mesh: Partial<Node>) {
     type: mesh.type,
     blob: mesh.blob,
     animation: mesh.animation,
+    controllers: mesh.controllers,
     color: mesh.color,
     scene: mesh.scene,
     gameType: mesh.gameType,
@@ -85,6 +86,7 @@ export function jsonToMesh(json: Node) {
   mesh.color = json.color
   mesh.actions = json.actions
   mesh.keyBindings = json.keyBindings
+  mesh.controllers = json.controllers
   // default animation
   if (mesh.keyBindings?.default) mesh.animation = mesh.keyBindings?.default
   return mesh
@@ -136,3 +138,56 @@ initDb().then(async (s) => {
     currentScene: scenes?.at(0)?.uuid,
   })
 })
+
+export type CharAction =
+  | 'moveForward'
+  | 'moveBackward'
+  | 'moveLeft'
+  | 'moveRight'
+  | 'jump'
+  | 'runForward'
+  | 'runBackward'
+  | 'runLeft'
+  | 'runRight'
+
+export const characterController: {
+  label: string
+  value: CharAction
+}[] = [
+  {
+    label: 'Move Forward',
+    value: 'moveForward',
+  },
+  {
+    label: 'Move Backward',
+    value: 'moveBackward',
+  },
+  {
+    label: 'Move Left',
+    value: 'moveLeft',
+  },
+  {
+    label: 'Move Right',
+    value: 'moveRight',
+  },
+  {
+    label: 'Jump',
+    value: 'jump',
+  },
+  {
+    label: 'Run Forward',
+    value: 'runForward',
+  },
+  {
+    label: 'Run Backward',
+    value: 'runBackward',
+  },
+  {
+    label: 'Run Left',
+    value: 'runLeft',
+  },
+  {
+    label: 'Run Right',
+    value: 'runRight',
+  },
+]

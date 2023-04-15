@@ -10,6 +10,7 @@ export function Animations() {
   return selected && selected.type === 'GLTF' ? (
     <div>
       <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
+      <Label.Root className="text-black11 truncate w-full text-sm font-semibold mb-3 block ">Animations</Label.Root>
 
       {Object.keys(selected?.actions ?? {}).map((animation) => (
         <div key={animation} className="mb-2 gap-2 grid grid-cols-3 ">
@@ -56,41 +57,47 @@ export function Animations() {
         </div>
       ))}
       <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
+      <Label.Root className="text-black11 truncate w-full text-sm font-semibold mb-3 block ">
+        Animations actions
+      </Label.Root>
 
-      <Select
-        classname="mb-4"
-        label="Default Animation"
-        options={Object.keys(selected?.actions ?? {}).map((animation) => ({
-          label: animation,
-          value: animation,
-        }))}
-        value={selected.keyBindings?.default ?? ''}
-        onChange={(val) =>
-          store.updateNode(selected.uuid ?? '', {
-            keyBindings: {
-              ...selected.keyBindings,
-              default: val,
-            },
-          })
-        }
-      />
+      <div className="grid grid-cols-2 gap-x-3 items-center">
+        <Label.Root className="text-black11 truncate w-full text-sm font-medium">Default animation</Label.Root>
 
-      <Select
-        label="On Click Animation"
-        options={Object.keys(selected?.actions ?? {}).map((animation) => ({
-          label: animation,
-          value: animation,
-        }))}
-        value={selected.keyBindings?.onClick ?? ''}
-        onChange={(val) =>
-          store.updateNode(selected.uuid ?? '', {
-            keyBindings: {
-              ...selected.keyBindings,
-              onClick: val,
-            },
-          })
-        }
-      />
+        <Select
+          options={Object.keys(selected?.actions ?? {}).map((animation) => ({
+            label: animation,
+            value: animation,
+          }))}
+          value={selected.keyBindings?.default ?? ''}
+          onChange={(val) =>
+            store.updateNode(selected.uuid ?? '', {
+              keyBindings: {
+                ...selected.keyBindings,
+                default: val,
+              },
+            })
+          }
+        />
+
+        <Label.Root className="text-black11 truncate w-full text-sm font-medium">onClick animation</Label.Root>
+
+        <Select
+          options={Object.keys(selected?.actions ?? {}).map((animation) => ({
+            label: animation,
+            value: animation,
+          }))}
+          value={selected.keyBindings?.onClick ?? ''}
+          onChange={(val) =>
+            store.updateNode(selected.uuid ?? '', {
+              keyBindings: {
+                ...selected.keyBindings,
+                onClick: val,
+              },
+            })
+          }
+        />
+      </div>
     </div>
   ) : null
 }

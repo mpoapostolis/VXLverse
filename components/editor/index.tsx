@@ -1,5 +1,6 @@
 import { useStore } from '@/store'
 import { Animations } from '../settings/animations'
+import { CharController } from '../settings/charController'
 import { Material } from '../settings/material'
 import { NodeList } from '../settings/nodeList'
 import { TransformSettings } from '../settings/transform'
@@ -13,6 +14,7 @@ export default function Editor() {
       <TransformSettings />
       <Material />
       <Animations />
+      <CharController />
     </div>
   )
 }

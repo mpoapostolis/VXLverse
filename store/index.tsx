@@ -1,6 +1,6 @@
 import { AnimationAction, HexColorString, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
-import { defaultGameConf, subStore } from './utils'
+import { CharAction, defaultGameConf, subStore } from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -47,6 +47,7 @@ export type Node = Partial<Mesh> & {
   url?: string
   blob?: Blob
   animation?: string
+  controllers?: Partial<Record<CharAction, string>>
   color?: string
   keyBindings?: KeyBindings
   gameType?: GameType
