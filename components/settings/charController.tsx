@@ -7,7 +7,6 @@ import { Fragment } from 'react'
 export function CharController() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
-  console.log(selected?.controlls?.['moveForward'])
   return selected && selected.gameType === 'hero' ? (
     <div>
       <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />

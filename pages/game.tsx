@@ -3,6 +3,7 @@ import { GameNode } from '@/components/gameNode'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
+import { CharAction } from '@/store/utils'
 import { Environment, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import Head from 'next/head'
@@ -47,20 +48,19 @@ export default function Home() {
   const keyBindings = Object.entries(hero?.keyBindings ?? {})
   const defaultAnimation = hero?.keyBindings?.default
   const heroUUid = hero?.uuid
-
   useEffect(() => {
-    if (!heroUUid) return
+    if (!heroUUid || !hero.controlls) return
+    const pairs = Object.entries(hero.controlls)
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return
       let keyPress = e.key === ' ' ? 'Space' : e.key
-
       const animation = keyBindings.find(([_, key]) => key === keyPress)?.[0]
-      if (!animation || !heroUUid) return
-      store.updateNode(heroUUid, { animation })
+      const action = pairs.find(([_, key]) => key === keyPress)?.[0] as CharAction
+      if (animation || action) store.updateNode(heroUUid, { action, animation: animation ?? defaultAnimation })
     })
     document.addEventListener('keyup', (e) => {
       if (e.repeat) return
-      store.updateNode(heroUUid, { animation: defaultAnimation })
+      store.updateNode(heroUUid, { animation: defaultAnimation, action: undefined })
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [heroUUid, defaultAnimation])

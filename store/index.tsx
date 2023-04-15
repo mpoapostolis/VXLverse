@@ -1,6 +1,6 @@
 import { AnimationAction, HexColorString, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
-import { CharAction, defaultGameConf, subStore } from './utils'
+import { CharAction, defaultGameConf, initDb, meshToJson } from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -45,7 +45,7 @@ export type GameType = 'hero' | 'enemy' | 'npc'
 export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
-  action?: string
+  action?: CharAction
   blob?: Blob
   animation?: string
   controlls?: Partial<Record<CharAction, string>>
@@ -140,4 +140,8 @@ export const useStore = create<Store>((set) => ({
   setMode: (mode) => set({ mode }),
 }))
 
-subStore()
+useStore?.subscribe(async (state) => {
+  const db = await initDb()
+  const nodes = state.nodes.map(meshToJson)
+  db.put('store', { nodes, scenes: state.scenes }, 0)
+})

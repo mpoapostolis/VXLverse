@@ -1,4 +1,5 @@
 import { Node } from '@/store'
+import { characterController } from '@/store/utils'
 import { useFrame } from '@react-three/fiber'
 import { useRef } from 'react'
 import { Mesh } from 'three'
@@ -6,17 +7,54 @@ import { Gltf } from '../gltf'
 import { MeshGeometry } from '../meshGeometry'
 
 export function GameNode(props: Partial<Node>) {
-  useFrame(() => {
-    if (!props.animation || props.gameType !== 'hero') return
-    if (!ref.current) return
-    if (props.animation === 'Walking') ref.current.position.z += 0.1
-    if (props.animation === 'Running') ref.current.position.z += 0.25
-    if (props.animation === 'WalkingBackward') ref.current.position.z -= 0.1
-    if (props.animation === 'RunningBackward') ref.current.position.z -= 0.25
-    if (props.animation === 'WalkingLeftTurn') ref.current.position.x += 0.1
-    if (props.animation === 'LeftStrafe') ref.current.position.x += 0.2
-    if (props.animation === 'RightStrafeWalking') ref.current.position.x -= 0.1
-    if (props.animation === 'RightStrafe') ref.current.position.x -= 0.2
+  const controlls = characterController.map((key) => key.value)
+  useFrame((t) => {
+    if (props.gameType !== 'hero' || !ref.current) return
+
+    // @ts-ignore
+    const theta = t.controls?.getAzimuthalAngle()
+    // @ts-ignore
+    const phi = t.controls?.getPolarAngle()
+
+    if (theta && phi) {
+      ref.current.rotation.y = theta + Math.PI
+    }
+
+    if (props.action === 'moveForward') {
+      ref.current.position.x -= 0.1 * Math.sin(theta)
+      ref.current.position.z -= 0.1 * Math.cos(theta)
+    }
+    if (props.action === 'runForward') {
+      ref.current.position.x -= 0.25 * Math.sin(theta)
+      ref.current.position.z -= 0.25 * Math.cos(theta)
+    }
+    if (props.action === 'moveBackward') {
+      if (phi < 0.2) return
+      ref.current.position.x += 0.1 * Math.sin(theta)
+      ref.current.position.z += 0.1 * Math.cos(theta)
+    }
+    if (props.action === 'runBackward') {
+      if (phi < 0.2) return
+
+      ref.current.position.x += 0.25 * Math.sin(theta)
+      ref.current.position.z += 0.25 * Math.cos(theta)
+    }
+    if (props.action === 'moveLeft') {
+      ref.current.position.x -= 0.1 * Math.cos(theta)
+      ref.current.position.z += 0.1 * Math.sin(theta)
+    }
+    if (props.action === 'runLeft') {
+      ref.current.position.x -= 0.2 * Math.cos(theta)
+      ref.current.position.z += 0.2 * Math.sin(theta)
+    }
+    if (props.action === 'moveRight') {
+      ref.current.position.x += 0.1 * Math.cos(theta)
+      ref.current.position.z -= 0.1 * Math.sin(theta)
+    }
+    if (props.action === 'runRight') {
+      ref.current.position.x += 0.2 * Math.cos(theta)
+      ref.current.position.z -= 0.2 * Math.sin(theta)
+    }
   })
   const ref = useRef<Mesh>(null)
 

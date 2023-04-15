@@ -40,7 +40,7 @@ export const defaultGameConf: Partial<Store> = {
   currentScene: defaultScenes?.at(0)?.uuid,
 }
 
-async function initDb() {
+export async function initDb() {
   return openDB('vxlverse', 1, {
     upgrade(db) {
       db.createObjectStore('store', {
@@ -113,13 +113,6 @@ export function exportGame() {
     saveAs(content, 'game.zip')
   })
 }
-export function subStore() {
-  useStore.subscribe(async (state) => {
-    const db = await initDb()
-    const nodes = state.nodes.map(meshToJson)
-    db.put('store', { nodes, scenes: state.scenes }, 0)
-  })
-}
 
 initDb().then(async (s) => {
   const [store] = (await s.getAll('store')) as {
@@ -132,7 +125,7 @@ initDb().then(async (s) => {
       equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
     })) ?? defaultGameConf?.scenes
 
-  useStore.setState({
+  useStore?.setState({
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
     currentScene: scenes?.at(0)?.uuid,
