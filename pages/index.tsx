@@ -7,6 +7,7 @@ import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import clsx from 'clsx'
+import Head from 'next/head'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
@@ -34,9 +35,16 @@ export default function Home() {
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
     <main className="h-screen overflow-hidden">
+      <Head>
+        <title>VXLverse - An All-in-One RPG Creation Tool</title>
+      </Head>
       <SceneModal />
       <Menu />
-      <div className={clsx('grid h-full w-screen grid-cols-[1fr_16vw]')}>
+      <div
+        className={clsx(
+          'grid h-full w-screen xl:grid-cols-[1fr_17vw] lg:grid-cols-[1fr_25vw] md:grid-cols-[1fr_30vw] grid-cols-[1fr_50vw]',
+        )}
+      >
         {/* The button to open modal */}
         <div className="relative">
           <Controls />
@@ -54,8 +62,7 @@ export default function Home() {
 
             {store.nodes
               ?.filter((e) => {
-                if (e.gameType === 'hero') return true
-                else return e.scene === store.currentScene
+                return e.scene === store.currentScene
               })
               .map((node, idx) => (
                 <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />

@@ -12,10 +12,12 @@ export function Select(props: {
 }) {
   return (
     <div className={props.classname}>
-      <Label.Root className={clsx('text-black11 w-full text-sm font-medium mb-1')}>{props.label}</Label.Root>
+      {props.label && (
+        <Label.Root className={clsx('text-black11 w-full text-sm font-medium mb-1')}>{props.label}</Label.Root>
+      )}
       <RSelect.Root value={props.value} onValueChange={props.onChange}>
         <RSelect.Trigger
-          className="flex border border-mauve7 items-center justify-center  px-2 text-xs leading-none py-1 w-full h-fit gap-1   focus:outline-none outline-none text-blackA12  bg-mauve1"
+          className="flex border truncate border-mauve7 items-center justify-center  px-2 text-xs leading-none py-1 w-full h-fit gap-1   focus:outline-none outline-none text-blackA12  bg-mauve1"
           aria-label="Label"
         >
           <RSelect.Value placeholder={props.value} />

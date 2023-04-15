@@ -5,6 +5,7 @@ import { lights } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import Head from 'next/head'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, Vector3, sRGBEncoding } from 'three'
 
@@ -28,8 +29,9 @@ function Orbit() {
   })
   return (
     <OrbitControls
+      enablePan={false}
       target={hero?.position}
-      maxDistance={10.1}
+      maxDistance={20.1}
       minDistance={4}
       position={[0, -5, 0]}
       makeDefault
@@ -51,9 +53,10 @@ export default function Home() {
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return
       let keyPress = e.key === ' ' ? 'Space' : e.key
-      const action = keyBindings.find(([_, key]) => key === keyPress)?.[0]
-      if (!action || !heroUUid) return
-      store.updateNode(heroUUid, { animation: action })
+
+      const animation = keyBindings.find(([_, key]) => key === keyPress)?.[0]
+      if (!animation || !heroUUid) return
+      store.updateNode(heroUUid, { animation })
     })
     document.addEventListener('keyup', (e) => {
       if (e.repeat) return
@@ -65,6 +68,9 @@ export default function Home() {
 
   return (
     <main className="relative h-screen overflow-hidden">
+      <Head>
+        <title>VXLverse - An All-in-One RPG Creation Tool</title>
+      </Head>
       <Canvas>
         <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
         {selectedScene?.equirect ? (

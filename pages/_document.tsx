@@ -2,7 +2,6 @@ import { Head, Html, Main, NextScript } from 'next/document'
 
 const MetaTags = () => (
   <Head>
-    <title>VXLverse - An All-in-One RPG Creation Tool</title>
     <meta
       name="description"
       content="VXLverse is an innovative software platform that combines the power of a 3D modeling software like Blender with the interactive elements of RPG games. It allows users to easily create immersive worlds with customizable characters, dialogues, NPCs, and more."

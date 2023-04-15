@@ -7,7 +7,6 @@ export function GlbModel() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
-
   return ['hero', 'enemy', 'npc'].includes(selected?.gameType ?? '') ? (
     <>
       <Separator className="my-4  h-[1px] bg-blackA5" />

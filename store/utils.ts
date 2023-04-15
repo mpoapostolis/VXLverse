@@ -59,7 +59,7 @@ export function meshToJson(mesh: Partial<Node>) {
     type: mesh.type,
     blob: mesh.blob,
     animation: mesh.animation,
-    controllers: mesh.controllers,
+    controlls: mesh.controlls,
     color: mesh.color,
     scene: mesh.scene,
     gameType: mesh.gameType,
@@ -86,7 +86,7 @@ export function jsonToMesh(json: Node) {
   mesh.color = json.color
   mesh.actions = json.actions
   mesh.keyBindings = json.keyBindings
-  mesh.controllers = json.controllers
+  mesh.controlls = json.controlls
   // default animation
   if (mesh.keyBindings?.default) mesh.animation = mesh.keyBindings?.default
   return mesh
