@@ -87,12 +87,7 @@ export function jsonToMesh(json: Node) {
   mesh.actions = json.actions
   mesh.keyBindings = json.keyBindings
   mesh.controlls = json.controlls
-  mesh.userData = {
-    name: json.name,
-    type: json.type,
-    gameType: json.gameType,
-    scene: json.scene,
-  }
+
   // default animation
   if (mesh.keyBindings?.default) mesh.animation = mesh.keyBindings?.default
   return mesh

@@ -6,7 +6,7 @@ import { GRID_SIZE, useStore } from '@/store'
 import { CharAction } from '@/store/utils'
 import { Environment, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Physics, RigidBody } from '@react-three/rapier'
+import { RigidBody, useRapier } from '@react-three/rapier'
 import Head from 'next/head'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, Vector3, sRGBEncoding } from 'three'
@@ -23,6 +23,7 @@ function Orbit() {
   const t = useThree()
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
+  const ctx = useRapier()
 
   const v3 = new Vector3()
   useFrame((t) => {
@@ -74,29 +75,27 @@ export default function Home() {
         <title>VXLverse - An All-in-One RPG Creation Tool</title>
       </Head>
       <Canvas>
-        <Physics>
-          <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
-          {selectedScene?.equirect ? (
-            <Env equirect={selectedScene.equirect} />
-          ) : (
-            <color attach="background" args={[selectedScene?.color ?? '#999']} />
-          )}
+        <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
+        {selectedScene?.equirect ? (
+          <Env equirect={selectedScene.equirect} />
+        ) : (
+          <color attach="background" args={[selectedScene?.color ?? '#999']} />
+        )}
 
-          {store.nodes.map((node, idx) =>
-            lights.includes(node.type) ? (
-              <mesh key={node.uuid} position={node.position}>
-                <Light type={node?.type ?? 'DirectionalLight'} />
-              </mesh>
-            ) : (
-              <GameNode key={idx} {...node} />
-            ),
-          )}
-          <RigidBody>
-            <Plane args={[GRID_SIZE, GRID_SIZE]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
-          </RigidBody>
-          <Orbit />
-          <Preload all />
-        </Physics>
+        {store.nodes.map((node, idx) =>
+          lights.includes(node.type) ? (
+            <mesh key={node.uuid} position={node.position}>
+              <Light type={node?.type ?? 'DirectionalLight'} />
+            </mesh>
+          ) : (
+            <GameNode key={idx} {...node} />
+          ),
+        )}
+        <RigidBody>
+          <Plane args={[GRID_SIZE, GRID_SIZE]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
+        </RigidBody>
+        <Orbit />
+        <Preload all />
       </Canvas>
       <Dialogue />
     </main>
