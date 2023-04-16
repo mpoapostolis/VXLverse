@@ -3,19 +3,19 @@ import * as Label from '@radix-ui/react-menubar'
 import * as RSelect from '@radix-ui/react-select'
 import clsx from 'clsx'
 
-export function Select(props: {
+export function Select<T = string>(props: {
   options: { label: string; value: string }[]
   label?: string
   classname?: string
   value?: string
-  onChange: (value: string) => void
+  onChange: (value: T) => void
 }) {
   return (
     <div className={props.classname}>
       {props.label && (
         <Label.Root className={clsx('text-black11 w-full text-sm font-medium mb-1')}>{props.label}</Label.Root>
       )}
-      <RSelect.Root value={props.value} onValueChange={props.onChange}>
+      <RSelect.Root value={props.value} onValueChange={(e) => props.onChange(e as T)}>
         <RSelect.Trigger
           className="flex border truncate border-mauve7 items-center justify-center  px-2 text-xs leading-none py-1 w-full h-fit gap-1   focus:outline-none outline-none text-blackA12  bg-mauve1"
           aria-label="Label"

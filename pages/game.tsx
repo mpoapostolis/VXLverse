@@ -3,7 +3,6 @@ import { GameNode } from '@/components/gameNode'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
-import { CharAction } from '@/store/utils'
 import { Environment, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import Head from 'next/head'
@@ -23,16 +22,32 @@ function Orbit() {
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
 
+  useEffect(() => {
+    document.addEventListener('pointerdown', (e) => {
+      if (e.button !== 2) return
+      const raycaster = t.raycaster
+      raycaster.setFromCamera(t.pointer, t.camera)
+      const intersects = raycaster.intersectObjects(t.scene.children)
+      store.updateNode(hero?.uuid ?? '', { velocity: 2, goTo: intersects?.at(0)?.point, animation: 'Walking' })
+    })
+    return () => document.removeEventListener('pointerdown', () => {})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hero?.uuid])
+
   const v3 = new Vector3()
+  const pos = t.scene.getObjectByProperty('type', 'hero')
+
   useFrame((t) => {
-    // @ts-ignore
-    // t.controls.target = hero.position
-    // t.controls.update()
+    try {
+      // @ts-ignore
+      t.controls.target = pos.position
+    } catch (error) {}
   })
 
   return (
     <OrbitControls
-      // target={hero?.position}
+      target={hero?.position}
+      enablePan={false}
       maxDistance={30.1}
       minDistance={4}
       position={[0, -5, 0]}
@@ -46,25 +61,18 @@ export default function Home() {
   const store = useStore()
 
   const hero = store.nodes.find((node) => node.gameType === 'hero')
-  const keyBindings = Object.entries(hero?.keyBindings ?? {})
-  const defaultAnimation = hero?.keyBindings?.default
   const heroUUid = hero?.uuid
   useEffect(() => {
-    if (!heroUUid || !hero.controlls) return
-    const pairs = Object.entries(hero.controlls)
+    if (!heroUUid) return
+
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return
-      let keyPress = e.key === ' ' ? 'Space' : e.key
-      const animation = keyBindings.find(([_, key]) => key === keyPress)?.[0]
-      const action = pairs.find(([_, key]) => key === keyPress)?.[0] as CharAction
-      if (animation || action) store.updateNode(heroUUid, { action, animation: animation ?? defaultAnimation })
     })
     document.addEventListener('keyup', (e) => {
       if (e.repeat) return
-      store.updateNode(heroUUid, { animation: defaultAnimation, action: undefined })
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heroUUid, defaultAnimation])
+  }, [heroUUid])
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
 
   return (

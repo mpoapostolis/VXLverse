@@ -45,12 +45,12 @@ export type GameType = 'hero' | 'enemy' | 'npc'
 export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
-  action?: CharAction
+  goTo?: Vector3
+  velocity?: number
   blob?: Blob
   animation?: string
-  controlls?: Partial<Record<CharAction, string>>
   color?: string
-  keyBindings?: KeyBindings
+  actionToAnimation?: Record<string, CharAction>
   gameType?: GameType
   actions?: {
     [x: string]: AnimationAction | null

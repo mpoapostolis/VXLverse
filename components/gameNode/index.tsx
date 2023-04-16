@@ -1,66 +1,41 @@
-import { Node } from '@/store'
-import { characterController } from '@/store/utils'
+import { Node, useStore } from '@/store'
 import { useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
-import { Mesh } from 'three'
+import { useEffect, useRef } from 'react'
+import { Mesh, Vector3 } from 'three'
 import { Gltf } from '../gltf'
 import { MeshGeometry } from '../meshGeometry'
 
 export function GameNode(props: Partial<Node>) {
-  const controlls = characterController.map((key) => key.value)
-  useFrame((t) => {
-    if (props.gameType !== 'hero' || !ref.current) return
+  const store = useStore()
+  const ref = useRef<Mesh>(null)
 
-    // @ts-ignore
-    const theta = t.controls?.getAzimuthalAngle()
-    // @ts-ignore
-    const phi = t.controls?.getPolarAngle()
-    const position = ref.current.position
-    const y = position.y
+  const v3 = ref?.current?.position
 
-    if (theta && phi) {
-    }
-
-    if (props.action === 'moveForward') {
-      const x = position.x - 0.1 * Math.sin(theta)
-      const z = position.z - 0.1 * Math.cos(theta)
-    }
-    if (props.action === 'runForward') {
-      const x = position.x - 0.25 * Math.sin(theta)
-      const z = position.z - 0.25 * Math.cos(theta)
-    }
-    if (props.action === 'moveBackward') {
-      if (phi < 0.2) return
-      const x = position.x + 0.1 * Math.sin(theta)
-      const z = position.z + 0.1 * Math.cos(theta)
-    }
-    if (props.action === 'runBackward') {
-      if (phi < 0.2) return
-
-      const x = position.x + 0.25 * Math.sin(theta)
-      const z = position.z + 0.25 * Math.cos(theta)
-    }
-    if (props.action === 'moveLeft') {
-      const x = position.x - 0.1 * Math.cos(theta)
-      const z = position.z + 0.1 * Math.sin(theta)
-    }
-    if (props.action === 'runLeft') {
-      const x = position.x - 0.2 * Math.cos(theta)
-      const z = position.z + 0.2 * Math.sin(theta)
-    }
-    if (props.action === 'moveRight') {
-      const x = position.x + 0.1 * Math.cos(theta)
-      const z = position.z - 0.1 * Math.sin(theta)
-    }
-    if (props.action === 'runRight') {
-      const x = position.x + 0.2 * Math.cos(theta)
-      const z = position.z - 0.2 * Math.sin(theta)
+  const targetPosition = new Vector3(props.goTo?.x, ref?.current?.position.y, props?.goTo?.z)
+  useFrame(() => {
+    if (props.velocity === 0 || !ref.current || !props.uuid || !props.goTo) return
+    const currentPosition = ref.current.position.clone()
+    const distance = currentPosition.distanceTo(targetPosition)
+    if (distance > 2) {
+      ref.current.lookAt(targetPosition)
+      const velocity = targetPosition
+        .clone()
+        .sub(currentPosition)
+        .normalize()
+        .multiplyScalar(props?.velocity ?? 0)
+      const newPosition = currentPosition.clone().add(velocity)
+      ref.current.position.lerp(newPosition, 0.1)
     }
   })
-  const ref = useRef<Mesh>(null)
+
+  useEffect(() => {
+    if (!props.uuid) return
+    console.log('props.uuid', props.actionToAnimation)
+  }, [props.actionToAnimation, props.uuid])
 
   return (
     <mesh
+      ref={ref}
       type={props.gameType}
       position={props.position ?? [0, 0, 0]}
       rotation={props.rotation}

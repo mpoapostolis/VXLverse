@@ -1,5 +1,4 @@
 import { Animations } from '../settings/animations'
-import { CharController } from '../settings/charController'
 import { GlbModel } from '../settings/glbModel'
 import { Material } from '../settings/material'
 import { NodeList } from '../settings/nodeList'
@@ -13,7 +12,6 @@ export default function Editor() {
       <GlbModel />
       <Material />
       <Animations />
-      <CharController />
     </div>
   )
 }

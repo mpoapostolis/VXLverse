@@ -56,14 +56,13 @@ export function meshToJson(mesh: Partial<Node>) {
     position: mesh.position?.toArray(),
     rotation: mesh.rotation?.toArray(),
     scale: mesh.scale?.toArray(),
-    type: mesh.type,
     blob: mesh.blob,
     animation: mesh.animation,
-    controlls: mesh.controlls,
     color: mesh.color,
     scene: mesh.scene,
     gameType: mesh.gameType,
-    keyBindings: mesh.keyBindings,
+    actionToAnimation: mesh.actionToAnimation,
+    type: mesh.type,
   }
 }
 
@@ -72,24 +71,23 @@ export function jsonToMesh(json: Node) {
   const e3 = (json.rotation ?? [0, 0, 0]) as number[]
   const s3 = (json.scale ?? [0, 0, 0]) as number[]
 
+  console.log(json.actionToAnimation)
+  const pair = Object.entries(json.actionToAnimation ?? {})
+  const idleAnimation = pair.find(([_, key]) => key === 'idle')?.[0]
   const mesh = new Mesh() as Node
-  mesh.position?.set(v3[0], v3[1], v3[2]),
-    mesh.rotation?.set(e3[0], e3[1], e3[2]),
-    mesh.scale?.set(s3[0], s3[1], s3[2]),
-    (mesh.type = json.type)
+  mesh.position?.set(v3[0], v3[1], v3[2])
+  mesh.rotation?.set(e3[0], e3[1], e3[2])
+  mesh.scale?.set(s3[0], s3[1], s3[2])
+  mesh.type = json.type
   mesh.blob = json.blob
   mesh.scene = json.scene
   mesh.gameType = json.gameType
   mesh.name = json.name
   mesh.url = json.blob ? URL.createObjectURL(json.blob) : undefined
-  mesh.animation = json.animation
+  mesh.animation = idleAnimation
   mesh.color = json.color
-  mesh.actions = json.actions
-  mesh.keyBindings = json.keyBindings
-  mesh.controlls = json.controlls
-
-  // default animation
-  if (mesh.keyBindings?.default) mesh.animation = mesh.keyBindings?.default
+  mesh.actionToAnimation = json.actionToAnimation
+  mesh.type = json.type
   return mesh
 }
 
@@ -125,63 +123,25 @@ initDb().then(async (s) => {
       ...obj,
       equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
     })) ?? defaultGameConf?.scenes
-
   useStore?.setState({
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
+    selectedNode: undefined,
     currentScene: scenes?.at(0)?.uuid,
   })
 })
 
-export type CharAction =
-  | 'moveForward'
-  | 'moveBackward'
-  | 'moveLeft'
-  | 'moveRight'
-  | 'jump'
-  | 'runForward'
-  | 'runBackward'
-  | 'runLeft'
-  | 'runRight'
+export type CharAction = 'walk' | 'run' | 'attack' | 'jump' | 'die' | 'idle' | 'hit'
 
-export const characterController: {
+export const charActions: {
   label: string
   value: CharAction
 }[] = [
-  {
-    label: 'Move Forward',
-    value: 'moveForward',
-  },
-  {
-    label: 'Move Backward',
-    value: 'moveBackward',
-  },
-  {
-    label: 'Move Left',
-    value: 'moveLeft',
-  },
-  {
-    label: 'Move Right',
-    value: 'moveRight',
-  },
-  {
-    label: 'Jump',
-    value: 'jump',
-  },
-  {
-    label: 'Run Forward',
-    value: 'runForward',
-  },
-  {
-    label: 'Run Backward',
-    value: 'runBackward',
-  },
-  {
-    label: 'Run Left',
-    value: 'runLeft',
-  },
-  {
-    label: 'Run Right',
-    value: 'runRight',
-  },
+  { label: 'Walk', value: 'walk' },
+  { label: 'Run', value: 'run' },
+  { label: 'Attack', value: 'attack' },
+  { label: 'Jump', value: 'jump' },
+  { label: 'Die', value: 'die' },
+  { label: 'Idle', value: 'idle' },
+  { label: 'Hit', value: 'hit' },
 ]
