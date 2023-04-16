@@ -6,7 +6,6 @@ import { GRID_SIZE, useStore } from '@/store'
 import { CharAction } from '@/store/utils'
 import { Environment, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { RigidBody, useRapier } from '@react-three/rapier'
 import Head from 'next/head'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, Vector3, sRGBEncoding } from 'three'
@@ -23,7 +22,6 @@ function Orbit() {
   const t = useThree()
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
-  const ctx = useRapier()
 
   const v3 = new Vector3()
   useFrame((t) => {
@@ -91,9 +89,7 @@ export default function Home() {
             <GameNode key={idx} {...node} />
           ),
         )}
-        <RigidBody>
-          <Plane args={[GRID_SIZE, GRID_SIZE]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
-        </RigidBody>
+        <Plane args={[GRID_SIZE, GRID_SIZE]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
         <Orbit />
         <Preload all />
       </Canvas>

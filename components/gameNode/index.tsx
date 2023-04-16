@@ -1,8 +1,8 @@
 import { Node } from '@/store'
 import { characterController } from '@/store/utils'
 import { useFrame } from '@react-three/fiber'
-import { RapierRigidBody, vec3 } from '@react-three/rapier'
 import { useRef } from 'react'
+import { Mesh } from 'three'
 import { Gltf } from '../gltf'
 import { MeshGeometry } from '../meshGeometry'
 
@@ -15,8 +15,7 @@ export function GameNode(props: Partial<Node>) {
     const theta = t.controls?.getAzimuthalAngle()
     // @ts-ignore
     const phi = t.controls?.getPolarAngle()
-
-    const position = vec3(ref.current?.translation())
+    const position = ref.current.position
     const y = position.y
 
     if (theta && phi) {
@@ -58,7 +57,7 @@ export function GameNode(props: Partial<Node>) {
       const z = position.z - 0.2 * Math.sin(theta)
     }
   })
-  const ref = useRef<RapierRigidBody>(null)
+  const ref = useRef<Mesh>(null)
 
   return (
     <mesh
