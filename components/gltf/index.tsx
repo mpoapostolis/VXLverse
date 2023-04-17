@@ -8,6 +8,7 @@ export function Gltf(props: {
   statusToAnimation?: Record<string, CharStatus>
   uuid: string
   url: string
+  animation?: string
 }) {
   const { scene, animations } = useGLTF(props.url)
   const { actions } = useAnimations(animations, scene)
@@ -29,6 +30,15 @@ export function Gltf(props: {
       actions[animation]?.fadeOut(0.2)
     }
   }, [actions, props.status, props.statusToAnimation])
+
+  useEffect(() => {
+    if (!actions || !props.animation) return
+    actions[props.animation]?.reset().fadeIn(0.5)?.play()
+    return () => {
+      if (!actions || !props.animation) return
+      actions[props?.animation]?.fadeOut(0.5)
+    }
+  }, [actions, props.animation])
 
   return <primitive object={scene} dispose={null} />
 }

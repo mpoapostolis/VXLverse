@@ -130,7 +130,7 @@ initDb().then(async (s) => {
   })
 })
 
-export type CharStatus = 'walk' | 'run' | 'attack' | 'jump' | 'die' | 'idle' | 'hit'
+export type CharStatus = 'walk' | 'run' | 'attack' | 'jump' | 'die' | 'idle' | 'hit' | 'interact'
 
 export const CharStatuss: {
   label: string
@@ -143,4 +143,5 @@ export const CharStatuss: {
   { label: 'Die', value: 'die' },
   { label: 'Idle', value: 'idle' },
   { label: 'Hit', value: 'hit' },
+  { label: 'Interact', value: 'interact' },
 ]
