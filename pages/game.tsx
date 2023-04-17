@@ -92,7 +92,8 @@ export default function Home() {
         <title>VXLverse - An All-in-One RPG Creation Tool</title>
       </Head>
       <Canvas>
-        <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
+        <fog attach="fog" args={[selectedScene?.color ?? '#999', 0, 120]} />
+        <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE * 4, GRID_SIZE * 4]} />
         {selectedScene?.equirect ? (
           <Env equirect={selectedScene.equirect} />
         ) : (
@@ -108,7 +109,7 @@ export default function Home() {
             <GameNode key={idx} {...node} />
           ),
         )}
-        <Plane args={[GRID_SIZE, GRID_SIZE]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
+        <Plane args={[GRID_SIZE * 4, GRID_SIZE * 4]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
         <Orbit />
         <Preload all />
       </Canvas>
