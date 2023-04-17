@@ -29,6 +29,22 @@ export function Gltf(props: {
   }, [scene])
 
   useEffect(() => {
+    if (props.status === 'interact') {
+      const name = Object.entries(props.statusToAnimation ?? {}).find(([, status]) => status === 'interact')?.[0]
+      if (!name) return
+      // when animation end return to idle
+      const animation = actions?.[name]
+      if (!animation) return
+      const duration = animation.getClip()?.duration
+      if (!duration) return
+      setTimeout(() => {
+        store.updateNode(props.uuid, { status: 'idle' })
+      }, duration * 1000)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.status, actions])
+
+  useEffect(() => {
     const animation = Object.entries(props.statusToAnimation ?? {}).find(
       ([, status]) => status === (props?.status || 'idle'),
     )?.[0]
