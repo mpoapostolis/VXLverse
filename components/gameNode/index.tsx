@@ -1,6 +1,6 @@
 import { Node, useStore } from '@/store'
 import { useFrame } from '@react-three/fiber'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { Mesh, Vector3 } from 'three'
 import { Gltf } from '../gltf'
 import { MeshGeometry } from '../meshGeometry'
@@ -8,8 +8,6 @@ import { MeshGeometry } from '../meshGeometry'
 export function GameNode(props: Partial<Node>) {
   const store = useStore()
   const ref = useRef<Mesh>(null)
-
-  const v3 = ref?.current?.position
 
   const targetPosition = new Vector3(props.goTo?.x, ref?.current?.position.y, props?.goTo?.z)
   useFrame(() => {
@@ -22,16 +20,13 @@ export function GameNode(props: Partial<Node>) {
         .clone()
         .sub(currentPosition)
         .normalize()
-        .multiplyScalar(props?.velocity ?? 0)
+        .multiplyScalar(props?.velocity ?? 2)
       const newPosition = currentPosition.clone().add(velocity)
       ref.current.position.lerp(newPosition, 0.1)
+    } else {
+      store.updateNode(props.uuid, { goTo: undefined, status: 'idle' })
     }
   })
-
-  useEffect(() => {
-    if (!props.uuid) return
-    console.log('props.uuid', props.actionToAnimation)
-  }, [props.actionToAnimation, props.uuid])
 
   return (
     <mesh
@@ -44,7 +39,7 @@ export function GameNode(props: Partial<Node>) {
       receiveShadow
     >
       {props.url && props.uuid && props.type === 'GLTF' && (
-        <Gltf animation={props.animation} uuid={props.uuid} url={props.url} />
+        <Gltf statusToAnimation={props.statusToAnimation} status={props.status} uuid={props.uuid} url={props.url} />
       )}
       {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
       <meshStandardMaterial color={props.color} />

@@ -7,7 +7,7 @@ import { Environment, OrbitControls, Plane, Preload, useTexture } from '@react-t
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import Head from 'next/head'
 import { useEffect } from 'react'
-import { EquirectangularReflectionMapping, Vector3, sRGBEncoding } from 'three'
+import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
 function Env(props: { equirect: string }) {
   const texture = useTexture(props.equirect ?? '')
@@ -28,13 +28,16 @@ function Orbit() {
       const raycaster = t.raycaster
       raycaster.setFromCamera(t.pointer, t.camera)
       const intersects = raycaster.intersectObjects(t.scene.children)
-      store.updateNode(hero?.uuid ?? '', { velocity: 2, goTo: intersects?.at(0)?.point, animation: 'Walking' })
+      if (intersects?.at(0)?.point)
+        store.updateNode(hero?.uuid ?? '', {
+          goTo: intersects?.at(0)?.point,
+          status: e.shiftKey ? 'run' : 'walk',
+        })
     })
     return () => document.removeEventListener('pointerdown', () => {})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hero?.uuid])
 
-  const v3 = new Vector3()
   const pos = t.scene.getObjectByProperty('type', 'hero')
 
   useFrame((t) => {
@@ -60,19 +63,27 @@ function Orbit() {
 export default function Home() {
   const store = useStore()
 
-  const hero = store.nodes.find((node) => node.gameType === 'hero')
-  const heroUUid = hero?.uuid
-  useEffect(() => {
-    if (!heroUUid) return
+  function cb(shiftKey: boolean) {
+    const state = useStore.getState()
+    const hero = state?.nodes?.find((node) => node.gameType === 'hero')
+    if (!hero?.uuid || hero?.status === 'idle') return
+    store.updateNode(hero.uuid, { velocity: shiftKey ? 4 : 2, status: shiftKey ? 'run' : 'walk' })
+  }
 
+  useEffect(() => {
     document.addEventListener('keydown', (e) => {
       if (e.repeat) return
+      cb(e.shiftKey)
     })
     document.addEventListener('keyup', (e) => {
       if (e.repeat) return
+      cb(e.shiftKey)
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [heroUUid])
+    return () => {
+      document.removeEventListener('keydown', () => {})
+      document.removeEventListener('keyup', () => {})
+    }
+  }, [])
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
 
   return (

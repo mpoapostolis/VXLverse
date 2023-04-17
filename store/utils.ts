@@ -61,7 +61,7 @@ export function meshToJson(mesh: Partial<Node>) {
     color: mesh.color,
     scene: mesh.scene,
     gameType: mesh.gameType,
-    actionToAnimation: mesh.actionToAnimation,
+    statusToAnimation: mesh.statusToAnimation,
     type: mesh.type,
   }
 }
@@ -71,8 +71,7 @@ export function jsonToMesh(json: Node) {
   const e3 = (json.rotation ?? [0, 0, 0]) as number[]
   const s3 = (json.scale ?? [0, 0, 0]) as number[]
 
-  console.log(json.actionToAnimation)
-  const pair = Object.entries(json.actionToAnimation ?? {})
+  const pair = Object.entries(json.statusToAnimation ?? {})
   const idleAnimation = pair.find(([_, key]) => key === 'idle')?.[0]
   const mesh = new Mesh() as Node
   mesh.position?.set(v3[0], v3[1], v3[2])
@@ -86,7 +85,7 @@ export function jsonToMesh(json: Node) {
   mesh.url = json.blob ? URL.createObjectURL(json.blob) : undefined
   mesh.animation = idleAnimation
   mesh.color = json.color
-  mesh.actionToAnimation = json.actionToAnimation
+  mesh.statusToAnimation = json.statusToAnimation
   mesh.type = json.type
   return mesh
 }
@@ -131,11 +130,11 @@ initDb().then(async (s) => {
   })
 })
 
-export type CharAction = 'walk' | 'run' | 'attack' | 'jump' | 'die' | 'idle' | 'hit'
+export type CharStatus = 'walk' | 'run' | 'attack' | 'jump' | 'die' | 'idle' | 'hit'
 
-export const charActions: {
+export const CharStatuss: {
   label: string
-  value: CharAction
+  value: CharStatus
 }[] = [
   { label: 'Walk', value: 'walk' },
   { label: 'Run', value: 'run' },

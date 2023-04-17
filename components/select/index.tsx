@@ -4,10 +4,11 @@ import * as RSelect from '@radix-ui/react-select'
 import clsx from 'clsx'
 
 export function Select<T = string>(props: {
-  options: { label: string; value: string }[]
+  options: { label: string; value?: string }[]
   label?: string
   classname?: string
   value?: string
+  disabled?: string[]
   onChange: (value: T) => void
 }) {
   return (
@@ -15,12 +16,13 @@ export function Select<T = string>(props: {
       {props.label && (
         <Label.Root className={clsx('text-black11 w-full text-sm font-medium mb-1')}>{props.label}</Label.Root>
       )}
-      <RSelect.Root value={props.value} onValueChange={(e) => props.onChange(e as T)}>
+      <RSelect.Root value={props?.value} onValueChange={(e) => props.onChange(e as T)}>
         <RSelect.Trigger
           className="flex border truncate border-mauve7 items-center justify-center  px-2 text-xs leading-none py-1 w-full h-fit gap-1   focus:outline-none outline-none text-blackA12  bg-mauve1"
           aria-label="Label"
         >
-          <RSelect.Value placeholder={props.value} />
+          <RSelect.Value placeholder={props?.value ?? '-'} />
+
           <RSelect.Icon className="text-blackA11 ml-auto">
             <ChevronDownIcon />
           </RSelect.Icon>
@@ -29,8 +31,19 @@ export function Select<T = string>(props: {
           <RSelect.Content className="overflow-hidden border border-mauve8 bg-mauve4  ">
             <RSelect.Viewport className="p-[5px]">
               <RSelect.Group>
-                {props.options.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
+                {[
+                  {
+                    label: '-',
+                    value: null,
+                  },
+                  ...props.options,
+                ].map((option, idx) => (
+                  <SelectItem
+                    disabled={props.disabled?.includes(option.value ?? '')}
+                    className="data-[disabled]:text-blackA8"
+                    key={`${option?.value}${idx}`}
+                    value={option.value}
+                  >
                     {option.label}
                   </SelectItem>
                 ))}

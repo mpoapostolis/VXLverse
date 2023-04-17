@@ -1,5 +1,5 @@
 import { useStore } from '@/store'
-import { CharAction, charActions } from '@/store/utils'
+import { CharStatus, CharStatuss } from '@/store/utils'
 import * as Label from '@radix-ui/react-label'
 import * as Menubar from '@radix-ui/react-menubar'
 import clsx from 'clsx'
@@ -9,6 +9,7 @@ import { Select } from '../select'
 export function Animations() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
+  const animationAvailable = Object.values(selected?.statusToAnimation ?? {})
   return selected && selected.type === 'GLTF' ? (
     <div>
       <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
@@ -17,7 +18,7 @@ export function Animations() {
       <div className={'mb-2 gap-2 grid text-left borer grid-cols-[1fr_60px_1fr]'}>
         <Label.Root className="text-blackA9 truncate w-full text-sm font-medium">Name</Label.Root>
         <Label.Root className="text-blackA9 truncate w-full text-sm font-medium">Preview</Label.Root>
-        <Label.Root className="text-blackA9 truncate w-full text-sm font-medium">Action </Label.Root>
+        <Label.Root className="text-blackA9 truncate w-full text-sm font-medium">Play if </Label.Root>
 
         {Object.keys(selected?.actions ?? {}).map((animation) => (
           <Fragment key={animation}>
@@ -39,13 +40,14 @@ export function Animations() {
               <span className="text text-xs">{selected.animation === animation ? 'Stop' : 'Play'}</span>
             </button>
 
-            <Select<CharAction>
-              value={selected?.actionToAnimation?.[animation]}
-              options={charActions}
+            <Select<CharStatus>
+              value={selected?.statusToAnimation?.[animation]}
+              options={CharStatuss}
+              disabled={animationAvailable}
               onChange={(val) =>
                 store.updateNode(selected.uuid ?? '', {
-                  actionToAnimation: {
-                    ...selected?.actionToAnimation,
+                  statusToAnimation: {
+                    ...selected?.statusToAnimation,
                     [animation]: val,
                   },
                 })

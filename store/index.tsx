@@ -1,6 +1,6 @@
 import { AnimationAction, HexColorString, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
-import { CharAction, defaultGameConf, initDb, meshToJson } from './utils'
+import { CharStatus, defaultGameConf, initDb, meshToJson } from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -50,7 +50,8 @@ export type Node = Partial<Mesh> & {
   blob?: Blob
   animation?: string
   color?: string
-  actionToAnimation?: Record<string, CharAction>
+  statusToAnimation?: Record<string, CharStatus>
+  status: CharStatus
   gameType?: GameType
   actions?: {
     [x: string]: AnimationAction | null
@@ -83,6 +84,7 @@ export type Store = {
   selectNode: (uuid?: string) => void
   updateNode: (uuid: string, node: Partial<Node>) => void
   updateScene: (uuid?: string, scene?: Partial<Scene>) => void
+
   deleteNode: () => void
   deleteScene: (uuid?: string) => void
 }
