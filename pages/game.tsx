@@ -67,7 +67,7 @@ export default function Home() {
     const state = useStore.getState()
     const hero = state?.nodes?.find((node) => node.gameType === 'hero')
     if (!hero?.uuid || hero?.status === 'idle') return
-    store.updateNode(hero.uuid, { velocity: shiftKey ? 4 : 2, status: shiftKey ? 'run' : 'walk' })
+    store.updateNode(hero.uuid, { status: shiftKey ? 'run' : 'walk' })
   }
 
   useEffect(() => {

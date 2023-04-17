@@ -10,6 +10,7 @@ export function GameNode(props: Partial<Node>) {
   const ref = useRef<Mesh>(null)
 
   const targetPosition = new Vector3(props.goTo?.x, ref?.current?.position.y, props?.goTo?.z)
+
   useFrame(() => {
     if (props.velocity === 0 || !ref.current || !props.uuid || !props.goTo) return
     const currentPosition = ref.current.position.clone()
@@ -20,7 +21,7 @@ export function GameNode(props: Partial<Node>) {
         .clone()
         .sub(currentPosition)
         .normalize()
-        .multiplyScalar(props?.velocity ?? 2)
+        .multiplyScalar(props.status === 'run' ? 3 : 1.5)
       const newPosition = currentPosition.clone().add(velocity)
       ref.current.position.lerp(newPosition, 0.1)
     } else {
