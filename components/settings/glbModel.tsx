@@ -37,7 +37,7 @@ export function GlbModel() {
             e.target.value = ''
           }}
           type="file"
-          accept=".gltf,.glb"
+          accept=".gltf, .glb"
           className="text-blackA11  flex   rounded-none  h-6 w-full flex-1 items-center justify-center border p-1 border-blackA7  text-xs leading-none outline-none mb-2"
         />
       </div>

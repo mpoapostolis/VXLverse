@@ -1,7 +1,8 @@
 import { Node, useStore } from '@/store'
+import { Box } from '@react-three/drei'
 import { useFrame } from '@react-three/fiber'
-import { useRef } from 'react'
-import { Mesh, Vector3 } from 'three'
+import { useEffect, useRef, useState } from 'react'
+import { Euler, Mesh, Vector3 } from 'three'
 import { Gltf } from '../gltf'
 import { MeshGeometry } from '../meshGeometry'
 
@@ -29,6 +30,20 @@ export function GameNode(props: Partial<Node>) {
     }
   })
 
+  const [size, setSize] = useState<{ x: number; y: number; z: number }>()
+
+  useEffect(() => {
+    if (!ref.current) return
+    const rotation = props.rotation
+      ? new Euler(
+          (props.rotation.x * Math.PI) / 180,
+          (props.rotation.y * Math.PI) / 180,
+          (props.rotation.z * Math.PI) / 180,
+        )
+      : new Euler(0, 0, 0)
+    ref.current.rotation.set(rotation.x, rotation.y, rotation.z)
+  }, [props.rotation])
+
   return (
     <mesh
       ref={ref}
@@ -36,11 +51,35 @@ export function GameNode(props: Partial<Node>) {
       position={props.position ?? [0, 0, 0]}
       rotation={props.rotation}
       scale={props.scale ?? [0, 0, 0]}
-      castShadow
-      receiveShadow
     >
+      <Box
+        onClick={() => {
+          if (!props.uuid) return
+          const doIHaveInteract = Object.entries(props.statusToAnimation ?? {}).find(
+            ([, status]) => status === 'interact',
+          )
+          if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
+        }}
+        args={
+          size
+            ? [
+                (size?.x ?? 1) / (props.scale?.x ?? 1),
+                (size?.y ?? 1) / (props.scale?.y ?? 1),
+                (size?.z ?? 1) / (props.scale?.z ?? 1),
+              ]
+            : undefined
+        }
+      >
+        <meshStandardMaterial color={'green'} wireframe />
+      </Box>
       {props.url && props.uuid && props.type === 'GLTF' && (
-        <Gltf statusToAnimation={props.statusToAnimation} status={props.status} uuid={props.uuid} url={props.url} />
+        <Gltf
+          onLoad={setSize}
+          statusToAnimation={props.statusToAnimation}
+          status={props.status}
+          uuid={props.uuid}
+          url={props.url}
+        />
       )}
       {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
       <meshStandardMaterial color={props.color} />

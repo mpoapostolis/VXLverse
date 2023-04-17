@@ -87,6 +87,7 @@ export function jsonToMesh(json: Node) {
   mesh.color = json.color
   mesh.statusToAnimation = json.statusToAnimation
   mesh.type = json.type
+
   return mesh
 }
 

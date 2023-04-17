@@ -2,6 +2,7 @@ import { Animations } from '../settings/animations'
 import { GlbModel } from '../settings/glbModel'
 import { Material } from '../settings/material'
 import { NodeList } from '../settings/nodeList'
+import { Quests } from '../settings/quests'
 import { TransformSettings } from '../settings/transform'
 
 export default function Editor() {
@@ -12,6 +13,7 @@ export default function Editor() {
       <GlbModel />
       <Material />
       <Animations />
+      <Quests />
     </div>
   )
 }

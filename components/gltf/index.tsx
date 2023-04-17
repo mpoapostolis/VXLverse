@@ -2,6 +2,7 @@ import { useStore } from '@/store'
 import { CharStatus } from '@/store/utils'
 import { useAnimations, useGLTF } from '@react-three/drei'
 import { useEffect } from 'react'
+import { Box3, Vector3 } from 'three'
 
 export function Gltf(props: {
   status?: CharStatus
@@ -9,6 +10,7 @@ export function Gltf(props: {
   uuid: string
   url: string
   animation?: string
+  onLoad?: (sizes: { x: number; y: number; z: number }) => void
 }) {
   const { scene, animations } = useGLTF(props.url)
   const { actions } = useAnimations(animations, scene)
@@ -18,12 +20,20 @@ export function Gltf(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actions, props.uuid])
 
+  // Calculate and log the dimensions of the primitive
+  useEffect(() => {
+    const boundingBox = new Box3().setFromObject(scene)
+    const size = new Vector3()
+    boundingBox.getSize(size)
+    props.onLoad?.(size)
+  }, [scene])
+
   useEffect(() => {
     const animation = Object.entries(props.statusToAnimation ?? {}).find(
       ([, status]) => status === (props?.status || 'idle'),
     )?.[0]
 
-    if (!actions || !animation) return
+    if (!actions || !animation || !actions[animation]) return
     actions[animation]?.reset().fadeIn(0.2)?.play()
     return () => {
       if (!actions || !animation) return
