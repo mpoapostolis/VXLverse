@@ -6,19 +6,19 @@ import clsx from 'clsx'
 export function Select<T = string>(props: {
   options: { label: string; value?: string }[]
   label?: string
-  classname?: string
+  className?: string
   value?: string
   disabled?: string[]
   onChange: (value: T) => void
 }) {
   return (
-    <div className={props.classname}>
+    <div className={props.className}>
       {props.label && (
         <Label.Root className={clsx('text-black11 w-full text-sm font-medium mb-1')}>{props.label}</Label.Root>
       )}
       <RSelect.Root value={props?.value} onValueChange={(e) => props.onChange(e as T)}>
         <RSelect.Trigger
-          className="flex border truncate border-mauve7 items-center justify-center  px-2 text-xs leading-none py-1 w-full h-fit gap-1   focus:outline-none outline-none text-blackA12  bg-mauve1"
+          className="flex border truncate h-full border-mauve7 items-center justify-center  px-2 text-xs leading-none py-1 w-full  gap-1   focus:outline-none outline-none text-blackA12  bg-mauve1"
           aria-label="Label"
         >
           <RSelect.Value placeholder={props?.value ?? '-'} />
@@ -28,7 +28,7 @@ export function Select<T = string>(props: {
           </RSelect.Icon>
         </RSelect.Trigger>
         <RSelect.Portal>
-          <RSelect.Content className="overflow-hidden border border-mauve8 bg-mauve4  ">
+          <RSelect.Content className="overflow-hidden border border-mauve8 bg-mauve4  z-50 ">
             <RSelect.Viewport className="p-[5px]">
               <RSelect.Group>
                 {[

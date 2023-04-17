@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver'
 import { openDB } from 'idb'
 import JSZip from 'jszip'
 import { Mesh } from 'three'
-import { Node, Scene, Store, useStore } from '.'
+import { BucketItem, Node, Scene, Store, useStore } from '.'
 
 const defaultNodes = (
   [
@@ -117,17 +117,25 @@ initDb().then(async (s) => {
   const [store] = (await s.getAll('store')) as {
     nodes: Node[]
     scenes: Scene[]
+    bucket: BucketItem[]
   }[]
   const scenes =
     store?.scenes?.map((obj) => ({
       ...obj,
       equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
     })) ?? defaultGameConf?.scenes
+  const bucket =
+    store?.bucket?.map((item) => ({
+      ...item,
+      url: item.blob ? URL.createObjectURL(item.blob) : undefined,
+    })) ?? []
+
   useStore?.setState({
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
     selectedNode: undefined,
     currentScene: scenes?.at(0)?.uuid,
+    bucket,
   })
 })
 

@@ -1,3 +1,4 @@
+import { BucketModal } from '@/components/bucketModal'
 import { Controls } from '@/components/controls'
 import Editor from '@/components/editor'
 import { Menu } from '@/components/menu'
@@ -39,6 +40,7 @@ export default function Home() {
         <title>VXLverse - An All-in-One RPG Creation Tool</title>
       </Head>
       <SceneModal />
+      <BucketModal />
       <Menu />
       <div
         className={clsx(

@@ -69,29 +69,58 @@ export type Scene = {
   blob?: Blob
 }
 
+export type BucketItem = {
+  uuid: string
+  name: string
+  url?: string
+  blob?: Blob
+}
+
 export type Mode = 'translate' | 'rotate' | 'scale'
 export type Store = {
+  reset: () => void
+
+  bucket: BucketItem[]
+  updateBucket: (uuid: string, node: BucketItem) => void
+  deleteBucketItem: (uuid: string) => void
+  addToBucket: (item: BucketItem) => void
+
+  setMode: (mode: Mode) => void
+  mode: Mode
+
+  scenes: Scene[]
   currentScene?: string
   setCurrentScene: (currentScene?: string) => void
-  reset: () => void
-  nodes: Partial<Node>[]
-  scenes: Scene[]
   addScene: (scene: Scene) => void
-  addNode: (node: Partial<Node>) => void
-  mode: Mode
-  setMode: (mode: Mode) => void
-  selectedNode?: string
-  selectNode: (uuid?: string) => void
-  updateNode: (uuid: string, node: Partial<Node>) => void
+  deleteScene: (uuid?: string) => void
   updateScene: (uuid?: string, scene?: Partial<Scene>) => void
 
+  nodes: Partial<Node>[]
+  selectedNode?: string
+  addNode: (node: Partial<Node>) => void
   deleteNode: () => void
-  deleteScene: (uuid?: string) => void
+  selectNode: (uuid?: string) => void
+  updateNode: (uuid: string, node: Partial<Node>) => void
 }
 
 export const useStore = create<Store>((set) => ({
   mode: 'translate',
   nodes: [],
+  bucket: [],
+  addToBucket: (item) =>
+    set((state) => ({
+      bucket: [...state.bucket, item],
+    })),
+  deleteBucketItem: (uuid) =>
+    set((state) => ({
+      bucket: state.bucket.filter((item) => item.url !== uuid),
+    })),
+
+  updateBucket: (uuid, node) =>
+    set((state) => ({
+      bucket: state.bucket.map((item) => (item.uuid === uuid ? { ...item, ...node } : item)),
+    })),
+
   setCurrentScene: (currentScene) => set({ currentScene }),
   selectNode: (uuid) => set({ selectedNode: uuid }),
 
@@ -145,5 +174,5 @@ export const useStore = create<Store>((set) => ({
 useStore?.subscribe(async (state) => {
   const db = await initDb()
   const nodes = state.nodes.map(meshToJson)
-  db.put('store', { nodes, scenes: state.scenes }, 0)
+  db.put('store', { nodes, scenes: state.scenes, bucket: state.bucket }, 0)
 })
