@@ -3,8 +3,10 @@ import * as Label from '@radix-ui/react-menubar'
 import * as RSelect from '@radix-ui/react-select'
 import clsx from 'clsx'
 
+type Option = { label: string; value?: string }
+
 export function Select<T = string>(props: {
-  options: { label: string; value?: string }[]
+  options: Record<string, Option[]>
   label?: string
   className?: string
   value?: string
@@ -30,24 +32,25 @@ export function Select<T = string>(props: {
         <RSelect.Portal>
           <RSelect.Content className="overflow-hidden border border-mauve8 bg-mauve4  z-50 ">
             <RSelect.Viewport className="p-[5px]">
-              <RSelect.Group>
-                {[
-                  {
-                    label: '-',
-                    value: null,
-                  },
-                  ...props.options,
-                ].map((option, idx) => (
-                  <SelectItem
-                    disabled={props.disabled?.includes(option.value ?? '')}
-                    className="data-[disabled]:text-blackA8"
-                    key={`${option?.value}${idx}`}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </RSelect.Group>
+              {Object.keys(props.options).map((group) => (
+                <RSelect.Group key={group}>
+                  <RSelect.Label className="pl-2 text-xs leading-5 text-mauve11">{group}</RSelect.Label>
+                  {props.options[group].map((option, idx) => (
+                    <SelectItem
+                      disabled={props.disabled?.includes(option.value ?? '')}
+                      className="data-[disabled]:text-blackA8"
+                      key={`${option?.value}${idx}`}
+                      value={option.value}
+                    >
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                  {/* except last one */}
+                  {group !== Object.keys(props.options)[Object.keys(props.options).length - 1] && (
+                    <RSelect.Separator className="my-1 h-[1px] bg-mauve6" />
+                  )}
+                </RSelect.Group>
+              ))}
             </RSelect.Viewport>
           </RSelect.Content>
         </RSelect.Portal>

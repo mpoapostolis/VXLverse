@@ -39,23 +39,37 @@ export function Quests() {
               <Label.Root className="text-mauve11 w-full text-sm font-medium">Reward</Label.Root>
               <input type="text" className="border outline-none w-full border-mauve7 h-8 px-2 text-blackA12 text-xs" />
               <Select
-                options={
-                  [...store?.nodes, ...store?.bucket].map((node) => ({
-                    label: `${node.name}`,
-                    value: `${node.uuid}`,
-                  })) ?? []
-                }
+                options={{
+                  nodes:
+                    store?.nodes.map((node) => ({
+                      label: `${node.name}`,
+                      value: `${node.uuid}`,
+                    })) ?? [],
+
+                  bucket:
+                    store?.bucket.map((node) => ({
+                      label: `${node.name}`,
+                      value: `${node.uuid}`,
+                    })) ?? [],
+                }}
                 onChange={console.log}
               />
               <input type="text" className="border outline-none w-full border-mauve7 h-8 px-2 text-blackA12 text-xs" />
               <input type="text" className="border outline-none w-full border-mauve7 h-8 px-2 text-blackA12 text-xs" />
               <Select
-                options={
-                  [...store?.nodes, ...store?.bucket].map((node) => ({
-                    label: `${node.name}`,
-                    value: `${node.uuid}`,
-                  })) ?? []
-                }
+                options={{
+                  nodes:
+                    store?.nodes.map((node) => ({
+                      label: `${node.name}`,
+                      value: `${node.uuid}`,
+                    })) ?? [],
+
+                  bucket:
+                    store?.bucket.map((node) => ({
+                      label: `${node.name}`,
+                      value: `${node.uuid}`,
+                    })) ?? [],
+                }}
                 onChange={console.log}
               />
             </div>

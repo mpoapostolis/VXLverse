@@ -38,6 +38,7 @@ export const defaultGameConf: Partial<Store> = {
   nodes: defaultNodes,
   scenes: defaultScenes,
   currentScene: defaultScenes?.at(0)?.uuid,
+  bucket: [],
 }
 
 export async function initDb() {
@@ -98,9 +99,9 @@ export function exportGame() {
     ...scene,
     equirect: scene.blob ? URL.createObjectURL(scene.blob) : undefined,
   }))
-  const hero = nodes.find((node) => node.gameType === 'hero')
+
   const zip = new JSZip()
-  zip.file('gameConf.json', JSON.stringify({ nodes, scenes }))
+  zip.file('gameConf.json', JSON.stringify({ nodes, scenes, bucket: state.bucket }))
 
   nodes.forEach((node) => {
     if (node?.blob) zip.file(`assets/gltf/${node.name}`, node.blob)
@@ -108,9 +109,34 @@ export function exportGame() {
   scenes.forEach((scene) => {
     if (scene?.blob) zip.file(`assets/equirect/${scene.name}`, scene.blob)
   })
+
+  state.bucket.forEach((item) => {
+    if (item?.blob) zip.file(`assets/bucket/${item.name}.${item.ext}`, item.blob)
+  })
+
   zip.generateAsync({ type: 'blob' }).then((content) => {
     saveAs(content, 'game.zip')
   })
+}
+
+export async function importGameZip(zip: JSZip) {
+  const _gameConf = zip.file('gameConf.json')
+  // const _gltf = zip.folder('assets')?.folder('gltf')
+  // const _equirect = zip.folder('assets')?.folder('equirect')
+  // const _bucket = zip.folder('assets')?.folder('bucket')
+
+  // console.log(_gameConf, _gltf, _equirect, _bucket)
+  const gameConf = await _gameConf?.async('string')
+  const gameConfJson = JSON.parse(gameConf ?? '{}')
+  const nodes = gameConfJson?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes
+
+  zip.forEach((relativePath, file) => {
+    console.log(relativePath, file)
+  })
+
+  // useStore?.setState({
+  //   nodes: nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
+  // })
 }
 
 initDb().then(async (s) => {

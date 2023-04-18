@@ -53,10 +53,14 @@ export function BucketModal() {
                       const buffer = reader.result as ArrayBuffer
                       const blob = new Blob([buffer], { type: 'application/octet-stream' })
                       const mesh = new Mesh()
+                      let f = file.name
+                      const ext = f.split('.').pop()
+                      const name = f.split('.').slice(0, -1).join('.')
                       store.addToBucket({
                         uuid: mesh.uuid,
                         blob: blob,
-                        name: file.name,
+                        ext: ext,
+                        name: name,
                         url: URL.createObjectURL(blob),
                       })
                     }

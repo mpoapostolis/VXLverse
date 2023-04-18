@@ -71,6 +71,7 @@ export type Scene = {
 
 export type BucketItem = {
   uuid: string
+  ext?: string
   name: string
   url?: string
   blob?: Blob
