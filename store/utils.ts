@@ -119,24 +119,56 @@ export function exportGame() {
   })
 }
 
-export async function importGameZip(zip: JSZip) {
-  const _gameConf = zip.file('gameConf.json')
-  // const _gltf = zip.folder('assets')?.folder('gltf')
-  // const _equirect = zip.folder('assets')?.folder('equirect')
-  // const _bucket = zip.folder('assets')?.folder('bucket')
+// take file from input type
+export async function importGameZip(file: File) {
+  const zip = await JSZip.loadAsync(file)
+  const _gameConf = await zip.file('gameConf.json')?.async('string')
+  const gameConfJson = JSON.parse(_gameConf ?? '{}')
+  const assets = zip.folder('assets')
+  const gltf = assets?.folder('gltf')
+  const equirect = assets?.folder('equirect')
+  const bucket = assets?.folder('bucket')
 
-  // console.log(_gameConf, _gltf, _equirect, _bucket)
-  const gameConf = await _gameConf?.async('string')
-  const gameConfJson = JSON.parse(gameConf ?? '{}')
-  const nodes = gameConfJson?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes
+  // const nodes = gameConfJson?.nodes?.map(jsonToMesh) ?? []
+  const scenes = await Promise.all(
+    gameConfJson?.scenes?.map(async (scene: any) => {
+      const blob = await equirect?.file(scene.name)?.async('blob')
+      return {
+        ...scene,
+        blob,
+        equirect: blob ? URL.createObjectURL(blob) : undefined,
+      }
+    }) ?? [],
+  )
+  const bucketItems = await Promise.all(
+    gameConfJson?.bucket?.map(async (item: any) => {
+      const blob = await bucket?.file(`${item.name}.${item.ext}`)?.async('blob')
+      return {
+        ...item,
+        blob,
+        url: blob ? URL.createObjectURL(blob) : undefined,
+      }
+    }) ?? [],
+  )
 
-  zip.forEach((relativePath, file) => {
-    console.log(relativePath, file)
+  const _nodes = await Promise.all(
+    gameConfJson?.nodes.map(async (node: Node) => {
+      const blob = await gltf?.file(node?.name ?? '')?.async('blob')
+      return {
+        ...node,
+        blob,
+      }
+    }),
+  )
+
+  const nodes = _nodes.map(jsonToMesh)
+  useStore?.setState({
+    nodes,
+    scenes,
+    selectedNode: undefined,
+    currentScene: scenes?.at(0)?.uuid,
+    bucket: bucketItems,
   })
-
-  // useStore?.setState({
-  //   nodes: nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
-  // })
 }
 
 initDb().then(async (s) => {
@@ -145,6 +177,7 @@ initDb().then(async (s) => {
     scenes: Scene[]
     bucket: BucketItem[]
   }[]
+
   const scenes =
     store?.scenes?.map((obj) => ({
       ...obj,

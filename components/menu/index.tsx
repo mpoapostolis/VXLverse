@@ -2,7 +2,6 @@ import { Node, useStore } from '@/store'
 import { exportGame, importGameZip } from '@/store/utils'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
 import * as Menubar from '@radix-ui/react-menubar'
-import JSZip from 'jszip'
 
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -77,11 +76,8 @@ export function Menu() {
                   onChange={(e) => {
                     const file = e.target.files?.[0]
                     if (!file) return
-                    const zip = new JSZip()
-                    zip.loadAsync(file).then((zip) => {
-                      importGameZip(zip)
-                    })
-                    //
+                    importGameZip(file)
+                    e.target.value = ''
                   }}
                   accept=".zip"
                   className="absolute left-0 top-0 h-full w-full opacity-0"
