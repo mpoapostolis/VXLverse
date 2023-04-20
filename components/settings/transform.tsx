@@ -1,6 +1,7 @@
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
-import * as Label from '@radix-ui/react-label'
-import * as Menubar from '@radix-ui/react-menubar'
 import { Euler, Vector3 } from 'three'
 import { Xyz } from '../xyz'
 
@@ -11,25 +12,25 @@ export function TransformSettings() {
 
   return !selected ? null : (
     <>
-      <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
-      <Label.Root className="text-black11 truncate w-full text-sm font-semibold mb-3 block ">Transform</Label.Root>
+      <Separator className="my-4" />
+      <Label className="w-full text-sm font-semibold mb-4 block ">Transform</Label>
+
       <div className="mb-2 grid grid-cols-[1fr_3fr] ">
-        <Label.Root className="text-black11 w-full text-sm font-medium">Type</Label.Root>
-        <Label.Root className="text-black11 w-full text-sm font-medium">
+        <Label>Type</Label>
+        <Label className=" w-full text-sm font-medium">
           {selected.type}
-          <span className="text-xs text-blackA10 ml-1">- {selected?.gameType ?? selected.type}</span>
-        </Label.Root>
+          <span className="text-xs  text-gray-500  ml-1">- {selected?.gameType ?? selected.type}</span>
+        </Label>
       </div>
 
-      <div className="grid grid-cols-[1fr_3fr] ">
-        <Label.Root className="text-black11 w-full text-sm font-medium">Name</Label.Root>
-        <input
+      <div className="grid grid-cols-[1fr_3fr]  gap-0.5 mb-2 ">
+        <Label>Name</Label>
+        <Input
           onChange={(evt) => {
             if (!selected?.uuid) return
             store.updateNode(selected.uuid, { name: evt.target.value })
           }}
           value={selected?.name ?? selected?.type}
-          className="text-blackA11  rounded-none inline-flex h-6 w-full flex-1 items-center justify-center  pl-2.5 border-blackA7 border text-xs leading-none outline-none mb-2"
         />
       </div>
 

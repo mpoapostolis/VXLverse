@@ -23,16 +23,16 @@ export function SceneModal() {
       <Dialog.Portal>
         <Dialog.Overlay className="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0 z-10" />
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] z-20 max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-mauve4 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-          <Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium">{verb} Scene</Dialog.Title>
+          <Dialog.Title className=" m-0 text-[17px] font-medium">{verb} Scene</Dialog.Title>
           <Menubar.Separator className="my-1  h-[1px] bg-blackA5" />
 
-          <Dialog.Description className="text-mauve11 mt-[10px] mb-5 text-[15px] leading-normal">
+          <Dialog.Description className=" mt-[10px] mb-5 text-[15px] leading-normal">
             Add a new scene to your project. You can add a background color or an equirectangular image.
           </Dialog.Description>
 
           <div className="">
             <div className=" mb-2 ">
-              <Label.Root className="text-black11 w-full text-sm font-medium">Name</Label.Root>
+              <Label.Root className=" w-full text-sm font-medium">Name</Label.Root>
               <input
                 onChange={(evt) => {
                   store.updateScene(selectedScene?.uuid, {
@@ -44,7 +44,7 @@ export function SceneModal() {
               />
             </div>
             <div className=" mb-2 ">
-              <Label.Root className="text-black11 w-full text-sm font-medium">Background</Label.Root>
+              <Label.Root className=" w-full text-sm font-medium">Background</Label.Root>
               <select
                 onChange={(evt) => {
                   store.updateScene(selectedScene?.uuid, {
@@ -64,7 +64,7 @@ export function SceneModal() {
             <div className="grid grid-cols-[80px_1fr] items-center gap-4 ">
               {selectedScene?.type === 'color' && (
                 <>
-                  <Label.Root className="text-black11 w-full text-sm font-medium">Color</Label.Root>
+                  <Label.Root className=" w-full text-sm font-medium">Color</Label.Root>
 
                   <input
                     onChange={(evt) => {
@@ -80,7 +80,7 @@ export function SceneModal() {
               )}
               {selectedScene?.type === 'equirect' && (
                 <>
-                  <Label.Root className="text-black11 w-fit text-sm font-medium">Equirect</Label.Root>
+                  <Label.Root className=" w-fit text-sm font-medium">Equirect</Label.Root>
                   <Upload
                     className={clsx(
                       'bg-base-300 ml-auto h-20 w-20 min-w-[40px] border border-dashed border-mauve8  ',
@@ -102,13 +102,13 @@ export function SceneModal() {
                 onClick={() => {
                   close()
                 }}
-                className="text-blackA111 hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
+                className=" hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
               >
                 Cancel
               </button>
               <button
                 onClick={close}
-                className="text-blackA111 hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
+                className=" hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
               >
                 Save
               </button>
@@ -118,7 +118,7 @@ export function SceneModal() {
           <Dialog.Close asChild>
             <button
               onClick={close}
-              className="text-blackA11 hover:bg-blackA4  px-4 py-2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded focus:outline-none"
+              className=" hover:bg-blackA4  px-4 py-2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded focus:outline-none"
               aria-label="Close"
             >
               <Cross2Icon />

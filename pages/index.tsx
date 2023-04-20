@@ -4,10 +4,10 @@ import Editor from '@/components/editor'
 import { Menu } from '@/components/menu'
 import { Node } from '@/components/node'
 import { SceneModal } from '@/components/sceneModal'
+import { cn } from '@/lib/utils'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import clsx from 'clsx'
 import Head from 'next/head'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
@@ -27,6 +27,7 @@ export default function Home() {
     if (e.key.toLocaleLowerCase() === 'e') store.setMode('rotate')
     if (e.key.toLocaleLowerCase() === 'r') store.setMode('scale')
     if (e.key.toLocaleLowerCase() === 'delete') store.deleteNode()
+    if (e.key.toLocaleLowerCase() === 'escape') store.selectNode(undefined)
   }
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown)
@@ -42,11 +43,7 @@ export default function Home() {
       <SceneModal />
       <BucketModal />
       <Menu />
-      <div
-        className={clsx(
-          'grid h-full w-screen xl:grid-cols-[1fr_17vw] lg:grid-cols-[1fr_25vw] md:grid-cols-[1fr_30vw] grid-cols-[1fr_50vw]',
-        )}
-      >
+      <div className={cn('grid h-full w-screen transition duration-150 grid-cols-[1fr_18vw]')}>
         {/* The button to open modal */}
         <div className="relative">
           <Controls />

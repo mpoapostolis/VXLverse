@@ -145,8 +145,9 @@ export const useStore = create<Store>((set) => ({
   deleteScene: () =>
     set((state) => {
       const idx = state.scenes.findIndex((s) => s.uuid === state.currentScene)
+      const firstSceneAfterDelete = state.scenes[idx + 1] || state.scenes[idx - 1]
       return {
-        currentScene: state.scenes[idx - 1]?.uuid ?? undefined,
+        currentScene: firstSceneAfterDelete?.uuid,
         scenes: state.scenes.filter((scene) => scene.uuid !== state.currentScene),
       }
     }),

@@ -1,12 +1,12 @@
-import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
 import * as Dialog from '@radix-ui/react-dialog'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import * as Label from '@radix-ui/react-label'
+import { Separator } from '@radix-ui/react-menubar'
 import { useState } from 'react'
 import { Select } from '../select'
 
-export function Quests() {
+export function GameProperties() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const [open, setOpen] = useState(false)
@@ -15,15 +15,15 @@ export function Quests() {
     setOpen(false)
   }
 
-  return ['hero', 'enemy', 'npc'].includes(selected?.gameType ?? '') ? (
+  return selected?.gameType === 'npc' ? (
     <>
-      <Separator className="my-4" />
-      <Label.Root className=" truncate w-full text-sm font-semibold mb-4 block ">Quests</Label.Root>
+      <Separator className="my-4  h-[1px] bg-blackA5" />
+      <Label.Root className=" truncate w-full text-sm font-semibold mb-3 block ">Game Properties</Label.Root>
       <button
         onClick={() => {
           setOpen(true)
         }}
-        className="w-full border border-dashed border-black border-opacity-25 py-6 text-xs"
+        className="w-full mt-4 border border-dashed border-black border-opacity-25 py-6 text-xs"
       >
         Dialogue Editor
       </button>{' '}

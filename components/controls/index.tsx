@@ -8,8 +8,8 @@ export function Controls() {
       <button
         onClick={() => store.setMode('translate')}
         className={clsx('rounded-t border-b border-black border-opacity-10 hover:bg-mauve3  p-2', {
-          'bg-mauve7 ': store.mode !== 'translate',
-          'bg-mauve2 ': store.mode === 'translate',
+          'bg-background ': store.mode !== 'translate',
+          'bg-card ': store.mode === 'translate',
         })}
       >
         <picture>
@@ -20,8 +20,8 @@ export function Controls() {
       <button
         onClick={() => store.setMode('rotate')}
         className={clsx('border-b border-black border-opacity-10 hover:bg-mauve3  p-2', {
-          'bg-mauve7 ': store.mode !== 'rotate',
-          'bg-mauve2 ': store.mode === 'rotate',
+          'bg-background ': store.mode !== 'rotate',
+          'bg-card ': store.mode === 'rotate',
         })}
       >
         <picture>
@@ -31,8 +31,8 @@ export function Controls() {
       <button
         onClick={() => store.setMode('scale')}
         className={clsx('rounded-b border-b border-black border-opacity-10 hover:bg-mauve3  p-2', {
-          'bg-mauve7 ': store.mode !== 'scale',
-          'bg-mauve2 ': store.mode === 'scale',
+          'bg-background ': store.mode !== 'scale',
+          'bg-card ': store.mode === 'scale',
         })}
       >
         <picture>

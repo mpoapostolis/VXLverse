@@ -18,10 +18,10 @@ export function BucketModal() {
       <Dialog.Portal>
         <Dialog.Overlay className="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0 z-10" />
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] z-20 max-h-[85vh] w-[75vw] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-mauve4 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-          <Dialog.Title className="text-mauve12 m-0 text-[17px] font-medium">Bucket Editor</Dialog.Title>
+          <Dialog.Title className=" m-0 text-[17px] font-medium">Bucket Editor</Dialog.Title>
           <Separator className="my-1  h-[1px] bg-blackA5" />
 
-          <Dialog.Description className="text-mauve11 mt-[10px] mb-5 text-[15px] leading-normal">
+          <Dialog.Description className=" mt-[10px] mb-5 text-[15px] leading-normal">
             You can use bucket to add Rewards or Required Items to Your Quests
           </Dialog.Description>
 
@@ -36,7 +36,7 @@ export function BucketModal() {
                     }}
                     value={item.name}
                     type="text"
-                    className="border absolute bottom-0 outline-none rounded-b w-full h-8 px-2 text-blackA12 text-xs"
+                    className="border absolute bottom-0 outline-none rounded-b w-full h-8 px-2  text-xs"
                   />
                 </div>
               )
@@ -73,7 +73,7 @@ export function BucketModal() {
                 className="absolute left-0 top-0 h-full w-full opacity-0"
                 type="file"
               />
-              <div className="border h-40 w-40 text-xs border-dashed   border-mauve8   grid place-items-center rounded text-mauve9">
+              <div className="border h-40 w-40 text-xs border-dashed   border-mauve8   grid place-items-center rounded ">
                 <div className="flex flex-col items-center justify-center">
                   <UploadIcon />
                   <div className="mt-2">New Image</div>
@@ -87,7 +87,7 @@ export function BucketModal() {
               onClick={() => {
                 close()
               }}
-              className="text-blackA111 hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
+              className=" hover:bg-blackA4  px-4 py-2 items-center justify-center rounded focus:outline-none"
             >
               Close
             </button>
@@ -96,7 +96,7 @@ export function BucketModal() {
           <Dialog.Close asChild>
             <button
               onClick={close}
-              className="text-blackA11 hover:bg-blackA4  px-4 py-2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded focus:outline-none"
+              className=" hover:bg-blackA4  px-4 py-2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded focus:outline-none"
               aria-label="Close"
             >
               <Cross2Icon />

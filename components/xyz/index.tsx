@@ -1,11 +1,14 @@
-import * as Label from '@radix-ui/react-label'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 export function Xyz(props: { onChange: (val: number[]) => void; label: string; values: number[] }) {
+  const idxToLabel = ['x', 'y', 'z']
   return (
     <div className="mb-2 grid w-full  grid-cols-4 gap-2">
-      <Label.Root className="text-black11 w-full text-sm font-medium">{props.label}</Label.Root>
+      <Label>{props.label}</Label>
       {props.values.map((value, idx) => (
-        <input
+        <Input
+          placeholder={idxToLabel[idx]}
           key={idx}
           onChange={(e) => {
             const values = props.values
@@ -13,7 +16,6 @@ export function Xyz(props: { onChange: (val: number[]) => void; label: string; v
             props.onChange(values)
           }}
           type="number"
-          className="text-blackA11  rounded-none inline-flex h-6 w-full flex-1 items-center justify-center  pl-2.5 border-blackA7 border text-xs leading-none outline-none"
           value={Number(value.toFixed(2))}
         />
       ))}

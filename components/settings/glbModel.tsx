@@ -1,7 +1,8 @@
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
-import * as Label from '@radix-ui/react-label'
-import { Separator } from '@radix-ui/react-menubar'
 import { Euler, Mesh } from 'three'
+import { Input } from '../ui/input'
 
 export function GlbModel() {
   const store = useStore()
@@ -9,11 +10,11 @@ export function GlbModel() {
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
   return ['hero', 'enemy', 'npc'].includes(selected?.gameType ?? '') ? (
     <>
-      <Separator className="my-4  h-[1px] bg-blackA5" />
-      <Label.Root className="text-black11 truncate w-full text-sm font-semibold mb-3 block ">3d Model</Label.Root>
+      <Separator className="my-4 " />
+      <Label className="  w-full text-sm font-semibold mb-4 block ">3d Model</Label>
       <div className="grid grid-cols-[1fr_2fr] xs place-items-center">
-        <Label.Root className="text-blackA9 w-full text-xs font-medium">Glb / Gltf</Label.Root>
-        <input
+        <Label className=" w-full">Glb / Gltf</Label>
+        <Input
           onChange={(e) => {
             const file = e.target.files?.[0]
             if (!file) return
@@ -38,7 +39,6 @@ export function GlbModel() {
           }}
           type="file"
           accept=".gltf, .glb"
-          className="text-blackA11  flex   rounded-none  h-6 w-full flex-1 items-center justify-center border p-1 border-blackA7  text-xs leading-none outline-none mb-2"
         />
       </div>
     </>

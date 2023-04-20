@@ -1,7 +1,7 @@
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
 import { CharStatus, CharStatuss } from '@/store/utils'
-import * as Label from '@radix-ui/react-label'
-import * as Menubar from '@radix-ui/react-menubar'
 import clsx from 'clsx'
 import { Fragment } from 'react'
 import { Select } from '../select'
@@ -12,18 +12,16 @@ export function Animations() {
   const animationAvailable = Object.values(selected?.statusToAnimation ?? {})
   return selected && selected.type === 'GLTF' ? (
     <div>
-      <Menubar.Separator className="my-4  h-[1px] bg-blackA5" />
-      <Label.Root className="text-black11 truncate w-full text-sm font-semibold mb-3 block ">Animations</Label.Root>
+      <Separator className="my-4" />
+      <Label className=" truncate w-full text-sm font-semibold mb-4 block ">Animations</Label>
 
-      <div className={'mb-2 gap-2 grid text-left borer grid-cols-[1fr_60px_1fr]'}>
-        <Label.Root className="text-blackA9 truncate w-full text-sm font-medium">Name</Label.Root>
-        <Label.Root className="text-blackA9 truncate w-full text-sm font-medium">Preview</Label.Root>
-        <Label.Root className="text-blackA9 truncate w-full text-sm font-medium">Play if </Label.Root>
-
+      <div className={'mb-2 gap-2 grid text-left borer grid-cols-[1fr_80px_1fr]'}>
+        <Label className=" truncate text-sm text-slate-400 ">Name</Label>
+        <Label className=" truncate text-sm text-slate-400 ">Preview</Label>
+        <Label className=" truncate text-sm text-slate-400 ">Play if </Label>
         {Object.keys(selected?.actions ?? {}).map((animation) => (
           <Fragment key={animation}>
-            <Label.Root className="text-black11 truncate w-full text-sm font-medium">{animation}</Label.Root>
-
+            <Label className=" truncate w-full ">{animation}</Label>
             <button
               onClick={() => {
                 if (!selected?.uuid) return
@@ -33,7 +31,7 @@ export function Animations() {
                 })
               }}
               className={clsx(
-                'text-xs flex w-fit items-center  px-3  bg-mauve6 rounded font-bold text-blackA11  py-1',
+                'text-xs flex w-fit items-center  px-3  bg-muted text-muted-foreground  rounded    py-1',
                 {},
               )}
             >
@@ -50,7 +48,7 @@ export function Animations() {
                 store.updateNode(selected.uuid ?? '', {
                   statusToAnimation: {
                     ...selected?.statusToAnimation,
-                    [animation]: val,
+                    [animation]: val ?? undefined,
                   },
                 })
               }
