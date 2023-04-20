@@ -15,6 +15,7 @@ import {
 import { Node, useStore } from '@/store'
 import { exportGame, importGameZip } from '@/store/utils'
 import { DownloadIcon, GearIcon, Pencil1Icon, PlayIcon, ResetIcon, TrashIcon, UploadIcon } from '@radix-ui/react-icons'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Mesh, Vector3 } from 'three'
 
@@ -69,8 +70,11 @@ export function Menu() {
           <MenubarItem disabled>New Incognito Window</MenubarItem>
           <MenubarSeparator />
           <MenubarItem>
-            Import{' '}
+            Import
             <input
+              onClick={(e) => {
+                e.stopPropagation()
+              }}
               onChange={(e) => {
                 const file = e.target.files?.[0]
                 if (!file) return
@@ -231,12 +235,14 @@ export function Menu() {
       <MenubarMenu>
         <MenubarTrigger>Game</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>
-            Play{' '}
-            <MenubarShortcut>
-              <PlayIcon />
-            </MenubarShortcut>
-          </MenubarItem>
+          <Link href={'/game'} target="__blank">
+            <MenubarItem>
+              Play{' '}
+              <MenubarShortcut>
+                <PlayIcon />
+              </MenubarShortcut>
+            </MenubarItem>
+          </Link>
           <MenubarSeparator />
           <MenubarItem>
             Settings
