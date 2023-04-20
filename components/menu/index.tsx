@@ -14,10 +14,21 @@ import {
 } from '@/components/ui/menubar'
 import { Node, useStore } from '@/store'
 import { exportGame, importGameZip } from '@/store/utils'
-import { DownloadIcon, GearIcon, Pencil1Icon, PlayIcon, ResetIcon, TrashIcon, UploadIcon } from '@radix-ui/react-icons'
+import {
+  DownloadIcon,
+  EraserIcon,
+  GearIcon,
+  Pencil1Icon,
+  PlayIcon,
+  ReloadIcon,
+  ResetIcon,
+  TrashIcon,
+  UploadIcon,
+} from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Mesh, Vector3 } from 'three'
+import { Indicator } from '../indicator'
 
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
@@ -61,13 +72,13 @@ export function Menu() {
       <MenubarMenu>
         <MenubarTrigger>File</MenubarTrigger>
         <MenubarContent>
-          <MenubarItem>
-            New Tab <MenubarShortcut>⌘T</MenubarShortcut>
+          <MenubarItem onClick={store.reset}>
+            New Project
+            <MenubarShortcut>
+              <EraserIcon />
+            </MenubarShortcut>
           </MenubarItem>
-          <MenubarItem>
-            New Window <MenubarShortcut>⌘N</MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem disabled>New Incognito Window</MenubarItem>
+
           <MenubarSeparator />
           <MenubarItem>
             Import
@@ -98,7 +109,10 @@ export function Menu() {
           <MenubarSeparator />
 
           <MenubarItem>
-            Print... <MenubarShortcut>⌘P</MenubarShortcut>
+            Settings{' '}
+            <MenubarShortcut>
+              <GearIcon />
+            </MenubarShortcut>
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
@@ -117,6 +131,7 @@ export function Menu() {
                   }}
                   className="data-[highlighted]::to-mauve10 group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
                 >
+                  <Indicator classname="mr-2" type={item} gameType="hero" />
                   {item}
                 </MenubarItem>
               ))}
@@ -132,6 +147,7 @@ export function Menu() {
                     }}
                     className="data-[highlighted]::to-mauve10 group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
                   >
+                    <Indicator classname="mr-2" type={geometry} />
                     {geometry}
                   </MenubarItem>
                 ))}
@@ -149,6 +165,7 @@ export function Menu() {
                     }}
                     className="data-[highlighted]::to-mauve10 group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
                   >
+                    <Indicator classname="mr-2" type={light} />
                     {light}
                   </MenubarItem>
                 ))}
@@ -164,9 +181,10 @@ export function Menu() {
                     onClick={() => {
                       store.selectNode(node.uuid)
                     }}
-                    className="data-[highlighted]::to-mauve10 group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
+                    className="data-[highlighted]::to-mauve10  group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
                   >
-                    {(node?.name || node?.gameType) ?? node.type}{' '}
+                    <Indicator classname="mr-2" gameType={node.gameType} type={node.type ?? 'hero'} />
+                    <span className="truncate ">{(node?.name || node?.gameType) ?? node.type} </span>
                   </MenubarItem>
                 ))}
               </MenubarSubContent>
@@ -207,10 +225,16 @@ export function Menu() {
               <Pencil1Icon />
             </MenubarShortcut>
           </MenubarItem>
-          <MenubarItem disabled={store.scenes.length === 1} onClick={() => store.deleteScene()}>
+          <MenubarItem disabled={store.scenes.length === 1} onClick={store.deleteScene}>
             Delete
             <MenubarShortcut>
               <TrashIcon />
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem onClick={store.resetScene}>
+            Reset Scene
+            <MenubarShortcut>
+              <ReloadIcon />
             </MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />

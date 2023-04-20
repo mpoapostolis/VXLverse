@@ -93,9 +93,9 @@ export type Store = {
   currentScene?: string
   setCurrentScene: (currentScene?: string) => void
   addScene: (scene: Scene) => void
-  deleteScene: (uuid?: string) => void
+  deleteScene: () => void
   updateScene: (uuid?: string, scene?: Partial<Scene>) => void
-
+  resetScene: () => void
   nodes: Partial<Node>[]
   selectedNode?: string
   addNode: (node: Partial<Node>) => void
@@ -116,6 +116,23 @@ export const useStore = create<Store>((set) => ({
     set((state) => ({
       bucket: state.bucket.filter((item) => item.url !== uuid),
     })),
+
+  resetScene: () =>
+    set((s) => {
+      return {
+        scenes: s.scenes.map((scene) =>
+          scene.uuid === s.currentScene
+            ? {
+                ...scene,
+                color: '#999',
+                type: 'color',
+              }
+            : scene,
+        ),
+
+        nodes: s.nodes.filter((n) => n.scene !== s.currentScene),
+      }
+    }),
 
   updateBucket: (uuid, node) =>
     set((state) => ({

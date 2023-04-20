@@ -1,5 +1,6 @@
 import { useStore } from '@/store'
 import clsx from 'clsx'
+import { Indicator } from '../indicator'
 
 export function NodeList() {
   const store = useStore()
@@ -32,7 +33,7 @@ export function NodeList() {
             )}
             key={idx}
           >
-            <span className="mr-2 inline-block h-1.5 w-1.5 rounded-full bg-red-300" />
+            <Indicator classname="mr-2" type={node.type ?? ''} gameType={node.gameType} />
             <span>
               {node?.name === '' ? node.type : node?.name}
               <span className="text-xs text-slate-400   ml-1"> - {node?.gameType ?? node.type}</span>
