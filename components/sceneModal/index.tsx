@@ -7,12 +7,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
-import { MenubarItem, MenubarShortcut } from '@/components/ui/menubar'
-import { Separator } from '@/components/ui/separator'
+import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
+import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
 import { Pencil1Icon } from '@radix-ui/react-icons'
-import { useRouter } from 'next/router'
 import { HexColorString } from 'three'
+import { MenubarShortcut } from '../ui/menubar'
+import { Separator } from '../ui/separator'
 import { Upload } from '../upload'
 
 export function SceneModal() {
@@ -20,25 +21,24 @@ export function SceneModal() {
 
   const verb = store.currentScene === 'new' ? 'Create' : 'Edit'
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
-  const router = useRouter()
-  const hash = router.asPath.split('#')[1]
-  const open = hash === 'new-scene' || hash === 'edit-scene'
-  const close = () => router.replace('/')
   return (
     <Dialog>
-      <DialogTrigger
-        onClick={(e) => {
-          e.stopPropagation()
-        }}
-        asChild
-      >
-        <MenubarItem onClick={(e) => e.preventDefault()}>
-          Edit
-          <MenubarShortcut>
-            <Pencil1Icon />
-          </MenubarShortcut>
-        </MenubarItem>
-      </DialogTrigger>
+      <ContextMenu>
+        <ContextMenuTrigger asChild>
+          <DialogTrigger asChild>
+            <div
+              className={cn(
+                'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+              )}
+            >
+              Edit
+              <MenubarShortcut>
+                <Pencil1Icon />
+              </MenubarShortcut>
+            </div>
+          </DialogTrigger>
+        </ContextMenuTrigger>
+      </ContextMenu>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{verb} Scene</DialogTitle>

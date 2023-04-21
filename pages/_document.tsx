@@ -25,7 +25,7 @@ const MetaTags = () => (
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@YourTwitterHandle" />
     <link rel="canonical" href="https://www.vxlverse.com/" />
-    <Script async src="https://www.googletagmanager.com/gtag/js?id=G-8D51L7ND00" strategy="afterInteractive" />
+    <Script async src="https://www.googletagmanager.com/gtag/js?id=G-8D51L7ND00" />
     <Script id="google-analytics" strategy="afterInteractive">
       {`
           window.dataLayer = window.dataLayer || [];

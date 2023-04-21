@@ -214,7 +214,6 @@ export function Menu() {
           <MenubarItem disabled>{sceneName}</MenubarItem>
 
           <SceneModal />
-
           <MenubarItem disabled={store.scenes.length === 1} onClick={store.deleteScene}>
             Delete
             <MenubarShortcut>
