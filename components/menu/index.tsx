@@ -220,7 +220,13 @@ export function Menu() {
               <Pencil1Icon />
             </MenubarShortcut>
           </SceneModal>
-          <MenubarItem disabled={store.scenes.length === 1} onClick={store.deleteScene}>
+          <MenubarItem
+            disabled={store.scenes.length === 1}
+            onClick={(e) => {
+              e.preventDefault()
+              store.deleteScene()
+            }}
+          >
             Delete
             <MenubarShortcut>
               <TrashIcon />
@@ -233,23 +239,22 @@ export function Menu() {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
-          <SceneModal>
-            <div
-              onClick={() => {
-                const mesh = new Mesh()
-                store.addScene({
-                  uuid: mesh.uuid,
-                  type: 'color',
-                  name: 'Scene ' + Number(store.scenes.length + 1),
-                  color: '#999',
-                })
-                router.replace({
-                  hash: `new-scene`,
-                })
-              }}
-            >
-              New Scene...
-            </div>
+          <SceneModal
+            onClick={() => {
+              const mesh = new Mesh()
+              store.addScene({
+                uuid: mesh.uuid,
+                type: 'color',
+                name: 'Scene ' + Number(store.scenes.length + 1),
+                color: '#999',
+              })
+              router.replace({
+                hash: `new-scene`,
+              })
+            }}
+            new
+          >
+            <div className="w-full ">New Scene...</div>
           </SceneModal>
         </MenubarContent>
       </MenubarMenu>

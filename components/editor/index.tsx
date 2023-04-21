@@ -7,7 +7,7 @@ import { TransformSettings } from '../settings/transform'
 
 export default function Editor() {
   return (
-    <div className=" border-base-300 h-screen w-full   border-l bg-mauve4 p-2 pb-12 overflow-auto ">
+    <div className=" border-base-300 lg:h-screen w-full   border-l bg-mauve4 p-2 pb-12 overflow-auto ">
       <NodeList />
       <TransformSettings />
       <GlbModel />

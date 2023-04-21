@@ -14,10 +14,10 @@ import { HexColorString } from 'three'
 import { Separator } from '../ui/separator'
 import { Upload } from '../upload'
 
-export function SceneModal(props: { children?: React.ReactNode }) {
+export function SceneModal(props: { onClick?: () => void; new?: boolean; children?: React.ReactNode }) {
   const store = useStore()
 
-  const verb = store.currentScene === 'new' ? 'Create' : 'Edit'
+  const verb = props.new ? 'Create' : 'Edit'
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
     <Dialog>
@@ -25,8 +25,9 @@ export function SceneModal(props: { children?: React.ReactNode }) {
         <ContextMenuTrigger asChild>
           <DialogTrigger asChild>
             <div
+              onClick={props?.onClick}
               className={cn(
-                'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'relative flex cursor-default hover:bg-slate-50 bg-opacity-10 select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
               )}
             >
               {props.children}
@@ -36,10 +37,12 @@ export function SceneModal(props: { children?: React.ReactNode }) {
       </ContextMenu>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{verb} Scene</DialogTitle>
+          <DialogTitle>
+            {verb} {props.new ? 'new scene' : selectedScene?.name}
+          </DialogTitle>
 
-          <DialogDescription>
-            Add a new scene to your project. You can add a background color or an equirectangular image.
+          <DialogDescription className="text-xs">
+            You can add a background color or an equirectangular image.
           </DialogDescription>
         </DialogHeader>
         <Separator />

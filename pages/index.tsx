@@ -38,11 +38,12 @@ export default function Home() {
       <Head>
         <title>VXLverse - An All-in-One RPG Creation Tool</title>
       </Head>
-      {/* <SceneModal /> */}
-      {/* <BucketModal /> */}
       <Menu />
-      <div className={cn('grid h-full w-screen transition duration-150 grid-cols-[1fr_18vw]')}>
-        {/* The button to open modal */}
+      <div
+        className={cn(
+          'grid h-full w-screen transition duration-150 lg:grid-cols-[1fr_25vw] xl:grid-cols-[1fr_20vw]  grid-rows-2 gap-4 lg:gap-0 lg:grid-rows-1',
+        )}
+      >
         <div className="relative">
           <Controls />
           <Canvas>
