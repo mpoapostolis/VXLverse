@@ -18,6 +18,7 @@ import {
   DownloadIcon,
   EraserIcon,
   GearIcon,
+  Pencil1Icon,
   PlayIcon,
   ReloadIcon,
   ResetIcon,
@@ -213,7 +214,12 @@ export function Menu() {
           <MenubarSeparator />
           <MenubarItem disabled>{sceneName}</MenubarItem>
 
-          <SceneModal />
+          <SceneModal>
+            Edit
+            <MenubarShortcut>
+              <Pencil1Icon />
+            </MenubarShortcut>
+          </SceneModal>
           <MenubarItem disabled={store.scenes.length === 1} onClick={store.deleteScene}>
             Delete
             <MenubarShortcut>
@@ -227,22 +233,24 @@ export function Menu() {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
-          <MenubarItem
-            onClick={() => {
-              const mesh = new Mesh()
-              store.addScene({
-                uuid: mesh.uuid,
-                type: 'color',
-                name: 'Scene ' + Number(store.scenes.length + 1),
-                color: '#999',
-              })
-              router.replace({
-                hash: `new-scene`,
-              })
-            }}
-          >
-            New Scene...
-          </MenubarItem>
+          <SceneModal>
+            <div
+              onClick={() => {
+                const mesh = new Mesh()
+                store.addScene({
+                  uuid: mesh.uuid,
+                  type: 'color',
+                  name: 'Scene ' + Number(store.scenes.length + 1),
+                  color: '#999',
+                })
+                router.replace({
+                  hash: `new-scene`,
+                })
+              }}
+            >
+              New Scene...
+            </div>
+          </SceneModal>
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>

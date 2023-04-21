@@ -10,13 +10,11 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
-import { Pencil1Icon } from '@radix-ui/react-icons'
 import { HexColorString } from 'three'
-import { MenubarShortcut } from '../ui/menubar'
 import { Separator } from '../ui/separator'
 import { Upload } from '../upload'
 
-export function SceneModal() {
+export function SceneModal(props: { children?: React.ReactNode }) {
   const store = useStore()
 
   const verb = store.currentScene === 'new' ? 'Create' : 'Edit'
@@ -31,10 +29,7 @@ export function SceneModal() {
                 'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
               )}
             >
-              Edit
-              <MenubarShortcut>
-                <Pencil1Icon />
-              </MenubarShortcut>
+              {props.children}
             </div>
           </DialogTrigger>
         </ContextMenuTrigger>
