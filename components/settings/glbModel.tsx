@@ -1,8 +1,8 @@
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
 import { Euler, Mesh } from 'three'
-import { Input } from '../ui/input'
 
 export function GlbModel() {
   const store = useStore()

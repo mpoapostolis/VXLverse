@@ -18,7 +18,6 @@ import {
   DownloadIcon,
   EraserIcon,
   GearIcon,
-  Pencil1Icon,
   PlayIcon,
   ReloadIcon,
   ResetIcon,
@@ -29,6 +28,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Mesh, Vector3 } from 'three'
 import { Indicator } from '../indicator'
+import { SceneModal } from '../sceneModal'
 
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
@@ -213,18 +213,8 @@ export function Menu() {
           <MenubarSeparator />
           <MenubarItem disabled>{sceneName}</MenubarItem>
 
-          <MenubarItem
-            onClick={() => {
-              router.push({
-                hash: `edit-scene`,
-              })
-            }}
-          >
-            Edit
-            <MenubarShortcut>
-              <Pencil1Icon />
-            </MenubarShortcut>
-          </MenubarItem>
+          <SceneModal />
+
           <MenubarItem disabled={store.scenes.length === 1} onClick={store.deleteScene}>
             Delete
             <MenubarShortcut>

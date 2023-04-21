@@ -1,9 +1,7 @@
-import { BucketModal } from '@/components/bucketModal'
 import { Controls } from '@/components/controls'
 import Editor from '@/components/editor'
 import { Menu } from '@/components/menu'
 import { Node } from '@/components/node'
-import { SceneModal } from '@/components/sceneModal'
 import { cn } from '@/lib/utils'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
@@ -40,8 +38,8 @@ export default function Home() {
       <Head>
         <title>VXLverse - An All-in-One RPG Creation Tool</title>
       </Head>
-      <SceneModal />
-      <BucketModal />
+      {/* <SceneModal /> */}
+      {/* <BucketModal /> */}
       <Menu />
       <div className={cn('grid h-full w-screen transition duration-150 grid-cols-[1fr_18vw]')}>
         {/* The button to open modal */}
