@@ -6,7 +6,7 @@ export function NodeList() {
   const store = useStore()
   const currentScene = store.scenes.find((scene) => scene.uuid === store.currentScene)
   return (
-    <div className="relative h-40 border-black border-opacity-0 overflow-auto border bg-white">
+    <div className="relative h-40 border-black border-opacity-0 overflow-auto border bg-card">
       <div
         className={clsx('absolute  h-full w-full text-xs', {
           hidden: store.nodes.length > 0,
@@ -26,17 +26,17 @@ export function NodeList() {
           <button
             onClick={() => store.selectNode(node.uuid)}
             className={clsx(
-              'flex w-full items-center  border-opacity-10  border-b border-black px-4 py-1 text-left text-xs  hover:bg-slate-100',
+              'flex w-full items-center  border-opacity-10  border-b border-black px-4 py-1 text-left text-xs  ',
               {
-                'bg-yellow-100': `${node?.uuid}` === store.selectedNode,
+                'bg-secondary text-secondary-foreground': `${node?.uuid}` === store.selectedNode,
               },
             )}
             key={idx}
           >
-            <Indicator classname="mr-2" type={node.type ?? ''} gameType={node.gameType} />
+            <Indicator classname="mr-2 " type={node.type ?? ''} gameType={node.gameType} />
             <span>
               {node?.name === '' ? node.type : node?.name}
-              <span className="text-xs text-slate-400   ml-1"> - {node?.gameType ?? node.type}</span>
+              <span className="text-xs   ml-1"> - {node?.gameType ?? node.type}</span>
             </span>
           </button>
         ))}

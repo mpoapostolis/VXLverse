@@ -9,7 +9,7 @@ export function Indicator(props: { type: string; gameType?: string; classname?: 
 
   return (
     <span
-      className={cn('inline-block h-2 w-2 rounded-full', props.classname)}
+      className={cn('inline-block border border-black border-opacity-50 h-2 w-2 rounded-full', props.classname)}
       style={{
         backgroundColor: color,
       }}

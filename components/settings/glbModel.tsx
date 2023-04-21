@@ -11,7 +11,7 @@ export function GlbModel() {
   return ['hero', 'enemy', 'npc'].includes(selected?.gameType ?? '') ? (
     <>
       <Separator className="my-4 " />
-      <Label className="  w-full text-sm font-semibold mb-4 block ">3d Model</Label>
+      <Label className="  w-full text-sm font-semibold mb-4 block text-secondary">3d Model</Label>
       <div className="grid grid-cols-[1fr_2fr] xs place-items-center">
         <Label className=" w-full">Glb / Gltf</Label>
         <Input

@@ -18,7 +18,9 @@ export function GameProperties() {
   return selected?.gameType === 'npc' ? (
     <>
       <Separator className="my-4  h-[1px] bg-blackA5" />
-      <Label.Root className=" truncate w-full text-sm font-semibold mb-3 block ">Game Properties</Label.Root>
+      <Label.Root className=" truncate w-full text-sm font-semibold mb-3 block  text-secondary">
+        Game Properties
+      </Label.Root>
       <button
         onClick={() => {
           setOpen(true)

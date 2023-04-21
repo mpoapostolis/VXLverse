@@ -7,9 +7,9 @@ export function Controls() {
     <div className="absolute left-3 top-3  z-10 grid h-fit w-fit">
       <button
         onClick={() => store.setMode('translate')}
-        className={clsx('rounded-t border-b border-black border-opacity-10 hover:bg-mauve3  p-2', {
-          'bg-background ': store.mode !== 'translate',
-          'bg-card ': store.mode === 'translate',
+        className={clsx('border-b border-black border-opacity-10  p-2', {
+          'bg-card ': store.mode !== 'translate',
+          'bg-secondary ': store.mode === 'translate',
         })}
       >
         <picture>
@@ -19,9 +19,9 @@ export function Controls() {
 
       <button
         onClick={() => store.setMode('rotate')}
-        className={clsx('border-b border-black border-opacity-10 hover:bg-mauve3  p-2', {
-          'bg-background ': store.mode !== 'rotate',
-          'bg-card ': store.mode === 'rotate',
+        className={clsx('border-b border-black border-opacity-10  p-2', {
+          'bg-card ': store.mode !== 'rotate',
+          'bg-secondary': store.mode === 'rotate',
         })}
       >
         <picture>
@@ -30,9 +30,9 @@ export function Controls() {
       </button>
       <button
         onClick={() => store.setMode('scale')}
-        className={clsx('rounded-b border-b border-black border-opacity-10 hover:bg-mauve3  p-2', {
-          'bg-background ': store.mode !== 'scale',
-          'bg-card ': store.mode === 'scale',
+        className={clsx('border-b border-black border-opacity-10  p-2', {
+          'bg-card ': store.mode !== 'scale',
+          'bg-secondary': store.mode === 'scale',
         })}
       >
         <picture>

@@ -13,12 +13,12 @@ export function Animations() {
   return selected && selected.type === 'GLTF' ? (
     <div>
       <Separator className="my-4" />
-      <Label className=" truncate w-full text-sm font-semibold mb-4 block ">Animations</Label>
+      <Label className=" truncate w-full text-sm font-semibold mb-4 block text-secondary ">Animations</Label>
 
       <div className={'mb-2 gap-2 grid text-left borer grid-cols-[1fr_80px_1fr]'}>
-        <Label className=" truncate text-sm text-slate-400 ">Name</Label>
-        <Label className=" truncate text-sm text-slate-400 ">Preview</Label>
-        <Label className=" truncate text-sm text-slate-400 ">Play if </Label>
+        <Label className=" truncate text-sm text-muted ">Name</Label>
+        <Label className=" truncate text-sm text-muted ">Preview</Label>
+        <Label className=" truncate text-sm text-muted ">Play if </Label>
         {Object.keys(selected?.actions ?? {}).map((animation) => (
           <Fragment key={animation}>
             <Label className=" truncate w-full ">{animation}</Label>
@@ -31,7 +31,7 @@ export function Animations() {
                 })
               }}
               className={clsx(
-                'text-xs flex w-fit items-center  px-3  bg-muted text-muted-foreground  rounded    py-1',
+                'text-xs flex w-fit items-center  px-3  bg-secondary text-secondary-foreground font-bold rounded py-1',
                 {},
               )}
             >

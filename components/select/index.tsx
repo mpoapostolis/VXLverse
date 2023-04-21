@@ -72,44 +72,6 @@ export function Select<T = string | null>(props: {
           ))}
         </SelectContent>
       </RSelect>
-      {/* <RSelect.Root value={props?.value} onValueChange={(e) => props.onChange(e as T)}>
-        <RSelect.Trigger
-          className="flex border truncate h-full border-mauve7 items-center justify-center  px-2 text-xs leading-none py-1 w-full  gap-1   focus:outline-none outline-none   bg-mauve1"
-          aria-label="Label"
-        >
-          <RSelect.Value placeholder={props?.value ?? '-'} />
-
-          <RSelect.Icon className=" ml-auto">
-            <ChevronDownIcon />
-          </RSelect.Icon>
-        </RSelect.Trigger>
-        <RSelect.Portal>
-          <RSelect.Content className="overflow-hidden border border-mauve8 bg-mauve4  z-50 ">
-            <RSelect.Viewport className="p-[5px]">
-              {Object.keys(props.options).map((group) => (
-                <RSelect.Group key={group}>
-                  <RSelect.Label className="pl-2 text-xs leading-5 ">{group}</RSelect.Label>
-                  {props.options[group].map((option, idx) => (
-                    <SelectItem
-                      disabled={props.disabled?.includes(option.value ?? '')}
-                      className="data-[disabled]:"
-                      key={`${option?.value}${idx}`}
-                      value={option.value}
-                    >
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                  {/* except last one */}
-      {/* {group !== Object.keys(props.options)[Object.keys(props.options).length - 1] && (
-                    <RSelect.Separator className="my-1 h-[1px] bg-mauve6" />
-                  )}
-                </RSelect.Group>
-              ))}
-            </RSelect.Viewport>
-          </RSelect.Content>
-        </RSelect.Portal>
-      </RSelect.Root> */}
-      {/* */}
     </div>
   )
 }

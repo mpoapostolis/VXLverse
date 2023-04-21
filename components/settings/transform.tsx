@@ -13,7 +13,7 @@ export function TransformSettings() {
   return !selected ? null : (
     <>
       <Separator className="my-4" />
-      <Label className="w-full text-sm font-semibold mb-4 block ">Transform</Label>
+      <Label className="w-full text-sm font-semibold mb-4 block text-secondary">Transform</Label>
 
       <div className="mb-2 grid grid-cols-[1fr_3fr] ">
         <Label>Type</Label>

@@ -27,7 +27,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
             <div
               onClick={props?.onClick}
               className={cn(
-                'relative flex cursor-default hover:bg-slate-50 bg-opacity-10 select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+                'relative flex cursor-default hover:bg-secondary hover:text-secondary-foreground bg-opacity-10 select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
               )}
             >
               {props.children}
@@ -57,7 +57,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                 })
               }}
               value={selectedScene?.name}
-              className="rounded-none w-full  bg-white border-blackA7 border p-2 text-xs leading-none outline-none"
+              className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
             />
           </div>
           <div className=" mb-2 ">
@@ -69,7 +69,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                 })
               }}
               value={selectedScene?.type}
-              className="rounded-none w-full  bg-white border-blackA7 border p-2 text-xs leading-none outline-none"
+              className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
             >
               <option value="color">Color</option>
               <option value="equirect">Equirect</option>

@@ -4,41 +4,56 @@
 
 @layer base {
   :root {
-    --background: 270 6% 93%;
-    --foreground: 222.2 47.4% 11.2%;
+    --background: #1c1f2b;
+    --foreground: #ffffff;
 
-    --font-sans: 'systen-ui';
+    --muted: #5c5f6d;
+    --muted-foreground: #ffffff;
 
-    --muted: 0 10% 85.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --popover: #1c1f2b;
+    --popover-foreground: #ffffff;
 
-    --popover: 270 6% 93%;
-    --background: 270 6% 93%;
+    --card: #2a2f3d;
+    --card-foreground: #ffffff;
 
-    --popover-foreground: 222.2 47.4% 11.2%;
+    --border: #4d5061;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 47.4% 11.2%;
+    --input: #2a2f3d;
+    --input-selected: #00daff;
 
-    --border: 0 10% 85.1%;
+    --primary: #3d8bff;
+    --primary-foreground: #ffffff;
 
-    --input: 214.3 31.8% 91.4%;
+    --secondary: #ffbe3d;
+    --secondary-foreground: #ffffff;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --accent: #42d464;
+    --accent-foreground: #ffffff;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --destructive: #ff5757;
+    --destructive-foreground: #ffffff;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 100% 50%;
-    --destructive-foreground: 210 40% 98%;
-
-    --ring: 215 20.2% 65.1%;
-
-    --radius: 0.5rem;
+    --radius: 0.05rem;
+  }
+  /* make scroll smaller */
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--background);
+  }
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: var(--muted);
+  }
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--muted);
+  }
+  /* Handle on click */
+  ::-webkit-scrollbar-thumb:active {
+    background: var(--muted);
   }
 
   .dark {
