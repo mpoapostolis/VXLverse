@@ -4,7 +4,7 @@ import { Menu } from '@/components/menu'
 import { Node } from '@/components/node'
 import { cn } from '@/lib/utils'
 import { GRID_SIZE, useStore } from '@/store'
-import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, Sky, useTexture } from '@react-three/drei'
+import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import Head from 'next/head'
 import { useEffect } from 'react'
@@ -55,8 +55,7 @@ export default function Home() {
             {selectedScene?.equirect ? (
               <Env equirect={selectedScene.equirect} />
             ) : (
-              <Sky />
-              // <color attach="background" args={[selectedScene?.color ?? '#999']} />
+              <color attach="background" args={[selectedScene?.color ?? '#999']} />
             )}
 
             {store.nodes

@@ -25,7 +25,7 @@
     --primary-foreground: #ffffff;
 
     --secondary: #ffbe3d;
-    --secondary-foreground: #ffffff;
+    --secondary-foreground: #000;
 
     --accent: #42d464;
     --accent-foreground: #ffffff;
@@ -33,7 +33,7 @@
     --destructive: #ff5757;
     --destructive-foreground: #ffffff;
 
-    --radius: 0.05rem;
+    --radius: 0.15rem;
   }
   /* make scroll smaller */
   ::-webkit-scrollbar {
