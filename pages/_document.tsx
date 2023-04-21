@@ -1,5 +1,4 @@
 import { Head, Html, Main, NextScript } from 'next/document'
-import Script from 'next/script'
 
 const MetaTags = () => (
   <Head>
@@ -25,15 +24,6 @@ const MetaTags = () => (
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@YourTwitterHandle" />
     <link rel="canonical" href="https://www.vxlverse.com/" />
-    <Script async src="https://www.googletagmanager.com/gtag/js?id=G-8D51L7ND00" />
-    <Script id="google-analytics" strategy="afterInteractive">
-      {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-8D51L7ND00');
-        `}
-    </Script>
   </Head>
 )
 
