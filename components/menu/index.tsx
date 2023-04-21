@@ -282,7 +282,11 @@ export function Menu() {
       </MenubarMenu>
 
       <MenubarMenu>
-        <MenubarTrigger>Help</MenubarTrigger>
+        <MenubarTrigger>
+          <Link href={'https://docs.vxlverse.com'} target="__blank">
+            Help
+          </Link>
+        </MenubarTrigger>
       </MenubarMenu>
     </Menubar>
   )
