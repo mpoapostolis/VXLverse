@@ -1,4 +1,5 @@
 import { Head, Html, Main, NextScript } from 'next/document'
+import Script from 'next/script'
 
 const MetaTags = () => (
   <Head>
@@ -30,6 +31,15 @@ const MetaTags = () => (
 export default function Document() {
   return (
     <Html lang="en" data-theme="wireframe">
+      <Script async src="https://www.googletagmanager.com/gtag/js?id=G-8D51L7ND00" strategy="afterInteractive" />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-8D51L7ND00');
+        `}
+      </Script>
       <MetaTags />
       <body>
         <Main />
