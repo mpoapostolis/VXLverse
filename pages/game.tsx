@@ -1,5 +1,5 @@
-import { Dialogue } from '@/components/dialogue'
 import { GameNode } from '@/components/gameNode'
+import { HelpModal } from '@/components/helpModal'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { GRID_SIZE, useStore } from '@/store'
@@ -22,19 +22,35 @@ function Orbit() {
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
 
+  function goTo() {
+    const raycaster = t.raycaster
+    raycaster.setFromCamera(t.pointer, t.camera)
+    const intersects = raycaster.intersectObjects(t.scene.children)
+    if (intersects?.at(0)?.point)
+      store.updateNode(hero?.uuid ?? '', {
+        goTo: intersects?.at(0)?.point,
+        status: 'walk',
+      })
+  }
+
   useEffect(() => {
     document.addEventListener('pointerdown', (e) => {
       if (e.button !== 2) return
-      const raycaster = t.raycaster
-      raycaster.setFromCamera(t.pointer, t.camera)
-      const intersects = raycaster.intersectObjects(t.scene.children)
-      if (intersects?.at(0)?.point)
-        store.updateNode(hero?.uuid ?? '', {
-          goTo: intersects?.at(0)?.point,
-          status: e.shiftKey ? 'run' : 'walk',
-        })
+      goTo()
     })
-    return () => document.removeEventListener('pointerdown', () => {})
+
+    document.addEventListener('touchstart', (e) => {
+      goTo()
+    })
+    return () => {
+      document.removeEventListener('pointerdown', (e) => {
+        if (e.button !== 2) return
+        goTo()
+      })
+      document.removeEventListener('touchstart', () => {
+        goTo()
+      })
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hero?.uuid])
 
@@ -80,8 +96,14 @@ export default function Home() {
       cb(e.shiftKey)
     })
     return () => {
-      document.removeEventListener('keydown', () => {})
-      document.removeEventListener('keyup', () => {})
+      document.removeEventListener('keydown', (e) => {
+        if (e.repeat) return
+        cb(e.shiftKey)
+      })
+      document.removeEventListener('keyup', (e) => {
+        if (e.repeat) return
+        cb(e.shiftKey)
+      })
     }
   }, [])
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
@@ -91,6 +113,7 @@ export default function Home() {
       <Head>
         <title>VXLverse - An All-in-One RPG Creation Tool</title>
       </Head>
+      <HelpModal />
       <Canvas>
         <fog attach="fog" args={[selectedScene?.color ?? '#999', 0, 120]} />
         <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE * 4, GRID_SIZE * 4]} />
@@ -113,7 +136,6 @@ export default function Home() {
         <Orbit />
         <Preload all />
       </Canvas>
-      <Dialogue />
     </main>
   )
 }
