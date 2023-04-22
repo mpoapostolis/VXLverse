@@ -1,6 +1,6 @@
 import { Node, NodeType, useStore } from '@/store'
 import { TransformControls, useHelper } from '@react-three/drei'
-import { useRef } from 'react'
+import { Suspense, useRef } from 'react'
 import { BoxHelper, Euler } from 'three'
 import { Gltf } from '../gltf'
 import { Light } from '../lights'
@@ -73,9 +73,11 @@ export function Node(
               props.uuid && store.selectNode(props.uuid)
             }}
           >
-            {props.url && props.uuid && props.type === 'GLTF' && (
-              <Gltf key={props.url} animation={props.animation} uuid={props.uuid} url={props.url} />
-            )}
+            <Suspense>
+              {props.url && props.uuid && props.type === 'GLTF' && (
+                <Gltf key={props.url} animation={props.animation} uuid={props.uuid} url={props.url} />
+              )}
+            </Suspense>
             {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
             <meshStandardMaterial color={props.color} />
           </mesh>

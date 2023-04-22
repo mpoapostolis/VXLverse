@@ -7,6 +7,8 @@ export type Model = {
   type: GameType
   id: string
   file: string
+  url: string
   name: string
   updated: string
+  scale: number
 }

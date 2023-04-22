@@ -1,8 +1,16 @@
 import { useStore } from '@/store'
 import { CharStatus } from '@/store/utils'
 import { useAnimations, useGLTF } from '@react-three/drei'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Box3, Vector3 } from 'three'
+import { SkeletonUtils } from 'three-stdlib'
+
+// same url multiple GLTF instances
+function useGltfMemo(url: string) {
+  const gltf = useGLTF(url)
+  const scene = useMemo(() => SkeletonUtils.clone(gltf.scene), [gltf.scene])
+  return { ...gltf, animations: [...gltf.animations], scene: scene }
+}
 
 export function Gltf(props: {
   status?: CharStatus
@@ -12,8 +20,10 @@ export function Gltf(props: {
   animation?: string
   onLoad?: (sizes: { x: number; y: number; z: number }) => void
 }) {
-  const { scene, animations } = useGLTF(props.url)
+  const { scene, animations } = useGltfMemo(props.url)
+  SkeletonUtils.clone(scene)
   const { actions } = useAnimations(animations, scene)
+
   const store = useStore()
   useEffect(() => {
     store.updateNode(props.uuid, { actions })

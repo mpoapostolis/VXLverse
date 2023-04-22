@@ -58,6 +58,7 @@ export function meshToJson(mesh: Partial<Node>) {
     rotation: mesh.rotation?.toArray(),
     scale: mesh.scale?.toArray(),
     blob: mesh.blob,
+    url: mesh.blob ? undefined : mesh.url,
     animation: mesh.animation,
     color: mesh.color,
     scene: mesh.scene,
@@ -83,7 +84,7 @@ export function jsonToMesh(json: Node) {
   mesh.scene = json.scene
   mesh.gameType = json.gameType
   mesh.name = json.name
-  mesh.url = json.blob ? URL.createObjectURL(json.blob) : undefined
+  mesh.url = json.blob ? URL.createObjectURL(json.blob) : json.url
   mesh.animation = idleAnimation
   mesh.color = json.color
   mesh.statusToAnimation = json.statusToAnimation
@@ -183,18 +184,12 @@ initDb().then(async (s) => {
       ...obj,
       equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
     })) ?? defaultGameConf?.scenes
-  const bucket =
-    store?.bucket?.map((item) => ({
-      ...item,
-      url: item.blob ? URL.createObjectURL(item.blob) : undefined,
-    })) ?? []
 
   useStore?.setState({
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
     selectedNode: undefined,
     currentScene: scenes?.at(0)?.uuid,
-    bucket,
   })
 })
 

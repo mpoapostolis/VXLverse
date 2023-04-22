@@ -12,6 +12,8 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from '@/components/ui/menubar'
+import { useModels } from '@/lib/models/queries'
+import { Model } from '@/lib/models/types'
 import { Node, useStore } from '@/store'
 import { exportGame, importGameZip } from '@/store/utils'
 import {
@@ -65,6 +67,24 @@ export function Menu() {
       type: type,
     })
   }
+  const { data: models } = useModels()
+
+  function addGLTF(node?: Model) {
+    if (!node) return
+    const mesh = new Mesh()
+
+    store.addNode({
+      ...mesh,
+      name: node.name,
+      gameType: node.type,
+      scene: store.currentScene,
+      position: new Vector3(0, 0, 0),
+      url: node.url,
+      type: 'GLTF',
+      scale: new Vector3(node?.scale ?? 1, node?.scale ?? 1, node?.scale ?? 1),
+    })
+  }
+
   const doIHaveHero = store.nodes?.some((n) => n.gameType === 'hero')
   const router = useRouter()
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
@@ -123,12 +143,13 @@ export function Menu() {
           <MenubarSub>
             <MenubarSubTrigger>RPG Entity</MenubarSubTrigger>
             <MenubarSubContent>
-              {['Hero', 'Npc', 'Enemy'].map((item) => (
+              {['Hero', 'Npc', 'Monster'].map((item) => (
                 <MenubarItem
                   disabled={item === 'Hero' && doIHaveHero}
                   key={item}
                   onClick={() => {
-                    addMesh('Capsule', item.toLocaleLowerCase() as Node['gameType'])
+                    const node = models?.find((m) => m.type === item.toLowerCase())
+                    addGLTF(node)
                   }}
                   className="data-[highlighted]::to-mauve10 group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
                 >
