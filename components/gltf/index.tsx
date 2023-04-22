@@ -54,6 +54,7 @@ export function Gltf(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.status, actions])
 
+  //
   useEffect(() => {
     const animation = Object.entries(props.statusToAnimation ?? {}).find(
       ([, status]) => status === (props?.status || 'idle'),
