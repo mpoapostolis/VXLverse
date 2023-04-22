@@ -39,16 +39,19 @@ function Orbit() {
       goTo()
     })
 
-    document.addEventListener('touchend', (e) => {
-      goTo()
+    document.addEventListener('click', (e) => {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+      if (isMobile) return goTo()
     })
+
     return () => {
       document.removeEventListener('pointerdown', (e) => {
         if (e.button !== 2) return
         goTo()
       })
-      document.removeEventListener('touchend', () => {
-        goTo()
+      document.removeEventListener('click', () => {
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+        if (isMobile) return goTo()
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
