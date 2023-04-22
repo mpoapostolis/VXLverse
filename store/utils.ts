@@ -30,7 +30,7 @@ const defaultScenes: Scene[] = [
     uuid: 'main',
     name: 'Main',
     type: 'color',
-    color: '#999',
+    color: '#000',
   },
 ]
 

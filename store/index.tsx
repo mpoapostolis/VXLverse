@@ -124,7 +124,7 @@ export const useStore = create<Store>((set) => ({
           scene.uuid === s.currentScene
             ? {
                 ...scene,
-                color: '#999',
+                color: '#000',
                 type: 'color',
               }
             : scene,

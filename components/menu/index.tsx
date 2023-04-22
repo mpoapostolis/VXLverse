@@ -267,7 +267,7 @@ export function Menu() {
                 uuid: mesh.uuid,
                 type: 'color',
                 name: 'Scene ' + Number(store.scenes.length + 1),
-                color: '#999',
+                color: '#000',
               })
               router.replace({
                 hash: `new-scene`,
