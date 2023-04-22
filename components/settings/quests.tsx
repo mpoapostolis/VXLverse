@@ -15,7 +15,7 @@ export function Quests() {
     setOpen(false)
   }
 
-  return ['hero', 'enemy', 'npc'].includes(selected?.gameType ?? '') ? (
+  return ['hero', 'monster', 'npc'].includes(selected?.gameType ?? '') ? (
     <>
       <Separator className="my-4" />
       <Label.Root className=" truncate w-full text-sm font-semibold mb-4 block text-secondary ">Quests</Label.Root>

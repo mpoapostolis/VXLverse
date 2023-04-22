@@ -41,7 +41,7 @@ export type KeyBindings = {
   onClick?: string
   default?: string
 } & Record<string, string>
-export type GameType = 'hero' | 'enemy' | 'npc'
+export type GameType = 'hero' | 'monster' | 'npc'
 export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
