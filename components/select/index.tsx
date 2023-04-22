@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { SelectSeparator } from '@radix-ui/react-select'
 
 export function SelectDemo() {
   return (
@@ -35,7 +34,7 @@ export function SelectDemo() {
 type Option = { label: string; value?: string }
 
 export function Select<T = string | null>(props: {
-  options: Record<string, Option[]>
+  options: Option[]
   label?: string
   className?: string
   value?: string
@@ -47,28 +46,19 @@ export function Select<T = string | null>(props: {
       {props.label && <Label className={clsx(' w-full text-sm font-medium mb-1')}>{props.label}</Label>}
 
       <RSelect value={props?.value ?? '-'} onValueChange={(e) => props.onChange((e === '-' ? undefined : e) as T)}>
-        <SelectTrigger>
+        <SelectTrigger className={props.className}>
           <SelectValue placeholder={props.value} />
         </SelectTrigger>
         <SelectContent>
-          {Object.keys(props.options).map((group) => (
-            <SelectGroup key={group}>
-              <SelectLabel className="pl-2  text-xs leading-5 ">{group}</SelectLabel>
-              <SelectItem value="-">-</SelectItem>
-              {props.options[group].map((option, idx) => (
-                <SelectItem
-                  disabled={props.disabled?.includes(option.value ?? '')}
-                  key={`${option?.value}${idx}`}
-                  value={option?.value ?? '-'}
-                >
-                  {option.label}
-                </SelectItem>
-              ))}
-              {/* except last one */}
-              {group !== Object.keys(props.options)[Object.keys(props.options).length - 1] && (
-                <SelectSeparator className="my-1 " />
-              )}
-            </SelectGroup>
+          <SelectItem value="-">-</SelectItem>
+          {props.options.map((option, idx) => (
+            <SelectItem
+              disabled={props.disabled?.includes(option.value ?? '')}
+              key={`${option?.value}${idx}`}
+              value={option?.value ?? '-'}
+            >
+              {option.label}
+            </SelectItem>
           ))}
         </SelectContent>
       </RSelect>

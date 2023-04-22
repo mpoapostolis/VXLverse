@@ -40,9 +40,7 @@ export function Animations() {
 
             <Select<CharStatus>
               value={selected?.statusToAnimation?.[animation]}
-              options={{
-                '': CharStatuss,
-              }}
+              options={CharStatuss}
               disabled={animationAvailable}
               onChange={(val) =>
                 store.updateNode(selected.uuid ?? '', {
