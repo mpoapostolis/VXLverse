@@ -39,7 +39,7 @@ function Orbit() {
       goTo()
     })
 
-    document.addEventListener('touchstart', (e) => {
+    document.addEventListener('touchend', (e) => {
       goTo()
     })
     return () => {
@@ -47,7 +47,7 @@ function Orbit() {
         if (e.button !== 2) return
         goTo()
       })
-      document.removeEventListener('touchstart', () => {
+      document.removeEventListener('touchend', () => {
         goTo()
       })
     }
@@ -83,6 +83,7 @@ export default function Home() {
     const state = useStore.getState()
     const hero = state?.nodes?.find((node) => node.gameType === 'hero')
     if (!hero?.uuid || hero?.status === 'idle') return
+
     store.updateNode(hero.uuid, { status: shiftKey ? 'run' : 'walk' })
   }
 
