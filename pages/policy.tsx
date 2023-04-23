@@ -5,8 +5,8 @@ export default function Page() {
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
       <p>
-        VXLverse ("us", "we", or "our") operates the VXLverse mobile application (hereinafter referred to as the
-        "Service").
+        VXLverse (&quot; us&quot; , &quot; we&quot; , or &quot; our&quot; ) operates the VXLverse mobile application
+        (hereinafter referred to as the &quot; Service&quot; ).
       </p>
       <p>
         This page informs you of our policies regarding the collection, use, and disclosure of personal data when you
@@ -16,8 +16,8 @@ export default function Page() {
       <h2 className="text-xl font-semibold mt-4 mb-2">Information Collection and Use</h2>
       <p>
         While using our Service, we may ask you to provide us with certain personally identifiable information that can
-        be used to contact or identify you ("Personal Data"). Personally identifiable information may include, but is
-        not limited to:
+        be used to contact or identify you (&quot;Personal Data&quot;). Personally identifiable information may include,
+        but is not limited to:
       </p>
       <ul className="list-disc ml-6">
         <li>Email address</li>
@@ -28,7 +28,7 @@ export default function Page() {
       <p>
         When you access the Service, we may collect certain information automatically, including, but not limited to,
         the type of device you use, your device unique ID, the IP address of your device, your operating system, and
-        other diagnostic data ("Usage Data").
+        other diagnostic data (&quot;Usage Data&quot;).
       </p>
       <h2 className="text-xl font-semibold mt-4 mb-2">Cookies</h2>
       <p>
