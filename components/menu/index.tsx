@@ -99,15 +99,9 @@ export function Menu() {
 
   const login = async () => {
     const pb = new PocketBase('https://admin.vxlverse.com')
-    const authMethods = await pb.collection('users').listAuthMethods()
-    const google = authMethods?.authProviders.find((m) => m.name === 'google')
-    if (!google) return
-    pb.collection('users').authWithOAuth2Code(
-      google?.name,
-      google?.codeChallenge,
-      google?.codeChallengeMethod,
-      google?.authUrl,
-    )
+    pb.collection('users').authWithOAuth2({
+      provider: 'google',
+    })
   }
 
   return (
