@@ -2,10 +2,12 @@ import { GameNode } from '@/components/gameNode'
 import { HelpModal } from '@/components/helpModal'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
+import { useGame } from '@/lib/games/queries'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
@@ -32,6 +34,11 @@ function Orbit() {
         status: 'walk',
       })
   }
+  const { data: game } = useGame()
+
+  useEffect(() => {
+    if (game) store.setGame(game)
+  }, [game])
 
   useEffect(() => {
     document.addEventListener('pointerdown', (e) => {
@@ -86,9 +93,11 @@ export default function Home() {
     const state = useStore.getState()
     const hero = state?.nodes?.find((node) => node.gameType === 'hero')
     if (!hero?.uuid || hero?.status === 'idle') return
-
     store.updateNode(hero.uuid, { status: shiftKey ? 'run' : 'walk' })
   }
+
+  const router = useRouter()
+  const id = router.query.id
 
   useEffect(() => {
     document.addEventListener('keydown', (e) => {

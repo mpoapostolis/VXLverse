@@ -1,6 +1,7 @@
-import { AnimationAction, HexColorString, Mesh, Vector3 } from 'three'
+import { Game } from '@/lib/games/types'
+import { AnimationAction, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
-import { CharStatus, defaultGameConf, initDb, meshToJson } from './utils'
+import { CharStatus, defaultGameConf, initDb, jsonToMesh, meshToJson } from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -74,7 +75,7 @@ export type Scene = {
   uuid?: string
   name?: string
   type?: SceneType
-  color?: HexColorString
+  color?: string
   equirect?: string
   blob?: Blob
 }
@@ -115,6 +116,8 @@ export type Store = {
   deleteNode: () => void
   selectNode: (uuid?: string) => void
   updateNode: (uuid: string, node: Partial<Node>) => void
+
+  setGame: (game: Game) => void
 }
 
 export const useStore = create<Store>((set) => ({
@@ -204,6 +207,12 @@ export const useStore = create<Store>((set) => ({
   },
   scenes: [],
   setMode: (mode) => set({ mode }),
+
+  setGame: (game) =>
+    set({
+      nodes: game.nodes.map(jsonToMesh),
+      scenes: game.scenes,
+    }),
 }))
 
 useStore?.subscribe(async (state) => {

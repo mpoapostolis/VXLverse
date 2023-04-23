@@ -15,7 +15,7 @@ import {
 import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
 import { Node, User, useStore } from '@/store'
-import { exportGame, importGameZip } from '@/store/utils'
+import { exportGame, importGameZip, meshToJson } from '@/store/utils'
 
 import {
   CheckCircledIcon,
@@ -27,9 +27,11 @@ import {
   QuestionMarkCircledIcon,
   ReloadIcon,
   ResetIcon,
+  Share1Icon,
   TrashIcon,
   UploadIcon,
 } from '@radix-ui/react-icons'
+import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import PocketBase from 'pocketbase'
@@ -37,6 +39,8 @@ import { Mesh, Vector3 } from 'three'
 import { Indicator } from '../indicator'
 import { SceneModal } from '../sceneModal'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { Label } from '../ui/label'
+import { useToast } from '../ui/use-toast'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
 export const geometries = [
@@ -107,6 +111,7 @@ export function Menu() {
     })
     store.setUser(authData?.meta?.rawUser as User)
   }
+  const { toast } = useToast()
 
   return (
     <Menubar>
@@ -311,10 +316,36 @@ export function Menu() {
             </MenubarItem>
           </Link>
           <MenubarSeparator />
-          <MenubarItem>
-            Settings
+          <MenubarItem
+            onClick={async () => {
+              const id = await axios
+                .post('/api/publish', {
+                  nodes: store.nodes.filter((e) => !e.blob).map(meshToJson),
+                  scenes: store.scenes,
+                })
+                .then((d) => {
+                  toast({
+                    title: 'You have successfully published your game! ',
+                    description: (
+                      <Label className="text-base ">
+                        Click
+                        <Link
+                          className="mx-2 font-bold text-secondary"
+                          href={`https://vxlverse.com/play?id=${d.data.id}`}
+                          target="_blank"
+                        >
+                          here
+                        </Link>
+                        to play it!
+                      </Label>
+                    ),
+                  })
+                })
+            }}
+          >
+            Publish
             <MenubarShortcut>
-              <GearIcon />
+              <Share1Icon />
             </MenubarShortcut>
           </MenubarItem>
 

@@ -10,7 +10,6 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
-import { HexColorString } from 'three'
 import { Separator } from '../ui/separator'
 import { Upload } from '../upload'
 
@@ -84,7 +83,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                 <input
                   onChange={(evt) => {
                     store.updateScene(selectedScene.uuid, {
-                      color: evt.target.value as HexColorString,
+                      color: evt.target.value,
                     })
                   }}
                   value={selectedScene?.color}

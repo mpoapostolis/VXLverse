@@ -1,3 +1,4 @@
+import { Toaster } from '@/components/ui/toaster'
 import '@/styles/globals.css'
 import { Analytics } from '@vercel/analytics/react'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
@@ -18,6 +19,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <GoogleAnalytics trackPageViews />
       <Analytics />
       <Component {...pageProps} />
+      <Toaster />
     </>
   )
 }
