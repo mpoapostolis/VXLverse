@@ -37,6 +37,16 @@ export const PLANE_GEOMETRY = new Vector3(5, 0.5, 5)
 export const CUBE_GEOMETRY = new Vector3(5, 5, 5)
 export const GRID_SIZE = 80
 
+export type User = {
+  email: string
+  given_name: string
+  id: string
+  locale: string
+  name: string
+  picture: string
+  verified_email: boolean
+}
+
 export type KeyBindings = {
   onClick?: string
   default?: string
@@ -82,6 +92,9 @@ export type Store = {
   reset: () => void
 
   bucket: BucketItem[]
+  user?: User
+  setUser: (user?: User) => void
+
   updateBucket: (uuid: string, node: BucketItem) => void
   deleteBucketItem: (uuid: string) => void
   addToBucket: (item: BucketItem) => void
@@ -105,9 +118,12 @@ export type Store = {
 }
 
 export const useStore = create<Store>((set) => ({
+  setUser: (user) => set({ user }),
+
   mode: 'translate',
   nodes: [],
   bucket: [],
+
   addToBucket: (item) =>
     set((state) => ({
       bucket: [...state.bucket, item],
@@ -193,5 +209,5 @@ export const useStore = create<Store>((set) => ({
 useStore?.subscribe(async (state) => {
   const db = await initDb()
   const nodes = state.nodes.map(meshToJson)
-  db.put('store', { nodes, scenes: state.scenes, bucket: state.bucket }, 0)
+  db.put('store', { user: state.user, nodes, scenes: state.scenes, bucket: state.bucket }, 0)
 })

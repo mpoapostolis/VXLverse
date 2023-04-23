@@ -14,7 +14,7 @@ import {
 } from '@/components/ui/menubar'
 import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
-import { Node, useStore } from '@/store'
+import { Node, User, useStore } from '@/store'
 import { exportGame, importGameZip } from '@/store/utils'
 
 import {
@@ -34,6 +34,7 @@ import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
 import { Indicator } from '../indicator'
 import { SceneModal } from '../sceneModal'
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
 export const geometries = [
@@ -99,9 +100,10 @@ export function Menu() {
 
   const login = async () => {
     const pb = new PocketBase('https://admin.vxlverse.com')
-    pb.collection('users').authWithOAuth2({
+    const authData = await pb.collection('users').authWithOAuth2({
       provider: 'google',
     })
+    store.setUser(authData?.meta?.rawUser as User)
   }
 
   return (
@@ -331,19 +333,22 @@ export function Menu() {
         </MenubarTrigger>
       </MenubarMenu>
       <MenubarMenu>
-        <div
-          onClick={async () => {
-            login()
-          }}
-          className="flex w-full items-center  hover:bg-none h-full  "
-        >
-          {/* <Icon className="ml-auto mr-2 h-7 w-7 cursor-pointer text-foreground " /> */}
-          <button type="button" className="ml-auto h-full flex items-center font-semibold bg-card px-4">
-            <picture>
-              <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
-            </picture>
-            <span className="hidden lg:block">Login with google</span>
-          </button>
+        <div className="flex w-full items-center  hover:bg-none h-full ">
+          {store.user ? (
+            <Avatar className="ml-auto mr-2 h-8 w-8">
+              <AvatarImage src={store.user?.picture} alt={store.user?.name} />
+              <AvatarFallback>{store.user?.name?.at(0)}</AvatarFallback>
+            </Avatar>
+          ) : (
+            <div onClick={login}>
+              <button type="button" className="ml-auto h-full flex items-center font-semibold bg-card px-4">
+                <picture>
+                  <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
+                </picture>
+                <span className="hidden lg:block">Login with google</span>
+              </button>
+            </div>
+          )}
         </div>
       </MenubarMenu>
     </Menubar>

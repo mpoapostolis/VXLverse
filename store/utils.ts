@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver'
 import { openDB } from 'idb'
 import JSZip from 'jszip'
 import { Mesh } from 'three'
-import { BucketItem, Node, Scene, Store, useStore } from '.'
+import { BucketItem, Node, Scene, Store, User, useStore } from '.'
 
 const defaultNodes = (
   [
@@ -174,6 +174,7 @@ export async function importGameZip(file: File) {
 
 initDb().then(async (s) => {
   const [store] = (await s.getAll('store')) as {
+    user: User
     nodes: Node[]
     scenes: Scene[]
     bucket: BucketItem[]
@@ -186,6 +187,7 @@ initDb().then(async (s) => {
     })) ?? defaultGameConf?.scenes
 
   useStore?.setState({
+    user: store.user,
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
     selectedNode: undefined,
