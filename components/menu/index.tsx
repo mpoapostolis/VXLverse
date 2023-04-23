@@ -330,7 +330,7 @@ export function Menu() {
       <MenubarMenu>
         <MenubarTrigger>Help</MenubarTrigger>
         <MenubarContent>
-          <Link href={'/game'} target="__blank">
+          <Link href={'https://docs.vxlverse.com/'} target="__blank">
             <MenubarItem>
               Documentation
               <MenubarShortcut>
