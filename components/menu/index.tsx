@@ -335,19 +335,21 @@ export function Menu() {
       <MenubarMenu>
         <div className="flex w-full items-center  hover:bg-none h-full ">
           {store.user ? (
-            <Avatar className="ml-auto mr-2 h-8 w-8">
+            <Avatar onClick={() => store.setUser(undefined)} className="ml-auto  mr-2 h-8 w-8 cursor-pointer">
               <AvatarImage src={store.user?.picture} alt={store.user?.name} />
               <AvatarFallback>{store.user?.name?.at(0)}</AvatarFallback>
             </Avatar>
           ) : (
-            <div onClick={login}>
-              <button type="button" className="ml-auto h-full flex items-center font-semibold bg-card px-4">
-                <picture>
-                  <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
-                </picture>
-                <span className="hidden lg:block">Login with google</span>
-              </button>
-            </div>
+            <button
+              onClick={login}
+              type="button"
+              className="ml-auto h-full flex items-center font-semibold bg-card px-4"
+            >
+              <picture>
+                <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
+              </picture>
+              <span className="hidden lg:block">Login with google</span>
+            </button>
           )}
         </div>
       </MenubarMenu>
