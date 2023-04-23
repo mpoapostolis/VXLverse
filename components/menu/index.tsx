@@ -18,11 +18,13 @@ import { Node, User, useStore } from '@/store'
 import { exportGame, importGameZip } from '@/store/utils'
 
 import {
+  CheckCircledIcon,
   DownloadIcon,
   EraserIcon,
   GearIcon,
   Pencil1Icon,
   PlayIcon,
+  QuestionMarkCircledIcon,
   ReloadIcon,
   ResetIcon,
   TrashIcon,
@@ -326,11 +328,26 @@ export function Menu() {
       </MenubarMenu>
 
       <MenubarMenu>
-        <MenubarTrigger>
-          <Link href={'https://docs.vxlverse.com'} target="__blank">
-            Help
+        <MenubarTrigger>Help</MenubarTrigger>
+        <MenubarContent>
+          <Link href={'/game'} target="__blank">
+            <MenubarItem>
+              Documentation
+              <MenubarShortcut>
+                <QuestionMarkCircledIcon />
+              </MenubarShortcut>
+            </MenubarItem>
           </Link>
-        </MenubarTrigger>
+          <MenubarSeparator />
+          <Link href={'https://github.com/users/mpoapostolis/projects/2/views/1'} target="__blank">
+            <MenubarItem>
+              RoadMap
+              <MenubarShortcut>
+                <CheckCircledIcon />
+              </MenubarShortcut>
+            </MenubarItem>
+          </Link>
+        </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>
         <div className="flex w-full items-center  hover:bg-none h-full ">
