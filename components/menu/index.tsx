@@ -16,6 +16,7 @@ import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
 import { Node, useStore } from '@/store'
 import { exportGame, importGameZip } from '@/store/utils'
+
 import {
   DownloadIcon,
   EraserIcon,
@@ -29,10 +30,10 @@ import {
 } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
 import { Indicator } from '../indicator'
 import { SceneModal } from '../sceneModal'
-
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
 export const geometries = [
@@ -53,6 +54,13 @@ export const geometries = [
   'TorusKnot',
   'Tube',
 ]
+
+export interface UserInfo {
+  id: string
+  email: string
+  name: string
+  picture: string
+}
 
 export function Menu() {
   const store = useStore()
@@ -88,6 +96,20 @@ export function Menu() {
   const doIHaveHero = store.nodes?.some((n) => n.gameType === 'hero')
   const router = useRouter()
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
+
+  const login = async () => {
+    const pb = new PocketBase('https://admin.vxlverse.com')
+    const authMethods = await pb.collection('users').listAuthMethods()
+    const google = authMethods?.authProviders.find((m) => m.name === 'google')
+    if (!google) return
+    pb.collection('users').authWithOAuth2Code(
+      google?.name,
+      google?.codeChallenge,
+      google?.codeChallengeMethod,
+      google?.authUrl,
+    )
+  }
+
   return (
     <Menubar>
       <MenubarMenu>
@@ -313,6 +335,22 @@ export function Menu() {
             Help
           </Link>
         </MenubarTrigger>
+      </MenubarMenu>
+      <MenubarMenu>
+        <div
+          onClick={async () => {
+            login()
+          }}
+          className="flex w-full items-center  hover:bg-none h-full  "
+        >
+          {/* <Icon className="ml-auto mr-2 h-7 w-7 cursor-pointer text-foreground " /> */}
+          <button type="button" className="ml-auto h-full flex items-center font-semibold bg-card px-4">
+            <picture>
+              <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
+            </picture>
+            <span className="hidden lg:block">Login with google</span>
+          </button>
+        </div>
       </MenubarMenu>
     </Menubar>
   )
