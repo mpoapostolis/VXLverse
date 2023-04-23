@@ -331,7 +331,7 @@ export function Menu() {
                         Click
                         <Link
                           className="mx-2 font-bold text-secondary"
-                          href={`https://vxlverse.com/play?id=${d.data.id}`}
+                          href={`https://vxlverse.com/game?id=${d.data.id}`}
                           target="_blank"
                         >
                           here
