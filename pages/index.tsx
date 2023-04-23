@@ -69,8 +69,14 @@ export default function Home() {
             <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enableDamping={false} />
             <Preload all />
           </Canvas>
+          <picture className="absolute block lg:hidden   bottom-4 left-4 z-50">
+            <img className="w-16 h-16" src="/logo.svg" alt="" />
+          </picture>
         </div>
         <Editor />
+        <picture className="hidden lg:block absolute bottom-4 left-4 z-50">
+          <img className="w-16 h-16" src="/logo.svg" alt="" />
+        </picture>
       </div>
       {/* <Stats className='fixed right-0' /> */}
     </main>

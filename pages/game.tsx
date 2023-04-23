@@ -149,6 +149,9 @@ export default function Home() {
         <Orbit />
         <Preload all />
       </Canvas>
+      <picture className="fixed bottom-4 left-4 z-50">
+        <img className="w-16 h-16" src="/logo.svg" alt="" />
+      </picture>
     </main>
   )
 }
