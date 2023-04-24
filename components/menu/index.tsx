@@ -36,9 +36,9 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
+import { Account } from '../account'
 import { Indicator } from '../indicator'
 import { SceneModal } from '../sceneModal'
-import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import { Label } from '../ui/label'
 import { useToast } from '../ui/use-toast'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
@@ -383,10 +383,7 @@ export function Menu() {
       <MenubarMenu>
         <div className="flex w-full items-center  hover:bg-none h-full ">
           {store.user ? (
-            <Avatar onClick={() => store.setUser(undefined)} className="ml-auto  mr-2 h-8 w-8 cursor-pointer">
-              <AvatarImage src={store.user?.picture} alt={store.user?.name} />
-              <AvatarFallback>{store.user?.name?.at(0)}</AvatarFallback>
-            </Avatar>
+            <Account />
           ) : (
             <button
               onClick={login}
