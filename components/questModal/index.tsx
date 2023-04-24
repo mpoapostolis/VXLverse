@@ -11,7 +11,7 @@ export function QuestModal() {
     <Dialog>
       <DialogTrigger asChild>
         <button className="w-full bg-card  border border-dashed border-card-foreground border-opacity-25 py-6 text-xs">
-          Dialogue Editor
+          Quest Editor
         </button>
       </DialogTrigger>
 

@@ -168,7 +168,7 @@ export function Menu() {
           <MenubarSub>
             <MenubarSubTrigger>RPG Entity</MenubarSubTrigger>
             <MenubarSubContent>
-              {['Hero', 'Npc', 'Monster'].map((item) => (
+              {['Hero', 'Npc', 'Monster', 'Item'].map((item) => (
                 <MenubarItem
                   disabled={item === 'Hero' && doIHaveHero}
                   key={item}
