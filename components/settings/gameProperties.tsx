@@ -15,12 +15,14 @@ export function GameProperties() {
       <div className="gap-3 grid  grid-cols-2 items-center ">
         <Label className=" w-full">Show when inventory has</Label>
         <Select
-          className="w-full"
-          onChange={(val) => {}}
-          options={store.nodes.map((model) => ({
-            label: model.name ?? '',
-            value: model.url ?? '',
-          }))}
+          options={
+            store.nodes.map((node) => ({
+              label: node.name ?? '',
+              value: node.uuid ?? '',
+            })) ?? []
+          }
+          onChange={(e) => console.log(e)}
+          value=""
         />
         <Label className="text-left" htmlFor={'collectToInventory'}>
           Collect to inventory
