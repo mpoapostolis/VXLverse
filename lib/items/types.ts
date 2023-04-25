@@ -4,6 +4,6 @@ export type Item = {
   created?: string
   id?: string
   name?: string
-  url?: string
+  img?: string
   description?: string
 }

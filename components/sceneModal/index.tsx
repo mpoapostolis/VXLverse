@@ -15,7 +15,6 @@ import { Upload } from '../upload'
 
 export function SceneModal(props: { onClick?: () => void; new?: boolean; children?: React.ReactNode }) {
   const store = useStore()
-
   const verb = props.new ? 'Create' : 'Edit'
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (

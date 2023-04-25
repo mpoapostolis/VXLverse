@@ -4,7 +4,7 @@ import { Separator } from '@/components/ui/separator'
 import { useModels } from '@/lib/models/queries'
 import { useStore } from '@/store'
 import { Euler, Mesh, Vector3 } from 'three'
-import { Select } from '../select'
+import { SelectModal } from '../selectModal'
 
 export function GlbModel() {
   const store = useStore()
@@ -17,24 +17,22 @@ export function GlbModel() {
       <Separator className="my-4 " />
       <Label className="  w-full text-sm font-semibold mb-4 block text-secondary">3d Model</Label>
       <div className="grid  grid-cols-[1fr_2fr] xs place-items-center gap-4">
-        <Label className=" w-full">Select 3d Model</Label>
-        <Select
-          value={selected?.url ?? ''}
-          className="w-full"
+        <Label className=" w-full">3d Model</Label>
+        <SelectModal
+          value={selected?.name}
+          type="models"
+          size="sm"
           onChange={(val) => {
             if (!selected?.uuid || !val) return
-            const currentModel = models.find((model) => model.url === val)
+            const model = models.find((model) => model.id === val)
+            console.log(model)
             store.updateNode(selected.uuid, {
               ...selected,
-              url: val,
-              name: currentModel?.name ?? '',
-              scale: new Vector3(currentModel?.scale ?? 1, currentModel?.scale ?? 1, currentModel?.scale ?? 1),
+              url: model?.url ?? '',
+              name: model?.name ?? '',
+              scale: new Vector3(model?.scale ?? 1, model?.scale ?? 1, model?.scale ?? 1),
             })
           }}
-          options={models.map((model) => ({
-            label: model.name,
-            value: model.url,
-          }))}
         />
 
         <Label className=" w-full">Upload your Glb</Label>
