@@ -41,7 +41,7 @@ export function SelectModal(props: {
         </DialogHeader>
         <Separator />
         <div className="grid ">
-          <div className="grid grid-cols-6 gap-4 overflow-auto max-h-[75vh]">
+          <div className="grid xl:grid-cols-4 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
             {arr.map((obj, i) => (
               <DialogTrigger asChild key={obj.id}>
                 <div
