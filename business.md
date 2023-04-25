@@ -1,6 +1,6 @@
 # Executive Summary
 
-VXLverse is a revolutionary online platform designed to empower users to both create and play a wide variety of games. Our mission is to provide an interactive and engaging space for game enthusiasts, offering them the opportunity to showcase their creativity and be rewarded for it.
+VXLverse is a revolutionary online platform designed to empower users to both create and play a wide variety of RPG games. Our mission is to provide an interactive and engaging space for game enthusiasts, offering them the opportunity to showcase their creativity and be rewarded for it.
 
 We aim to establish VXLverse as the go-to platform for discovering unique and enjoyable gaming experiences while fostering a community of innovative game creators. By offering creators the option to monetize their games, we will create a sustainable ecosystem where developers are incentivized to produce high-quality content that appeals to a broad audience.
 

@@ -124,7 +124,7 @@ export default function Home() {
   return (
     <main className="relative h-screen overflow-hidden">
       <Head>
-        <title>VXLverse - An All-in-One RPG Creation Tool</title>
+        <title>VXLverse</title>
       </Head>
       <HelpModal />
       <Canvas>
