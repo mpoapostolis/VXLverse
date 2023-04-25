@@ -34,7 +34,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
           </DialogTrigger>
         </ContextMenuTrigger>
       </ContextMenu>
-      <DialogContent>
+      <DialogContent className="lg:w-[80vw] w-screen ">
         <DialogHeader>
           <DialogTitle>
             {verb} {props.new ? 'new scene' : selectedScene?.name}
@@ -113,31 +113,3 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
     </Dialog>
   )
 }
-
-// export function SceneModal() {
-
-//   return (
-//     <Dialog open={open}>
-//       <Dialog.Portal>
-//         <Dialog.Overlay className="bg-blackA9 data-[state=open]:animate-overlayShow fixed inset-0 z-10" />
-//         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] z-20 max-h-[85vh] w-[90vw] max-w-[450px] translate-x-[-50%] translate-y-[-50%] rounded-[6px] bg-mauve4 p-[25px] shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] focus:outline-none">
-//           <Menubar.Separator className="my-1  h-[1px] bg-blackA5" />
-
-//           <Dialog.Description className=" mt-[10px] mb-5 text-[15px] leading-normal">
-//             Add a new scene to your project. You can add a background color or an equirectangular image.
-//           </Dialog.Description>
-
-//           <Dialog.Close asChild>
-//             <button
-//               onClick={close}
-//               className=" hover:bg-blackA4  px-4 py-2 absolute top-[10px] right-[10px] inline-flex h-[25px] w-[25px] appearance-none items-center justify-center rounded focus:outline-none"
-//               aria-label="Close"
-//             >
-//               <Cross2Icon />
-//             </button>
-//           </Dialog.Close>
-//         </Dialog.Content>
-//       </Dialog.Portal>
-//     </Dialog>
-//   )
-// }

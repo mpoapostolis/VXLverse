@@ -1,5 +1,7 @@
+import { useItems } from '@/lib/items/queries'
 import { useStore } from '@/store'
 import { Select } from '../select'
+import { SelectModal } from '../selectModal'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
@@ -7,6 +9,7 @@ import { Separator } from '../ui/separator'
 
 export function QuestModal() {
   const store = useStore()
+  const { data: items } = useItems()
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -27,11 +30,13 @@ export function QuestModal() {
 
         <div className="grid grid-cols-5 gap-4">
           <Label className=" w-full text-sm font-medium">Quest Name</Label>
-          <Label className=" w-full text-sm font-medium">Required Item</Label>
-          <Label className=" w-full text-sm font-medium">Quest Description</Label>
-          <Label className=" w-full text-sm font-medium">Quest complete</Label>
+          <Label className=" w-full text-sm font-medium">Initial Dialogue</Label>
+          <Label className=" w-full text-sm font-medium">Required item to complete</Label>
+          <Label className=" w-full text-sm font-medium">Quest complete dialogue</Label>
           <Label className=" w-full text-sm font-medium">Reward</Label>
           <Input type="text" className="h-8" />
+          <Input className="h-8" type="text" />
+
           <Select
             className="h-8"
             options={
@@ -43,17 +48,7 @@ export function QuestModal() {
             onChange={console.log}
           />
           <Input className="h-8" type="text" />
-          <Input className="h-8" type="text" />
-          <Select
-            className="h-8"
-            options={
-              store?.nodes.map((node) => ({
-                label: `${node.name}`,
-                value: `${node.uuid}`,
-              })) ?? []
-            }
-            onChange={console.log}
-          />
+          <SelectModal type="items" />
         </div>
       </DialogContent>
     </Dialog>
