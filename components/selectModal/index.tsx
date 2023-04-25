@@ -35,7 +35,7 @@ export function SelectModal(props: {
         <DialogHeader>
           <Input
             type="search"
-            className="rounded-2xl  w-full  px-4 placeholder:text-muted  duration-100 py-4"
+            className="  w-full  px-4 placeholder:text-muted  duration-100 py-4"
             placeholder="🔍 Search..."
           />
         </DialogHeader>

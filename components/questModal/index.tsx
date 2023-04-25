@@ -48,7 +48,7 @@ export function QuestModal() {
             onChange={console.log}
           />
           <Input className="h-8" type="text" />
-          <SelectModal type="items" />
+          <SelectModal type="items" onChange={console.log} />
         </div>
       </DialogContent>
     </Dialog>
