@@ -52,6 +52,16 @@ export type KeyBindings = {
   onClick?: string
   default?: string
 } & Record<string, string>
+
+export type Quest = {
+  uuid: string
+  name: string
+  initialDialog: string
+  requiredItemToComplete?: string
+  questCompleteDialog?: string
+  reward?: string
+}
+
 export type GameType = 'hero' | 'monster' | 'npc' | 'item'
 export type Node = Partial<Mesh> & {
   scene?: string
@@ -67,6 +77,7 @@ export type Node = Partial<Mesh> & {
   actions?: {
     [x: string]: AnimationAction | null
   }
+  quests?: Quest[]
   type: NodeType
 }
 export type SceneType = 'color' | 'equirect'

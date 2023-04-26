@@ -2,13 +2,13 @@ import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { fetcher } from '../utils'
-import { Item } from './types'
+import { Reward } from './types'
 
-export function useItems() {
+export function useRewards() {
   const router = useRouter()
-  const { data, error } = useSWR<Item[], AxiosError>(`/api/items`, fetcher)
+  const { data, error } = useSWR<Reward[], AxiosError>(`/api/rewards`, fetcher)
   return {
-    data: data ?? ([] as Item[]),
+    data: data ?? ([] as Reward[]),
     isLoading: !data && !error,
     isError: error,
   }

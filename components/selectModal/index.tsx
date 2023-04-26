@@ -1,6 +1,6 @@
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
-import { useItems } from '@/lib/items/queries'
 import { useModels } from '@/lib/models/queries'
+import { useRewards } from '@/lib/rewards/queries'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import { Label } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
@@ -17,14 +17,19 @@ export function SelectModal(props: {
   value?: string
 }) {
   const { data: models } = useModels()
-  const { data: items } = useItems()
+  const { data: items } = useRewards()
   const arr = props.type === 'models' ? models : items
+  const findName = (id?: string) => {
+    const idx = arr?.findIndex((obj) => obj.id === id)
+    return ~idx ? arr?.at(idx)?.name : undefined
+  }
+
   return (
     <Dialog>
       <ContextMenu>
         <DialogTrigger asChild>
-          <Button className="w-full" size={props.size}>
-            {props?.value ?? 'Select'}
+          <Button className="w-full truncate" size={props.size}>
+            {findName(props?.value) ?? 'Select'}
             <MenubarShortcut>
               <ChevronDownIcon className="h-4 w-4 opacity-50" />
             </MenubarShortcut>

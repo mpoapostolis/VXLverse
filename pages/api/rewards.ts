@@ -1,4 +1,4 @@
-import { getItems } from '@/lib/items/api'
+import { getRewards } from '@/lib/rewards/api'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 interface Props {
@@ -13,7 +13,7 @@ interface File {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (req.method) {
     case 'GET':
-      return getItems(req, res)
+      return getRewards(req, res)
 
     default:
       // return 405

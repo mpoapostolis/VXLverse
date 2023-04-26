@@ -12,7 +12,7 @@ export function GlbModel() {
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
   const { data: models } = useModels()
 
-  return ['hero', 'monster', 'npc'].includes(selected?.gameType ?? '') ? (
+  return ['hero', 'monster', 'npc', 'item'].includes(selected?.gameType ?? '') ? (
     <>
       <Separator className="my-4 " />
       <Label className="  w-full text-sm font-semibold mb-4 block text-secondary">3d Model</Label>

@@ -1,4 +1,4 @@
-export type Item = {
+export type Reward = {
   collectionId?: string
   collectionName?: string
   created?: string

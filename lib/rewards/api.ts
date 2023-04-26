@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import { getPocketBase } from '../pocketBase'
-import { Item } from './types'
+import { Reward } from './types'
 
-export async function getItems(_req: NextApiRequest, res: NextApiResponse) {
+export async function getRewards(_req: NextApiRequest, res: NextApiResponse) {
   const pb = await getPocketBase()
-  const records = await pb.collection('items').getFullList<Item>(200 /* batch size */, {
+  const records = await pb.collection('rewards').getFullList<Reward>(200 /* batch size */, {
     sort: '-created',
   })
   res.status(200).json(

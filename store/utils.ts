@@ -65,6 +65,7 @@ export function meshToJson(mesh: Partial<Node>) {
     gameType: mesh.gameType,
     statusToAnimation: mesh.statusToAnimation,
     type: mesh.type,
+    quests: mesh.quests,
   }
 }
 
@@ -80,6 +81,7 @@ export function jsonToMesh(json: Node) {
   mesh.rotation?.set(e3[0], e3[1], e3[2])
   mesh.scale?.set(s3[0], s3[1], s3[2])
   mesh.type = json.type
+  mesh.quests = json.quests
   mesh.blob = json.blob
   mesh.scene = json.scene
   mesh.gameType = json.gameType
@@ -190,6 +192,7 @@ initDb().then(async (s) => {
     user: store.user,
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
+
     selectedNode: undefined,
     currentScene: scenes?.at(0)?.uuid,
   })

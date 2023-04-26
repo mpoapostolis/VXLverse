@@ -24,14 +24,22 @@ export function GameProperties() {
           onChange={(e) => console.log(e)}
           value=""
         />
-        <Label className="text-left" htmlFor={'collectToInventory'}>
-          Collect to inventory
-        </Label>
-        <Switch className="ml-auto border" id={'collectToInventory'} />
-        <Label className="text-left" htmlFor={'UseAsTool'}>
-          Use as tool
-        </Label>
-        <Switch className="ml-auto border" id={'UseAsTool'} />
+        {selected.gameType === 'item' && (
+          <>
+            <Label className="text-left" htmlFor={'collectToInventory'}>
+              Collect to inventory
+            </Label>
+            <Switch className="ml-auto border" id={'collectToInventory'} />
+          </>
+        )}
+        {selected.gameType === 'item' && (
+          <>
+            <Label className="text-left" htmlFor={'UseAsTool'}>
+              Use as tool
+            </Label>
+            <Switch className="ml-auto border" id={'UseAsTool'} />
+          </>
+        )}
       </div>
     </>
   ) : null
