@@ -25,7 +25,6 @@ export function GlbModel() {
           onChange={(val) => {
             if (!selected?.uuid || !val) return
             const model = models.find((model) => model.id === val)
-            console.log(model)
             store.updateNode(selected.uuid, {
               ...selected,
               url: model?.url ?? '',

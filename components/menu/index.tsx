@@ -91,6 +91,7 @@ export function Menu() {
     store.addNode({
       ...mesh,
       name: node.name,
+      img: node.img,
       gameType: node.type,
       scene: store.currentScene,
       position: new Vector3(0, 0, 0),

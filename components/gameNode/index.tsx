@@ -66,6 +66,7 @@ export function GameNode(props: Partial<Node>) {
             ([, status]) => status === 'interact',
           )
           if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
+          store.selectNode(props.uuid)
         }}
         args={
           size

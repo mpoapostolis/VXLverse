@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver'
 import { openDB } from 'idb'
 import JSZip from 'jszip'
 import { Mesh } from 'three'
-import { BucketItem, Node, Scene, Store, User, useStore } from '.'
+import { Node, Scene, Store, User, useStore } from '.'
 
 const defaultNodes = (
   [
@@ -38,7 +38,6 @@ export const defaultGameConf: Partial<Store> = {
   nodes: defaultNodes,
   scenes: defaultScenes,
   currentScene: defaultScenes?.at(0)?.uuid,
-  bucket: [],
 }
 
 export async function initDb() {
@@ -66,6 +65,7 @@ export function meshToJson(mesh: Partial<Node>) {
     statusToAnimation: mesh.statusToAnimation,
     type: mesh.type,
     quests: mesh.quests,
+    img: mesh.img,
   }
 }
 
@@ -91,7 +91,7 @@ export function jsonToMesh(json: Node) {
   mesh.color = json.color
   mesh.statusToAnimation = json.statusToAnimation
   mesh.type = json.type
-
+  mesh.img = json.img
   return mesh
 }
 
@@ -104,17 +104,13 @@ export function exportGame() {
   }))
 
   const zip = new JSZip()
-  zip.file('gameConf.json', JSON.stringify({ nodes, scenes, bucket: state.bucket }))
+  zip.file('gameConf.json', JSON.stringify({ nodes, scenes }))
 
   nodes.forEach((node) => {
     if (node?.blob) zip.file(`assets/gltf/${node.name}`, node.blob)
   })
   scenes.forEach((scene) => {
     if (scene?.blob) zip.file(`assets/equirect/${scene.name}`, scene.blob)
-  })
-
-  state.bucket.forEach((item) => {
-    if (item?.blob) zip.file(`assets/bucket/${item.name}.${item.ext}`, item.blob)
   })
 
   zip.generateAsync({ type: 'blob' }).then((content) => {
@@ -130,7 +126,6 @@ export async function importGameZip(file: File) {
   const assets = zip.folder('assets')
   const gltf = assets?.folder('gltf')
   const equirect = assets?.folder('equirect')
-  const bucket = assets?.folder('bucket')
 
   // const nodes = gameConfJson?.nodes?.map(jsonToMesh) ?? []
   const scenes = await Promise.all(
@@ -140,16 +135,6 @@ export async function importGameZip(file: File) {
         ...scene,
         blob,
         equirect: blob ? URL.createObjectURL(blob) : undefined,
-      }
-    }) ?? [],
-  )
-  const bucketItems = await Promise.all(
-    gameConfJson?.bucket?.map(async (item: any) => {
-      const blob = await bucket?.file(`${item.name}.${item.ext}`)?.async('blob')
-      return {
-        ...item,
-        blob,
-        url: blob ? URL.createObjectURL(blob) : undefined,
       }
     }) ?? [],
   )
@@ -170,7 +155,6 @@ export async function importGameZip(file: File) {
     scenes,
     selectedNode: undefined,
     currentScene: scenes?.at(0)?.uuid,
-    bucket: bucketItems,
   })
 }
 
@@ -179,7 +163,6 @@ initDb().then(async (s) => {
     user: User
     nodes: Node[]
     scenes: Scene[]
-    bucket: BucketItem[]
   }[]
 
   const scenes =

@@ -60,6 +60,7 @@ export type Quest = {
   requiredItemToComplete?: string
   questCompleteDialog?: string
   reward?: string
+  status: 'incomplete' | 'completed'
 }
 
 export type GameType = 'hero' | 'monster' | 'npc' | 'item'
@@ -74,6 +75,7 @@ export type Node = Partial<Mesh> & {
   statusToAnimation?: Record<string, CharStatus>
   status: CharStatus
   gameType?: GameType
+  img?: string
   actions?: {
     [x: string]: AnimationAction | null
   }
@@ -91,25 +93,12 @@ export type Scene = {
   blob?: Blob
 }
 
-export type BucketItem = {
-  uuid: string
-  ext?: string
-  name: string
-  url?: string
-  blob?: Blob
-}
-
 export type Mode = 'translate' | 'rotate' | 'scale'
 export type Store = {
   reset: () => void
 
-  bucket: BucketItem[]
   user?: User
   setUser: (user?: User) => void
-
-  updateBucket: (uuid: string, node: BucketItem) => void
-  deleteBucketItem: (uuid: string) => void
-  addToBucket: (item: BucketItem) => void
 
   setMode: (mode: Mode) => void
   mode: Mode
@@ -136,16 +125,6 @@ export const useStore = create<Store>((set) => ({
 
   mode: 'translate',
   nodes: [],
-  bucket: [],
-
-  addToBucket: (item) =>
-    set((state) => ({
-      bucket: [...state.bucket, item],
-    })),
-  deleteBucketItem: (uuid) =>
-    set((state) => ({
-      bucket: state.bucket.filter((item) => item.url !== uuid),
-    })),
 
   resetScene: () =>
     set((s) => {
@@ -163,11 +142,6 @@ export const useStore = create<Store>((set) => ({
         nodes: s.nodes.filter((n) => n.scene !== s.currentScene),
       }
     }),
-
-  updateBucket: (uuid, node) =>
-    set((state) => ({
-      bucket: state.bucket.map((item) => (item.uuid === uuid ? { ...item, ...node } : item)),
-    })),
 
   setCurrentScene: (currentScene) => set({ currentScene }),
   selectNode: (uuid) => set({ selectedNode: uuid }),
@@ -229,5 +203,5 @@ export const useStore = create<Store>((set) => ({
 useStore?.subscribe(async (state) => {
   const db = await initDb()
   const nodes = state.nodes.map(meshToJson)
-  db.put('store', { user: state.user, nodes, scenes: state.scenes, bucket: state.bucket }, 0)
+  db.put('store', { user: state.user, nodes, scenes: state.scenes }, 0)
 })

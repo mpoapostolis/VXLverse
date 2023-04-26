@@ -25,6 +25,7 @@ const newQuest = () =>
     requiredItemToComplete: '',
     questCompleteDialog: '',
     reward: '',
+    status: 'incomplete',
   } as Quest)
 
 export function QuestModal() {
@@ -115,7 +116,6 @@ export function QuestModal() {
               />
               <Button
                 onClick={() => {
-                  console.log(obj.uuid)
                   store.updateNode(`${selectedNode?.uuid}`, {
                     ...selectedNode,
                     quests: selectedNode?.quests?.filter((q) => q.uuid !== obj.uuid),

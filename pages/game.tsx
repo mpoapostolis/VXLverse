@@ -1,3 +1,4 @@
+import { Dialogue } from '@/components/dialogue'
 import { GameNode } from '@/components/gameNode'
 import { HelpModal } from '@/components/helpModal'
 import { Light } from '@/components/lights'
@@ -152,6 +153,7 @@ export default function Home() {
       <picture className="fixed top-4 left-4 z-50">
         <img className="w-16 h-16" src="/logo.svg" alt="" />
       </picture>
+      <Dialogue />
     </main>
   )
 }

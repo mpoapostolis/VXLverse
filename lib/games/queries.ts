@@ -6,7 +6,8 @@ import { Game } from './types'
 
 export function useGame() {
   const router = useRouter()
-  const { data, error } = useSWR<Game, AxiosError>(`/api/games/${router.query.id}`, fetcher)
+  const id = router.query.id
+  const { data, error } = useSWR<Game, AxiosError>(id && `/api/games/${id}`, fetcher)
   return {
     data: data,
     isLoading: !data && !error,
