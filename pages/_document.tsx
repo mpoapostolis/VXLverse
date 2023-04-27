@@ -10,7 +10,7 @@ const MetaTags = () => (
     <meta property="og:title" content="VXLverse - Empower Your Creativity: Create and Play RPG Games with VXLverse" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="apple-touch-icon" href="/icons/192-192.png" />
+    <link rel="apple-touch-icon" href="/icons/192x192.png" />
 
     <meta
       property="og:description"
