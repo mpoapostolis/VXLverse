@@ -29,6 +29,7 @@ const MetaTags = () => (
     <meta name="twitter:site" content="@mpoapostolis" />
     <link rel="canonical" href="https://www.vxlverse.com/" />
     <meta name="theme-color" content="#000000" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </Head>
 )
 
