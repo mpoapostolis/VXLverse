@@ -9,6 +9,8 @@ const MetaTags = () => (
     <meta name="keywords" content="Game Development, RPG, VXLverse, 3D Modeling, Game Design, IndieDev, Gaming" />
     <meta property="og:title" content="VXLverse - Empower Your Creativity: Create and Play RPG Games with VXLverse" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="manifest" href="/manifest.json" />
+
     <meta
       property="og:description"
       content="VXLverse is a revolutionary online platform designed to empower users to both create and play a wide variety of RPG games. Our mission is to provide an interactive and engaging space for game enthusiasts, offering them the opportunity to showcase their creativity and be rewarded for it.."
