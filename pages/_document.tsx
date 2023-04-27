@@ -10,6 +10,7 @@ const MetaTags = () => (
     <meta property="og:title" content="VXLverse - Empower Your Creativity: Create and Play RPG Games with VXLverse" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" href="/icons/192-192.png" />
 
     <meta
       property="og:description"
@@ -27,6 +28,7 @@ const MetaTags = () => (
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@mpoapostolis" />
     <link rel="canonical" href="https://www.vxlverse.com/" />
+    <meta name="theme-color" content="#000000" />
   </Head>
 )
 
