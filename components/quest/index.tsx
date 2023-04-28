@@ -18,9 +18,13 @@ export function Quest() {
     })
   }
   return (
-    <Accordion type="single" className="w-full mb-4 ">
+    <Accordion collapsible type="single" className="w-full mb-4 ">
       {quests.map((obj, idx) => (
-        <AccordionItem className="px-4 border-l border-r first-of-type:border-t  " value={obj.uuid} key={obj.uuid}>
+        <AccordionItem
+          className="px-4 mb-2 border  data-[state=open]:border-none data-[state=closed]:bg-card "
+          value={obj.uuid}
+          key={obj.uuid}
+        >
           <AccordionTrigger>
             <Label className=" w-full text-xs font-medium">Quest: no{idx + 1}</Label>
           </AccordionTrigger>
