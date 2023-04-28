@@ -1,19 +1,43 @@
 import { Separator } from '@/components/ui/separator'
+import type { Quest as QuestType } from '@/store'
 import { useStore } from '@/store'
-import { useState } from 'react'
-import { QuestModal } from '../questModal'
+import { PlusIcon } from 'lucide-react'
+import { Quest } from '../quest'
+import { Button } from '../ui/button'
 import { Label } from '../ui/label'
+
+const newQuest = () =>
+  ({
+    uuid: Math.random().toString(36).substring(7),
+    name: 'New Quest',
+    initialDialog: '',
+    requiredItemToComplete: '',
+    questCompleteDialog: '',
+    reward: '',
+    status: 'incomplete',
+  } as QuestType)
 
 export function Quests() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
-  const [open, setOpen] = useState(false)
+  const quests = selected?.quests ?? []
 
   return selected?.gameType === 'npc' ? (
     <>
       <Separator className="my-4" />
-      <Label className=" truncate w-full text-sm font-semibold mb-4 block text-secondary ">Quest</Label>
-      <QuestModal />
+      <Label className=" truncate w-full text-sm font-semibold mb-4 block text-secondary ">Quests</Label>
+      <Quest />
+      <Button
+        onClick={() => {
+          store.updateNode(`${selected?.uuid}`, {
+            quests: [...quests, newQuest()],
+          })
+        }}
+        className="w-full "
+      >
+        <PlusIcon className="mr-2 w-4 h-4" />
+        New Quest
+      </Button>
     </>
   ) : null
 }
