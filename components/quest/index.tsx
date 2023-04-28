@@ -26,7 +26,7 @@ export function Quest() {
           key={obj.uuid}
         >
           <AccordionTrigger>
-            <Label className=" w-full text-xs font-medium">Quest: no{idx + 1}</Label>
+            <Label className=" w-full text-xs font-medium">{obj.name}</Label>
           </AccordionTrigger>
           <AccordionContent>
             <div className="grid grid-cols-[1fr_2fr] gap-4">

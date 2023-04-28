@@ -6,10 +6,10 @@ import { Quest } from '../quest'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
 
-const newQuest = () =>
+const newQuest = (num: number) =>
   ({
     uuid: Math.random().toString(36).substring(7),
-    name: 'New Quest',
+    name: `Quest: ${num + 1}`,
     initialDialog: '',
     requiredItemToComplete: '',
     questCompleteDialog: '',
@@ -30,7 +30,7 @@ export function Quests() {
       <Button
         onClick={() => {
           store.updateNode(`${selected?.uuid}`, {
-            quests: [...quests, newQuest()],
+            quests: [...quests, newQuest(quests?.length ?? 0)],
           })
         }}
         className="w-full "
