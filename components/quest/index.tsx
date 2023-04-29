@@ -24,7 +24,7 @@ export function Quest() {
         <AccordionItem
           className="px-4 mb-2 border  data-[state=open]:border-none data-[state=closed]:bg-card "
           value={obj.uuid}
-          key={obj.uuid}
+          key={idx}
         >
           <AccordionTrigger>
             <Label className=" w-full text-xs font-medium">{obj.name}</Label>

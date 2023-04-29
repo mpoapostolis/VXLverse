@@ -1,7 +1,9 @@
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
+import { cn } from '@/lib/utils'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import { Label } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
+import { Fragment } from 'react'
 import { Button, ButtonProps } from '../ui/button'
 import { Input } from '../ui/input'
 import { MenubarShortcut } from '../ui/menubar'
@@ -10,21 +12,29 @@ import { Separator } from '../ui/separator'
 export function SelectModal<T = string>(props: {
   size?: ButtonProps['size']
   children?: React.ReactNode
+  multiple?: boolean
   options?: {
-    src: string
     label: string
     value: string
+    src: string
   }[]
   onChange: (id?: T) => void
-  value?: string
+  value?: string | string[]
 }) {
-  const label = props.options?.find((opt) => opt.value === props.value)?.label
+  const Comp = props.multiple ? Fragment : DialogTrigger
+  const label =
+    typeof props.value === 'object'
+      ? props.options
+          ?.filter((opt) => props.value?.includes(opt.value))
+          .map((opt) => opt.label)
+          .join(', ')
+      : props.options?.find((opt) => opt.value === props.value || opt.src === props.value)?.label
   return (
     <Dialog>
       <ContextMenu>
         <DialogTrigger asChild>
           <Button className="w-full truncate" size={props.size}>
-            {label ?? 'Select'}
+            <span className="truncate">{label ?? 'Select'}</span>
             <MenubarShortcut>
               <ChevronDownIcon className="h-4 w-4 opacity-50" />
             </MenubarShortcut>
@@ -43,12 +53,14 @@ export function SelectModal<T = string>(props: {
         <div className="grid ">
           <div className="grid xl:grid-cols-4 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
             {props.options?.map((obj, i) => (
-              <DialogTrigger asChild key={obj.value}>
+              <Comp key={i}>
                 <div
                   onClick={() => {
                     props.onChange(obj.value as T)
                   }}
-                  className="relative h-48 hover:border-2 border-secondary"
+                  className={cn('relative h-48 hover:border-2 border-secondary', {
+                    'border-2 border-dashed border-secondary': props.value?.includes(obj.value),
+                  })}
                 >
                   <picture>
                     <img
@@ -61,7 +73,7 @@ export function SelectModal<T = string>(props: {
                     {obj.label}
                   </Label>
                 </div>
-              </DialogTrigger>
+              </Comp>
             ))}
           </div>
         </div>

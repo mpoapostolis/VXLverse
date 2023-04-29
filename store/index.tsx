@@ -74,8 +74,8 @@ export type Node = Partial<Mesh> & {
   blob?: Blob
   animation?: string
   color?: string
-  modelId?: string
   statusToAnimation?: Record<string, CharStatus>
+  showWhenInventoryHas?: string[]
   status: CharStatus
   gameType?: GameType
   img?: string

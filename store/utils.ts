@@ -50,7 +50,6 @@ export function meshToJson(mesh: Partial<Node>) {
     scale: mesh.scale?.toArray(),
     blob: mesh.blob,
     gravity: mesh.gravity,
-    modelId: mesh.modelId,
     url: mesh.blob ? undefined : mesh.url,
     animation: mesh.animation,
     color: mesh.color,
@@ -60,6 +59,7 @@ export function meshToJson(mesh: Partial<Node>) {
     type: mesh.type,
     quests: mesh.quests,
     img: mesh.img,
+    showWhenInventoryHas: mesh.showWhenInventoryHas,
   }
 }
 
@@ -86,8 +86,8 @@ export function jsonToMesh(json: Node) {
   mesh.color = json.color
   mesh.statusToAnimation = json.statusToAnimation
   mesh.type = json.type
+  mesh.showWhenInventoryHas = json.showWhenInventoryHas
   mesh.img = json.img
-  mesh.modelId = json.modelId
   return mesh
 }
 

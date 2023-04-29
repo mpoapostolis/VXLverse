@@ -10,7 +10,6 @@ export function GlbModel() {
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
   const { data: models } = useModels()
-  console.log(selected)
   return ['hero', 'monster', 'npc', 'item', 'portal'].includes(selected?.gameType ?? '') ? (
     <>
       <Separator className="my-4 " />
@@ -18,22 +17,21 @@ export function GlbModel() {
       <div className="grid  grid-cols-[1fr_2fr] xs place-items-center gap-4">
         <Label className=" w-full">3d Model</Label>
         <SelectModal
-          value={`${selected?.modelId}`}
+          value={`${selected?.img}`}
           options={
             models?.map((model) => ({
+              value: model.id,
               src: model.img,
               label: model.name,
-              value: model.id,
             })) ?? []
           }
           size="sm"
           onChange={(val) => {
             if (!selected?.uuid || !val) return
-            const model = models.find((model) => model.id === val)
 
+            const model = models.find((model) => model.img === val)
             store.updateNode(selected.uuid, {
               ...selected,
-              modelId: model?.id ?? '',
               url: model?.url ?? '',
               name: model?.name ?? '',
               scale: new Vector3(model?.scale ?? 1, model?.scale ?? 1, model?.scale ?? 1),
