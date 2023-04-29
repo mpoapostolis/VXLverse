@@ -7,14 +7,6 @@ import { Node, Scene, Store, User, useStore } from '.'
 const defaultNodes = (
   [
     {
-      name: 'Box',
-      position: [-4, 0.5, 2],
-      rotation: [0, 0, 0],
-      scale: [1, 1, 1],
-      type: 'Box',
-      scene: 'main',
-    },
-    {
       name: 'DirectionalLight',
       position: [2.3443115362954874, 0, 0.4895091354721197],
       rotation: [0, 0, 0],
@@ -57,6 +49,7 @@ export function meshToJson(mesh: Partial<Node>) {
     rotation: mesh.rotation?.toArray(),
     scale: mesh.scale?.toArray(),
     blob: mesh.blob,
+    gravity: mesh.gravity,
     url: mesh.blob ? undefined : mesh.url,
     animation: mesh.animation,
     color: mesh.color,
@@ -81,6 +74,7 @@ export function jsonToMesh(json: Node) {
   mesh.rotation?.set(e3[0], e3[1], e3[2])
   mesh.scale?.set(s3[0], s3[1], s3[2])
   mesh.type = json.type
+  mesh.gravity = json.gravity
   mesh.quests = json.quests
   mesh.blob = json.blob
   mesh.scene = json.scene
@@ -105,15 +99,8 @@ export function exportGame() {
   const zip = new JSZip()
   zip.file('gameConf.json', JSON.stringify({ nodes, scenes }))
 
-  nodes.forEach((node) => {
-    if (node?.blob) zip.file(`assets/gltf/${node.name}`, node.blob)
-  })
-  scenes.forEach((scene) => {
-    if (scene?.blob) zip.file(`assets/equirect/${scene.name}`, scene.blob)
-  })
-
   zip.generateAsync({ type: 'blob' }).then((content) => {
-    saveAs(content, 'game.zip')
+    saveAs(content, 'VXLverse.zip')
   })
 }
 
@@ -124,7 +111,6 @@ export async function importGameZip(file: File) {
   const gameConfJson = JSON.parse(_gameConf ?? '{}')
   const assets = zip.folder('assets')
   const gltf = assets?.folder('gltf')
-  const equirect = assets?.folder('equirect')
 
   // const nodes = gameConfJson?.nodes?.map(jsonToMesh) ?? []
   const scenes = await Promise.all(
@@ -166,7 +152,6 @@ initDb().then(async (s) => {
       ...obj,
       equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
     })) ?? defaultGameConf?.scenes
-
   useStore?.setState({
     user: store?.user,
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,

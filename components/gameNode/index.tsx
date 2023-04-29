@@ -32,7 +32,7 @@ export function GameNode(props: Partial<Node>) {
 
   const [size, setSize] = useState<{ x: number; y: number; z: number }>()
   useFrame(() => {
-    if (!ref.current) return
+    if (!ref.current || !props.gravity) return
     // gravity
     if (ref.current.position.y > (size?.y ?? 1) / 2) {
       ref.current.position.y -= 0.1

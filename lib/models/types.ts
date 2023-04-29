@@ -16,4 +16,5 @@ export type Model = {
   statusToAnimation: Record<string, CharStatus>
   defaultAnimation: string
   defaultPosition: number[]
+  gravity: 'on' | 'off'
 }

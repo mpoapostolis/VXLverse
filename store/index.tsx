@@ -69,6 +69,7 @@ export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
   goTo?: Vector3
+  gravity?: 'on' | 'off'
   velocity?: number
   blob?: Blob
   animation?: string
@@ -160,7 +161,8 @@ export const useStore = create<Store>((set) => ({
       ...defaultGameConf,
     }),
   deleteNode: () => {
-    const hero = useStore.getState().nodes.find((n) => n.gameType === 'hero')
+    const { nodes, selectedNode } = useStore.getState()
+    const hero = nodes.find((n) => n.uuid === selectedNode)?.gameType === 'hero'
     if (hero)
       return toast({
         variant: 'destructive',

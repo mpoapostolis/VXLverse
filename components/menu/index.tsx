@@ -96,6 +96,7 @@ export function Menu() {
       position: new Vector3(...defaultPosition),
       url: node.url,
       type: 'GLTF',
+      gravity: node.gravity,
       animation: node.defaultAnimation,
       name: node.name,
       statusToAnimation: node.statusToAnimation,
