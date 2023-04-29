@@ -28,12 +28,12 @@ export function GlbModel() {
           size="sm"
           onChange={(val) => {
             if (!selected?.uuid || !val) return
-
-            const model = models.find((model) => model.img === val)
+            const model = models.find((model) => model.id === val)
             store.updateNode(selected.uuid, {
               ...selected,
               url: model?.url ?? '',
               name: model?.name ?? '',
+              img: model?.img,
               scale: new Vector3(model?.scale ?? 1, model?.scale ?? 1, model?.scale ?? 1),
               rotation: new Euler(rot.x, rot.y, rot.z),
               type: 'GLTF',

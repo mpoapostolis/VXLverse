@@ -32,7 +32,9 @@ export default function Home() {
     return () => window.removeEventListener('keydown', onKeyDown)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
+  const selected = store.nodes?.find((e) => e.uuid === store.selectedNode)
   return (
     <main className="h-screen overflow-hidden">
       <Head>

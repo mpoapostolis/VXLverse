@@ -3,13 +3,13 @@ import { cn } from '@/lib/utils'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import { Label } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import { Button, ButtonProps } from '../ui/button'
 import { Input } from '../ui/input'
 import { MenubarShortcut } from '../ui/menubar'
 import { Separator } from '../ui/separator'
 
-export function SelectModal<T = string>(props: {
+export function SelectModal(props: {
   size?: ButtonProps['size']
   children?: React.ReactNode
   multiple?: boolean
@@ -18,7 +18,7 @@ export function SelectModal<T = string>(props: {
     value: string
     src: string
   }[]
-  onChange: (id?: T) => void
+  onChange: (id?: string) => void
   value?: string | string[]
 }) {
   const Comp = props.multiple ? Fragment : DialogTrigger
@@ -28,9 +28,14 @@ export function SelectModal<T = string>(props: {
           ?.filter((opt) => props.value?.includes(opt.value))
           .map((opt) => opt.label)
           .join(', ')
-      : props.options?.find((opt) => opt.value === props.value || opt.src === props.value)?.label
+      : props.options?.find((opt) => {
+          if (!props.value) return false
+          return opt.value === props.value || opt.src === props.value
+        })?.label
+  console.log(props.value, props.options)
+  const [searchTerm, setSearchTerm] = useState('')
   return (
-    <Dialog>
+    <Dialog onOpenChange={() => setSearchTerm('')}>
       <ContextMenu>
         <DialogTrigger asChild>
           <Button className="w-full truncate" size={props.size}>
@@ -44,6 +49,12 @@ export function SelectModal<T = string>(props: {
       <DialogContent className="lg:w-[80vw] z-50 w-screen ">
         <DialogHeader>
           <Input
+            value={searchTerm}
+            onChange={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              setSearchTerm(e.target.value)
+            }}
             type="search"
             className="  w-full  px-4 placeholder:text-muted  duration-100 py-4"
             placeholder="🔍 Search..."
@@ -52,29 +63,34 @@ export function SelectModal<T = string>(props: {
         <Separator />
         <div className="grid ">
           <div className="grid xl:grid-cols-4 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
-            {props.options?.map((obj, i) => (
-              <Comp key={i}>
-                <div
-                  onClick={() => {
-                    props.onChange(obj.value as T)
-                  }}
-                  className={cn('relative h-48 hover:border-2 border-secondary', {
-                    'border-2 border-dashed border-secondary': props.value?.includes(obj.value),
-                  })}
-                >
-                  <picture>
-                    <img
-                      src={obj.src ? obj.src : '/images/placeholder.png'}
-                      alt="preview"
-                      className="rounded-md w-full h-full object-scale-down bg-black "
-                    />
-                  </picture>
-                  <Label className="pl-2 bg-opacity-60 absolute text-xs top-0 py-2 left-0 w-full bg-black ">
-                    {obj.label}
-                  </Label>
-                </div>
-              </Comp>
-            ))}
+            {props.options
+              ?.filter((opt) => {
+                if (!searchTerm) return true
+                return opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+              })
+              ?.map((obj, i) => (
+                <Comp key={i}>
+                  <div
+                    onClick={() => {
+                      props.onChange(obj.value)
+                    }}
+                    className={cn('relative h-48 hover:border-2 border-secondary', {
+                      'border-2 border-dashed border-secondary': props.value?.includes(obj.value),
+                    })}
+                  >
+                    <picture>
+                      <img
+                        src={obj.src ? obj.src : '/images/placeholder.png'}
+                        alt="preview"
+                        className="rounded-md w-full h-full object-scale-down bg-black "
+                      />
+                    </picture>
+                    <Label className="pl-2 bg-opacity-60 absolute text-xs top-0 py-2 left-0 w-full bg-black ">
+                      {obj.label}
+                    </Label>
+                  </div>
+                </Comp>
+              ))}
           </div>
         </div>
       </DialogContent>
