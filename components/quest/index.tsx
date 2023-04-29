@@ -1,3 +1,4 @@
+import { useRewards } from '@/lib/rewards/queries'
 import { Quest, useStore } from '@/store'
 import { Select } from '../select'
 import { SelectModal } from '../selectModal'
@@ -10,7 +11,7 @@ export function Quest() {
   const store = useStore()
   const selectedNode = store?.nodes.find((node) => node.uuid === store.selectedNode)
   const quests = selectedNode?.quests ?? []
-
+  const { data: rewards } = useRewards()
   const updateQuest = (quest: Quest) => {
     store.updateNode(`${selectedNode?.uuid}`, {
       ...selectedNode,
@@ -80,8 +81,14 @@ export function Quest() {
                 onChange={(val) => {
                   updateQuest({ ...obj, reward: val ? val : undefined })
                 }}
+                options={
+                  rewards?.map((node) => ({
+                    label: `${node.name}`,
+                    value: `${node.id}`,
+                    src: `${node.img}`,
+                  })) ?? []
+                }
                 value={obj.reward}
-                type="items"
               />
               <div />
               <Button

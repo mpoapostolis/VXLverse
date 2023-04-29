@@ -19,7 +19,6 @@ import { exportGame, importGameZip, meshToJson } from '@/store/utils'
 
 import {
   CheckCircledIcon,
-  CubeIcon,
   DownloadIcon,
   EraserIcon,
   GearIcon,
@@ -222,7 +221,7 @@ export function Menu() {
           <MenubarSub>
             <MenubarSubTrigger>RPG Entity</MenubarSubTrigger>
             <MenubarSubContent>
-              {['Hero', 'Npc', 'Monster', 'Item', 'portal'].map((item) => (
+              {['Npc', 'Monster', 'Item', 'portal'].map((item) => (
                 <MenubarItem
                   disabled={item === 'Hero' && doIHaveHero}
                   key={item}
@@ -353,30 +352,6 @@ export function Menu() {
           >
             <div className="w-full ">New Scene...</div>
           </SceneModal>
-        </MenubarContent>
-      </MenubarMenu>
-      <MenubarMenu>
-        <MenubarTrigger>Examples</MenubarTrigger>
-        <MenubarContent>
-          <MenubarItem>
-            Example 1
-            <MenubarShortcut>
-              <CubeIcon />
-            </MenubarShortcut>
-          </MenubarItem>
-
-          <MenubarItem>
-            Example 2
-            <MenubarShortcut>
-              <CubeIcon />
-            </MenubarShortcut>
-          </MenubarItem>
-          <MenubarItem>
-            Example 3
-            <MenubarShortcut>
-              <CubeIcon />
-            </MenubarShortcut>
-          </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
 
