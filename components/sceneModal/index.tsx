@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
 import { Separator } from '../ui/separator'
-import { Upload } from '../upload'
 
 export function SceneModal(props: { onClick?: () => void; new?: boolean; children?: React.ReactNode }) {
   const store = useStore()
@@ -58,7 +57,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
               className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
             />
           </div>
-          <div className=" mb-2 ">
+          {/* <div className=" mb-2 ">
             <Label className=" w-full text-sm font-medium">Background</Label>
             <select
               onChange={(evt) => {
@@ -72,7 +71,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
               <option value="color">Color</option>
               <option value="equirect">Equirect</option>
             </select>
-          </div>
+          </div> */}
 
           <div className="grid grid-cols-[80px_1fr] items-center gap-4 ">
             {selectedScene?.type === 'color' && (
@@ -91,7 +90,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                 />
               </>
             )}
-            {selectedScene?.type === 'equirect' && (
+            {/* {selectedScene?.type === 'equirect' && (
               <>
                 <Label className=" w-fit text-sm font-medium">Equirect</Label>
                 <Upload
@@ -105,7 +104,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                   }
                 />
               </>
-            )}
+            )} */}
           </div>
         </div>
       </DialogContent>

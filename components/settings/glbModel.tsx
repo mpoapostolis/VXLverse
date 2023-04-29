@@ -1,9 +1,8 @@
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { useModels } from '@/lib/models/queries'
 import { useStore } from '@/store'
-import { Euler, Mesh, Vector3 } from 'three'
+import { Euler, Vector3 } from 'three'
 import { SelectModal } from '../selectModal'
 
 export function GlbModel() {
@@ -12,7 +11,7 @@ export function GlbModel() {
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
   const { data: models } = useModels()
 
-  return ['hero', 'monster', 'npc', 'item'].includes(selected?.gameType ?? '') ? (
+  return ['hero', 'monster', 'npc', 'item', 'portal'].includes(selected?.gameType ?? '') ? (
     <>
       <Separator className="my-4 " />
       <Label className="  w-full text-sm font-semibold mb-4 block text-secondary">3d Model</Label>
@@ -25,16 +24,23 @@ export function GlbModel() {
           onChange={(val) => {
             if (!selected?.uuid || !val) return
             const model = models.find((model) => model.id === val)
+            const defaultPosition = model?.defaultPosition ?? [0, 0, 0]
+
             store.updateNode(selected.uuid, {
               ...selected,
               url: model?.url ?? '',
               name: model?.name ?? '',
               scale: new Vector3(model?.scale ?? 1, model?.scale ?? 1, model?.scale ?? 1),
+              rotation: new Euler(rot.x, rot.y, rot.z),
+              type: 'GLTF',
+              position: new Vector3(...defaultPosition),
+              animation: model?.defaultAnimation,
+              statusToAnimation: model?.statusToAnimation,
             })
           }}
         />
 
-        <Label className=" w-full">Upload your Glb</Label>
+        {/* <Label className=" w-full">Upload your Glb</Label>
         <Input
           onChange={(e) => {
             const file = e.target.files?.[0]
@@ -60,7 +66,7 @@ export function GlbModel() {
           }}
           type="file"
           accept=".gltf, .glb"
-        />
+        /> */}
       </div>
     </>
   ) : null

@@ -3,8 +3,12 @@ const withPWA = require('@ducanh2912/next-pwa').default({
 })
 
 /** @type {import('next').NextConfig} */
-module.exports = withPWA({
-  // Next.js config
-  disable: process.env.NODE_ENV === 'development',
-  reactStrictMode: true,
-})
+module.exports =
+  process.env.NODE_ENV === 'development'
+    ? {
+        reactStrictMode: true,
+      }
+    : withPWA({
+        // Next.js config
+        reactStrictMode: true,
+      })

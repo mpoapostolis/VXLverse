@@ -5,7 +5,7 @@ import { useStore } from '@/store'
 export function Material() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
-  return selected ? (
+  return selected && selected.type !== 'GLTF' ? (
     <>
       <Separator className="my-4" />
       <Label className="truncate w-full text-sm font-semibold mb-4 block text-secondary">Material</Label>

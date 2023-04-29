@@ -129,7 +129,7 @@ export default function Home() {
       </Head>
       <HelpModal />
       <Canvas>
-        <fog attach="fog" args={[selectedScene?.color ?? '#999', 0, 120]} />
+        <fog attach="fog" args={[selectedScene?.color ?? '#000', 0, 120]} />
         <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE * 4, GRID_SIZE * 4]} />
         {selectedScene?.equirect ? (
           <Env equirect={selectedScene.equirect} />

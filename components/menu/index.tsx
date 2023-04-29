@@ -19,6 +19,7 @@ import { exportGame, importGameZip, meshToJson } from '@/store/utils'
 
 import {
   CheckCircledIcon,
+  CubeIcon,
   DownloadIcon,
   EraserIcon,
   GearIcon,
@@ -26,15 +27,14 @@ import {
   PlayIcon,
   QuestionMarkCircledIcon,
   ReloadIcon,
-  ResetIcon,
   Share1Icon,
   TrashIcon,
   UploadIcon,
 } from '@radix-ui/react-icons'
 import axios from 'axios'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import PocketBase from 'pocketbase'
+import { useEffect } from 'react'
 import { Mesh, Vector3 } from 'three'
 import { Account } from '../account'
 import { Indicator } from '../indicator'
@@ -87,22 +87,31 @@ export function Menu() {
   function addGLTF(node?: Model) {
     if (!node) return
     const mesh = new Mesh()
-
+    const defaultPosition = node?.defaultPosition ?? [0, 0, 0]
     store.addNode({
       ...mesh,
-      name: node.name,
       img: node.img,
       gameType: node.type,
       scene: store.currentScene,
-      position: new Vector3(0, 0, 0),
+      position: new Vector3(...defaultPosition),
       url: node.url,
       type: 'GLTF',
+      animation: node.defaultAnimation,
+      name: node.name,
+      statusToAnimation: node.statusToAnimation,
       scale: new Vector3(node?.scale ?? 1, node?.scale ?? 1, node?.scale ?? 1),
     })
   }
 
   const doIHaveHero = store.nodes?.some((n) => n.gameType === 'hero')
-  const router = useRouter()
+
+  useEffect(() => {
+    if (!doIHaveHero) {
+      addGLTF(models?.find((m) => m.type === 'hero'))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [doIHaveHero, models])
+
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
 
   const login = async () => {
@@ -117,7 +126,7 @@ export function Menu() {
   return (
     <Menubar>
       <MenubarMenu>
-        <MenubarTrigger>File</MenubarTrigger>
+        <MenubarTrigger>Game</MenubarTrigger>
         <MenubarContent>
           <MenubarItem onClick={store.reset}>
             New Project
@@ -125,6 +134,16 @@ export function Menu() {
               <EraserIcon />
             </MenubarShortcut>
           </MenubarItem>
+          <MenubarSeparator />
+
+          <Link href={'/game'} target="__blank">
+            <MenubarItem>
+              Play{' '}
+              <MenubarShortcut>
+                <PlayIcon />
+              </MenubarShortcut>
+            </MenubarItem>
+          </Link>
 
           <MenubarSeparator />
           <MenubarItem>
@@ -155,6 +174,39 @@ export function Menu() {
           </MenubarItem>
           <MenubarSeparator />
 
+          <MenubarItem
+            onClick={async () => {
+              const id = await axios
+                .post('/api/publish', {
+                  nodes: store.nodes.filter((e) => !e.blob).map(meshToJson),
+                  scenes: store.scenes,
+                })
+                .then((d) => {
+                  toast({
+                    title: 'You have successfully published your game! ',
+                    description: (
+                      <Label className="text-base ">
+                        Click
+                        <Link
+                          className="mx-2 font-bold text-secondary"
+                          href={`https://vxlverse.com/game?id=${d.data.id}`}
+                          target="_blank"
+                        >
+                          here
+                        </Link>
+                        to play it!
+                      </Label>
+                    ),
+                  })
+                })
+            }}
+          >
+            Publish
+            <MenubarShortcut>
+              <Share1Icon />
+            </MenubarShortcut>
+          </MenubarItem>
+
           <MenubarItem>
             Settings{' '}
             <MenubarShortcut>
@@ -169,7 +221,7 @@ export function Menu() {
           <MenubarSub>
             <MenubarSubTrigger>RPG Entity</MenubarSubTrigger>
             <MenubarSubContent>
-              {['Hero', 'Npc', 'Monster', 'Item'].map((item) => (
+              {['Hero', 'Npc', 'Monster', 'Item', 'portal'].map((item) => (
                 <MenubarItem
                   disabled={item === 'Hero' && doIHaveHero}
                   key={item}
@@ -295,9 +347,6 @@ export function Menu() {
                 name: 'Scene ' + Number(store.scenes.length + 1),
                 color: '#000',
               })
-              router.replace({
-                hash: `new-scene`,
-              })
             }}
             new
           >
@@ -306,54 +355,25 @@ export function Menu() {
         </MenubarContent>
       </MenubarMenu>
       <MenubarMenu>
-        <MenubarTrigger>Game</MenubarTrigger>
+        <MenubarTrigger>Examples</MenubarTrigger>
         <MenubarContent>
-          <Link href={'/game'} target="__blank">
-            <MenubarItem>
-              Play{' '}
-              <MenubarShortcut>
-                <PlayIcon />
-              </MenubarShortcut>
-            </MenubarItem>
-          </Link>
-          <MenubarSeparator />
-          <MenubarItem
-            onClick={async () => {
-              const id = await axios
-                .post('/api/publish', {
-                  nodes: store.nodes.filter((e) => !e.blob).map(meshToJson),
-                  scenes: store.scenes,
-                })
-                .then((d) => {
-                  toast({
-                    title: 'You have successfully published your game! ',
-                    description: (
-                      <Label className="text-base ">
-                        Click
-                        <Link
-                          className="mx-2 font-bold text-secondary"
-                          href={`https://vxlverse.com/game?id=${d.data.id}`}
-                          target="_blank"
-                        >
-                          here
-                        </Link>
-                        to play it!
-                      </Label>
-                    ),
-                  })
-                })
-            }}
-          >
-            Publish
+          <MenubarItem>
+            Example 1
             <MenubarShortcut>
-              <Share1Icon />
+              <CubeIcon />
             </MenubarShortcut>
           </MenubarItem>
 
-          <MenubarItem onClick={store.reset}>
-            Reset
+          <MenubarItem>
+            Example 2
             <MenubarShortcut>
-              <ResetIcon />
+              <CubeIcon />
+            </MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem>
+            Example 3
+            <MenubarShortcut>
+              <CubeIcon />
             </MenubarShortcut>
           </MenubarItem>
         </MenubarContent>

@@ -8,7 +8,7 @@ const defaultNodes = (
   [
     {
       name: 'Box',
-      position: [0, 0, 0],
+      position: [-4, 0.5, 2],
       rotation: [0, 0, 0],
       scale: [1, 1, 1],
       type: 'Box',
@@ -100,7 +100,6 @@ export function exportGame() {
   const nodes = state.nodes.map(meshToJson) ?? []
   const scenes = state.scenes.map((scene) => ({
     ...scene,
-    equirect: scene.blob ? URL.createObjectURL(scene.blob) : undefined,
   }))
 
   const zip = new JSZip()
@@ -130,11 +129,8 @@ export async function importGameZip(file: File) {
   // const nodes = gameConfJson?.nodes?.map(jsonToMesh) ?? []
   const scenes = await Promise.all(
     gameConfJson?.scenes?.map(async (scene: any) => {
-      const blob = await equirect?.file(scene.name)?.async('blob')
       return {
         ...scene,
-        blob,
-        equirect: blob ? URL.createObjectURL(blob) : undefined,
       }
     }) ?? [],
   )
@@ -172,7 +168,7 @@ initDb().then(async (s) => {
     })) ?? defaultGameConf?.scenes
 
   useStore?.setState({
-    user: store.user,
+    user: store?.user,
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
 

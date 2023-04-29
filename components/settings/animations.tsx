@@ -10,7 +10,8 @@ export function Animations() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const animationAvailable = Object.values(selected?.statusToAnimation ?? {})
-  return selected && selected.type === 'GLTF' ? (
+  const doIHaveActions = Object.keys(selected?.actions ?? {}).length > 0
+  return selected && selected.type === 'GLTF' && doIHaveActions ? (
     <div>
       <Separator className="my-4" />
       <Label className=" truncate w-full text-sm font-semibold mb-4 block text-secondary ">Animations</Label>

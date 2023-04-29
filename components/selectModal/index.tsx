@@ -19,17 +19,13 @@ export function SelectModal(props: {
   const { data: models } = useModels()
   const { data: items } = useRewards()
   const arr = props.type === 'models' ? models : items
-  const findName = (id?: string) => {
-    const idx = arr?.findIndex((obj) => obj.id === id)
-    return ~idx ? arr?.at(idx)?.name : undefined
-  }
 
   return (
     <Dialog>
       <ContextMenu>
         <DialogTrigger asChild>
           <Button className="w-full truncate" size={props.size}>
-            {findName(props?.value) ?? 'Select'}
+            {props?.value ?? 'Select'}
             <MenubarShortcut>
               <ChevronDownIcon className="h-4 w-4 opacity-50" />
             </MenubarShortcut>

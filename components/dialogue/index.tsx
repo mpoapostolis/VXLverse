@@ -7,7 +7,6 @@ export function Dialogue() {
   const selectedNode = store.nodes.find((node) => node.uuid === store.selectedNode)
 
   const doIHaveQuest = selectedNode?.quests?.find((q) => q.status === 'incomplete')
-  console.log(selectedNode, selectedNode?.quests)
   return (
     <div
       className={cn('fixed bottom-0 left-0 z-50 w-full  p-4', {

@@ -1,4 +1,5 @@
 import { GameType } from '@/store'
+import { CharStatus } from '@/store/utils'
 
 export type Model = {
   collectionId: string
@@ -12,4 +13,7 @@ export type Model = {
   name: string
   updated: string
   scale: number
+  statusToAnimation: Record<string, CharStatus>
+  defaultAnimation: string
+  defaultPosition: number[]
 }

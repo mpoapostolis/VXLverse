@@ -26,7 +26,9 @@ export function Gltf(props: {
 
   const store = useStore()
   useEffect(() => {
-    store.updateNode(props.uuid, { actions })
+    store.updateNode(props.uuid, {
+      actions,
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actions, props.uuid])
 

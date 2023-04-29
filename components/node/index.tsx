@@ -1,5 +1,5 @@
 import { Node, NodeType, useStore } from '@/store'
-import { TransformControls, useHelper } from '@react-three/drei'
+import { Html, TransformControls, useHelper } from '@react-three/drei'
 import { Suspense, useRef } from 'react'
 import { BoxHelper, Euler } from 'three'
 import { Gltf } from '../gltf'
@@ -73,7 +73,19 @@ export function Node(
               props.uuid && store.selectNode(props.uuid)
             }}
           >
-            <Suspense>
+            <Suspense
+              fallback={
+                <Html>
+                  <div
+                    className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-primary rounded-full"
+                    role="status"
+                    aria-label="loading"
+                  >
+                    <span className="sr-only">Loading...</span>
+                  </div>
+                </Html>
+              }
+            >
               {props.url && props.uuid && props.type === 'GLTF' && (
                 <Gltf key={props.url} animation={props.animation} uuid={props.uuid} url={props.url} />
               )}

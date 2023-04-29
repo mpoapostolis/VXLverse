@@ -10,7 +10,6 @@ export async function getModels(_req: NextApiRequest, res: NextApiResponse) {
   res.status(200).json(
     records.map((obj) => ({
       ...obj,
-
       url: `${process.env.PB_URL}api/files/${obj?.collectionId}/${obj?.id}/${obj?.file}`,
       img: `${process.env.PB_URL}api/files/${obj?.collectionId}/${obj?.id}/${obj?.img}`,
     })),

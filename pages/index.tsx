@@ -47,7 +47,7 @@ export default function Home() {
       >
         <div className="relative">
           <Controls />
-          <Canvas>
+          <Canvas camera={{ position: [10, 10, 10] }}>
             <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
             <GizmoHelper alignment="top-right" margin={[80, 80]}>
               <GizmoViewport axisColors={['#FF7F9A', '#C2EE00', '#73C5FF']} />
@@ -56,17 +56,17 @@ export default function Home() {
             {selectedScene?.equirect ? (
               <Env equirect={selectedScene.equirect} />
             ) : (
-              <color attach="background" args={[selectedScene?.color ?? '#999']} />
+              <color attach="background" args={[selectedScene?.color ?? '#000']} />
             )}
 
             {store.nodes
               ?.filter((e) => {
-                return e.scene === store.currentScene
+                return e.scene === store.currentScene || e.gameType === 'hero'
               })
               .map((node, idx) => (
                 <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
               ))}
-            <OrbitControls maxDistance={1000} position={[0, -5, 0]} makeDefault enableDamping={false} />
+            <OrbitControls maxDistance={1000} makeDefault enableDamping={false} />
             <Preload all />
           </Canvas>
           <picture className="absolute block lg:hidden   bottom-4 left-4 z-50">

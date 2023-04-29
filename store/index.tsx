@@ -1,3 +1,4 @@
+import { toast } from '@/components/ui/use-toast'
 import { Game } from '@/lib/games/types'
 import { AnimationAction, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
@@ -63,7 +64,7 @@ export type Quest = {
   status: 'incomplete' | 'completed'
 }
 
-export type GameType = 'hero' | 'monster' | 'npc' | 'item'
+export type GameType = 'hero' | 'monster' | 'npc' | 'item' | 'portal'
 export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
@@ -158,10 +159,18 @@ export const useStore = create<Store>((set) => ({
     set({
       ...defaultGameConf,
     }),
-  deleteNode: () =>
+  deleteNode: () => {
+    const hero = useStore.getState().nodes.find((n) => n.gameType === 'hero')
+    if (hero)
+      return toast({
+        variant: 'destructive',
+        title: 'Hero cannot be delete',
+        description: 'You can change the hero 3d model in the settings tab',
+      })
     set((state) => ({
       nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
-    })),
+    }))
+  },
 
   deleteScene: () =>
     set((state) => {
