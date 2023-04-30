@@ -128,21 +128,7 @@ export default function Home() {
         <title>VXLverse</title>
       </Head>
       <HelpModal />
-      <video
-        autoPlay
-        muted
-        onEnded={(e) => {
-          e.currentTarget.className = 'hidden'
-        }}
-        className="absolute top-0 left-0 w-full h-full object-cover z-50"
-      >
-        <source
-          src="https://admin.vxlverse.com/api/files/0n6p62xtlxvyuk8/fcrguwi3qkpn8ie/logo_8CIsGhj0he.webm"
-          type="video/webm"
-        />
-      </video>
-
-      <Canvas camera={{ position: [0, 15, -15] }}>
+      <Canvas>
         <fog attach="fog" args={[selectedScene?.color ?? '#000', 0, 120]} />
         <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE * 4, GRID_SIZE * 4]} />
         {selectedScene?.equirect ? (

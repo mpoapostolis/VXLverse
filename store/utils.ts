@@ -161,7 +161,7 @@ initDb().then(async (s) => {
     user: store?.user,
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
-    inventory: store.inventory,
+    inventory: store?.inventory ?? [],
     selectedNode: undefined,
     currentScene: scenes?.at(0)?.uuid,
   })
