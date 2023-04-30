@@ -2,7 +2,7 @@ import { saveAs } from 'file-saver'
 import { openDB } from 'idb'
 import JSZip from 'jszip'
 import { Mesh } from 'three'
-import { Node, Scene, Store, User, useStore } from '.'
+import { Inventory, Node, Scene, Store, User, useStore } from '.'
 
 const defaultNodes = (
   [
@@ -149,6 +149,7 @@ initDb().then(async (s) => {
     user: User
     nodes: Node[]
     scenes: Scene[]
+    inventory: Inventory
   }[]
 
   const scenes =
@@ -160,7 +161,7 @@ initDb().then(async (s) => {
     user: store?.user,
     nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
     scenes,
-
+    inventory: store.inventory,
     selectedNode: undefined,
     currentScene: scenes?.at(0)?.uuid,
   })

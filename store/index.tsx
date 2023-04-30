@@ -96,8 +96,8 @@ export type Scene = {
   blob?: Blob
 }
 
-type InventoryItem = string
-type Inventory = InventoryItem[]
+export type InventoryItem = string
+export type Inventory = InventoryItem[]
 
 type Dialogue = {
   dialogue?: string
@@ -242,5 +242,5 @@ export const useStore = create<Store>((set) => ({
 useStore?.subscribe(async (state) => {
   const db = await initDb()
   const nodes = state.nodes.map(meshToJson)
-  db.put('store', { user: state.user, nodes, scenes: state.scenes }, 0)
+  db.put('store', { user: state.user, nodes, inventory: state.inventory, scenes: state.scenes }, 0)
 })
