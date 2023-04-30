@@ -33,7 +33,7 @@ export const defaultGameConf: Partial<Store> = {
 }
 
 export async function initDb() {
-  return openDB('vxlverse', 1, {
+  return openDB('vxlverse', 1.1, {
     upgrade(db) {
       db.createObjectStore('store', {
         autoIncrement: true,
