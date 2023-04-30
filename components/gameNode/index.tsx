@@ -54,10 +54,11 @@ export function GameNode(props: Partial<Node>) {
   const invHas = (item: string) => store.inventory.includes(item)
   const isCollected = store.inventory.includes(props.uuid ?? '')
   const doIHaveTheReqItems = props.showWhenInventoryHas?.every(invHas) ?? true
+  const isVisible = !isCollected && doIHaveTheReqItems
 
   return (
     <mesh
-      visible={!isCollected && doIHaveTheReqItems}
+      visible={isVisible}
       ref={ref}
       type={props.gameType}
       position={props.position ?? [0, 0, 0]}
@@ -67,6 +68,8 @@ export function GameNode(props: Partial<Node>) {
       <Box
         onClick={() => {
           if (!props.uuid) return
+          if (!isVisible) return
+
           const doIHaveInteract = Object.entries(props.statusToAnimation ?? {}).find(
             ([, status]) => status === 'interact',
           )
