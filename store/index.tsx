@@ -117,6 +117,7 @@ export type Store = {
   inventory: Inventory
   addToInventory: (item: InventoryItem) => void
   removeFromInventory: (item: InventoryItem) => void
+  clearInventory: () => void
 
   dialogue?: Dialogue
   setDialogue: (dialogue?: Dialogue) => void
@@ -155,6 +156,8 @@ export const useStore = create<Store>((set) => ({
     set((state) => ({
       inventory: state.inventory.filter((i) => i !== item),
     })),
+
+  clearInventory: () => set({ inventory: [] }),
 
   resetScene: () =>
     set((s) => {

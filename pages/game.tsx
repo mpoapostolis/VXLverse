@@ -41,7 +41,10 @@ function Orbit() {
   const { data: game } = useGame()
 
   useEffect(() => {
-    if (game) store.setGame(game)
+    if (game) {
+      store.clearInventory()
+      store.setGame(game)
+    }
   }, [game])
 
   useEffect(() => {
@@ -189,6 +192,7 @@ export default function Home() {
           <Preload all />
         </Suspense>
       </Canvas>
+
       <picture className="fixed top-4 left-4 z-50">
         <img className="w-16 h-16" src="/logo.svg" alt="" />
       </picture>
