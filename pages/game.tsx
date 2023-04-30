@@ -84,7 +84,7 @@ function Orbit() {
     <OrbitControls
       target={hero?.position}
       enablePan={false}
-      maxDistance={30.1}
+      maxDistance={60.1}
       minDistance={4}
       position={[0, -5, 0]}
       makeDefault
