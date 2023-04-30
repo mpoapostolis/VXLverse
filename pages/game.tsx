@@ -3,13 +3,16 @@ import { GameNode } from '@/components/gameNode'
 import { HelpModal } from '@/components/helpModal'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
+import { Label } from '@/components/ui/label'
+import { Progress } from '@/components/ui/progress'
 import { useGame } from '@/lib/games/queries'
+import { cn } from '@/lib/utils'
 import { GRID_SIZE, useStore } from '@/store'
-import { Environment, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
+import { Environment, OrbitControls, Plane, Preload, useProgress, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
 function Env(props: { equirect: string }) {
@@ -87,6 +90,14 @@ function Orbit() {
   )
 }
 
+export function CustomLoader(props: { setProgress: (progress: number) => void }) {
+  const { progress } = useProgress()
+  useEffect(() => {
+    props.setProgress(progress)
+  }, [progress, props])
+  return null
+}
+
 export default function Home() {
   const store = useStore()
 
@@ -121,13 +132,25 @@ export default function Home() {
     }
   }, [])
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
-
+  const { progress } = useProgress()
   return (
     <main className="relative h-screen overflow-hidden">
       <Head>
         <title>VXLverse</title>
       </Head>
       <HelpModal />
+      <div
+        className={cn(' h-screen bg-black bg-opacity-50 w-screen grid place-items-center', {
+          hidden: progress === 100,
+        })}
+      >
+        <div className="w-full h-full  flex justify-center items-center">
+          <div className="container flex justify-center items-center flex-col mx-auto ">
+            <Label className="text-lg mb-2 font-bold">Loading {progress.toFixed(0)}%</Label>
+            <Progress value={progress} className="w-[50%]" />
+          </div>
+        </div>
+      </div>
       <video
         autoPlay
         muted
@@ -142,27 +165,29 @@ export default function Home() {
         />
       </video>
 
-      <Canvas camera={{ position: [0, 15, -15] }}>
-        <fog attach="fog" args={[selectedScene?.color ?? '#000', 0, 120]} />
-        <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE * 4, GRID_SIZE * 4]} />
-        {selectedScene?.equirect ? (
-          <Env equirect={selectedScene.equirect} />
-        ) : (
-          <color attach="background" args={[selectedScene?.color ?? '#999']} />
-        )}
-
-        {store.nodes.map((node, idx) =>
-          lights.includes(node.type) ? (
-            <mesh key={idx} position={node.position}>
-              <Light type={node?.type ?? 'DirectionalLight'} />
-            </mesh>
+      <Canvas className="w-full h-full" camera={{ position: [0, 15, -15] }}>
+        <Suspense>
+          <fog attach="fog" args={[selectedScene?.color ?? '#000', 0, 120]} />
+          <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE * 4, GRID_SIZE * 4]} />
+          {selectedScene?.equirect ? (
+            <Env equirect={selectedScene.equirect} />
           ) : (
-            <GameNode key={idx} {...node} />
-          ),
-        )}
-        <Plane args={[GRID_SIZE * 4, GRID_SIZE * 4]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
-        <Orbit />
-        <Preload all />
+            <color attach="background" args={[selectedScene?.color ?? '#999']} />
+          )}
+
+          {store.nodes.map((node, idx) =>
+            lights.includes(node.type) ? (
+              <mesh key={idx} position={node.position}>
+                <Light type={node?.type ?? 'DirectionalLight'} />
+              </mesh>
+            ) : (
+              <GameNode key={idx} {...node} />
+            ),
+          )}
+          <Plane args={[GRID_SIZE * 4, GRID_SIZE * 4]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
+          <Orbit />
+          <Preload all />
+        </Suspense>
       </Canvas>
       <picture className="fixed top-4 left-4 z-50">
         <img className="w-16 h-16" src="/logo.svg" alt="" />
