@@ -47,7 +47,8 @@ export function Quest() {
                   updateQuest({ ...obj, initialDialog: evt.target.value })
                 }}
                 rows={4}
-                className="flex w-full  border  bg-input pl-2.5 border-black border-opacity-20  text-xs ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                value={obj.initialDialog}
+                className="flex w-full  border  bg-input py-2.5 pl-2.5 border-black border-opacity-20  text-xs ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
 
               <Label className=" w-full text-xs font-medium">Required item to complete</Label>
@@ -73,7 +74,7 @@ export function Quest() {
                 disabled={!obj.requiredItemToComplete}
                 value={obj.questCompleteDialog}
                 rows={4}
-                className="flex w-full  border  bg-input pl-2.5 border-black border-opacity-20  text-xs ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex w-full  border  bg-input py-2.5 pl-2.5 border-black border-opacity-20  text-xs ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               />
 
               <Label className=" w-full text-xs font-medium">Reward</Label>

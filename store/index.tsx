@@ -96,6 +96,14 @@ export type Scene = {
   blob?: Blob
 }
 
+type InventoryItem = string
+type Inventory = InventoryItem[]
+
+type Dialogue = {
+  dialogue?: string
+  src?: string
+}
+
 export type Mode = 'translate' | 'rotate' | 'scale'
 export type Store = {
   reset: () => void
@@ -105,6 +113,13 @@ export type Store = {
 
   setMode: (mode: Mode) => void
   mode: Mode
+
+  inventory: Inventory
+  addToInventory: (item: InventoryItem) => void
+  removeFromInventory: (item: InventoryItem) => void
+
+  dialogue?: Dialogue
+  setDialogue: (dialogue?: Dialogue) => void
 
   scenes: Scene[]
   currentScene?: string
@@ -128,6 +143,18 @@ export const useStore = create<Store>((set) => ({
 
   mode: 'translate',
   nodes: [],
+
+  setDialogue: (dialogue) => set({ dialogue }),
+
+  inventory: [],
+  addToInventory: (item) =>
+    set((state) => ({
+      inventory: [...state.inventory, item],
+    })),
+  removeFromInventory: (item) =>
+    set((state) => ({
+      inventory: state.inventory.filter((i) => i !== item),
+    })),
 
   resetScene: () =>
     set((s) => {

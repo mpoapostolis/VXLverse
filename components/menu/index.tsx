@@ -377,6 +377,7 @@ export function Menu() {
           </Link>
         </MenubarContent>
       </MenubarMenu>
+
       <MenubarMenu>
         <div className="flex w-full items-center  hover:bg-none h-full ">
           {store.user ? (

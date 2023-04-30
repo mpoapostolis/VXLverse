@@ -139,7 +139,7 @@ export default function Home() {
 
         {store.nodes.map((node, idx) =>
           lights.includes(node.type) ? (
-            <mesh key={node.uuid} position={node.position}>
+            <mesh key={idx} position={node.position}>
               <Light type={node?.type ?? 'DirectionalLight'} />
             </mesh>
           ) : (

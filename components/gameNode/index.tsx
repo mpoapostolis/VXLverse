@@ -51,8 +51,13 @@ export function GameNode(props: Partial<Node>) {
     ref.current.rotation.set(rotation.x, rotation.y, rotation.z)
   }, [props.rotation])
 
+  const invHas = (item: string) => store.inventory.includes(item)
+  const isCollected = store.inventory.includes(props.uuid ?? '')
+  const doIHaveTheReqItems = props.showWhenInventoryHas?.every(invHas) ?? true
+
   return (
     <mesh
+      visible={!isCollected && doIHaveTheReqItems}
       ref={ref}
       type={props.gameType}
       position={props.position ?? [0, 0, 0]}
@@ -66,7 +71,26 @@ export function GameNode(props: Partial<Node>) {
             ([, status]) => status === 'interact',
           )
           if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
-          store.selectNode(props.uuid)
+          if (props.gameType === 'item') store.addToInventory(props.uuid)
+          if (props.quests) {
+            //   console.log('props.quests', props.quests)
+            const firstActiveQuest = props.quests.find((quest) => quest.status === 'incomplete')
+            if (firstActiveQuest) {
+              const isItCompleted = firstActiveQuest.requiredItemToComplete
+                ? invHas(firstActiveQuest.requiredItemToComplete ?? '')
+                : true
+
+              if (isItCompleted && firstActiveQuest.reward) store.addToInventory(firstActiveQuest.reward)
+
+              store.setDialogue({
+                src: props.img,
+                dialogue:
+                  isItCompleted && firstActiveQuest.questCompleteDialog
+                    ? firstActiveQuest.questCompleteDialog
+                    : firstActiveQuest.initialDialog,
+              })
+            }
+          }
         }}
         args={
           size

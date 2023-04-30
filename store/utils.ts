@@ -60,6 +60,7 @@ export function meshToJson(mesh: Partial<Node>) {
     quests: mesh.quests,
     img: mesh.img,
     showWhenInventoryHas: mesh.showWhenInventoryHas,
+    uuid: mesh.uuid,
   }
 }
 
@@ -88,6 +89,7 @@ export function jsonToMesh(json: Node) {
   mesh.type = json.type
   mesh.showWhenInventoryHas = json.showWhenInventoryHas
   mesh.img = json.img
+  mesh.uuid = json.uuid
   return mesh
 }
 
