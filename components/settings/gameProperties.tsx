@@ -39,6 +39,7 @@ export function GameProperties() {
           multiple
           value={selected?.showWhenInventoryHas}
           size="sm"
+          emptyMessage="There are currently no items or quest rewards available in the scene for selection. \n Please create some items or rewards first to proceed."
           onChange={(val) => {
             if (!selected?.uuid || !val) return
             store.updateNode(selected.uuid, {

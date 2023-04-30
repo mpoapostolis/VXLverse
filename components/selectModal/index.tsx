@@ -11,6 +11,7 @@ import { Separator } from '../ui/separator'
 
 export function SelectModal(props: {
   size?: ButtonProps['size']
+  emptyMessage?: string
   children?: React.ReactNode
   multiple?: boolean
   options?: {
@@ -32,7 +33,6 @@ export function SelectModal(props: {
           if (!props.value) return false
           return opt.value === props.value || opt.src === props.value
         })?.label
-  console.log(props.value, props.options)
   const [searchTerm, setSearchTerm] = useState('')
   return (
     <Dialog onOpenChange={() => setSearchTerm('')}>
@@ -62,6 +62,17 @@ export function SelectModal(props: {
         </DialogHeader>
         <Separator />
         <div className="grid ">
+          {props.options?.length === 0 && (
+            <div className="text-center h-20 w-full grid place-items-center text-muted text-sm">
+              <div>
+                {props.emptyMessage?.split('\\n').map((str, i) => (
+                  <div key={i} className=" text-center ">
+                    {str}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <div className="grid xl:grid-cols-4 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
             {props.options
               ?.filter((opt) => {
