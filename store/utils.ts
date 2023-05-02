@@ -49,7 +49,7 @@ export function meshToJson(mesh: Partial<Node>) {
     rotation: mesh.rotation?.toArray(),
     scale: mesh.scale?.toArray(),
     blob: mesh.blob,
-    gravity: mesh.gravity,
+    physics: mesh.physics,
     url: mesh.blob ? undefined : mesh.url,
     animation: mesh.animation,
     color: mesh.color,
@@ -76,7 +76,7 @@ export function jsonToMesh(json: Node) {
   mesh.rotation?.set(e3[0], e3[1], e3[2])
   mesh.scale?.set(s3[0], s3[1], s3[2])
   mesh.type = json.type
-  mesh.gravity = json.gravity
+  mesh.physics = json.physics
   mesh.quests = json.quests
   mesh.blob = json.blob
   mesh.scene = json.scene

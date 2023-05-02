@@ -1,5 +1,6 @@
 import { toast } from '@/components/ui/use-toast'
 import { Game } from '@/lib/games/types'
+import { RigidBodyTypeString } from '@react-three/rapier'
 import { AnimationAction, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
 import { CharStatus, defaultGameConf, initDb, jsonToMesh, meshToJson } from './utils'
@@ -69,7 +70,6 @@ export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
   goTo?: Vector3
-  gravity?: 'on' | 'off'
   velocity?: number
   blob?: Blob
   animation?: string
@@ -79,6 +79,7 @@ export type Node = Partial<Mesh> & {
   status: CharStatus
   gameType?: GameType
   img?: string
+  physics?: RigidBodyTypeString
   actions?: {
     [x: string]: AnimationAction | null
   }

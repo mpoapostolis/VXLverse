@@ -2,7 +2,6 @@ import { useStore } from '@/store'
 import { CharStatus } from '@/store/utils'
 import { useAnimations, useGLTF } from '@react-three/drei'
 import { useEffect, useMemo } from 'react'
-import { Box3, Vector3 } from 'three'
 import { SkeletonUtils } from 'three-stdlib'
 
 // same url multiple GLTF instances
@@ -18,7 +17,6 @@ export function Gltf(props: {
   uuid: string
   url: string
   animation?: string
-  onLoad?: (sizes: { x: number; y: number; z: number }) => void
 }) {
   const { scene, animations } = useGltfMemo(props.url)
   SkeletonUtils.clone(scene)
@@ -31,14 +29,6 @@ export function Gltf(props: {
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actions, props.uuid])
-
-  // Calculate and log the dimensions of the primitive
-  useEffect(() => {
-    const boundingBox = new Box3().setFromObject(scene)
-    const size = new Vector3()
-    boundingBox.getSize(size)
-    props.onLoad?.(size)
-  }, [scene])
 
   useEffect(() => {
     if (props.status === 'interact') {
@@ -56,7 +46,6 @@ export function Gltf(props: {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.status, actions])
 
-  //
   useEffect(() => {
     const animation = Object.entries(props.statusToAnimation ?? {}).find(
       ([, status]) => status === (props?.status || 'idle'),
