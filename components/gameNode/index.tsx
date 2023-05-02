@@ -65,7 +65,39 @@ export function GameNode(props: Partial<Node>) {
         position={props.position ?? [0, 0, 0]}
         type={props.gameType === 'hero' ? 'kinematicPosition' : props.physics ?? 'fixed'}
       >
-        <mesh type={props.gameType} visible={isVisible} ref={ref}>
+        <mesh
+          onClick={() => {
+            if (!props.uuid || !isVisible) return
+            const doIHaveInteract = Object.entries(props.statusToAnimation ?? {}).find(
+              ([, status]) => status === 'interact',
+            )
+
+            if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
+            if (props.gameType === 'item') store.addToInventory(props.uuid)
+            if (props.quests) {
+              //   console.log('props.quests', props.quests)
+              const firstActiveQuest = props.quests.find((quest) => quest.status === 'incomplete')
+              if (firstActiveQuest) {
+                const isItCompleted = firstActiveQuest.requiredItemToComplete
+                  ? invHas(firstActiveQuest.requiredItemToComplete ?? '')
+                  : true
+
+                if (isItCompleted && firstActiveQuest.reward) store.addToInventory(firstActiveQuest.reward)
+
+                store.setDialogue({
+                  src: props.img,
+                  dialogue:
+                    isItCompleted && firstActiveQuest.questCompleteDialog
+                      ? firstActiveQuest.questCompleteDialog
+                      : firstActiveQuest.initialDialog,
+                })
+              }
+            }
+          }}
+          type={props.gameType}
+          visible={isVisible}
+          ref={ref}
+        >
           <meshStandardMaterial color={'green'} wireframe />
           {props.url && props.uuid && props.type === 'GLTF' && (
             <Gltf statusToAnimation={props.statusToAnimation} status={props.status} uuid={props.uuid} url={props.url} />
