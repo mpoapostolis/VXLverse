@@ -2,7 +2,7 @@ import { Node, useStore } from '@/store'
 import { useFrame } from '@react-three/fiber'
 import { RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
 import { Suspense, useEffect, useRef } from 'react'
-import { Euler, Mesh, Vector3 } from 'three'
+import { Euler, Mesh, Quaternion, Vector3 } from 'three'
 import { Gltf } from '../gltf'
 import { MeshGeometry } from '../meshGeometry'
 
@@ -21,8 +21,12 @@ export function GameNode(props: Partial<Node>) {
       if (rb.isMoving()) store.updateNode(props.uuid ?? '', { status: 'idle' })
       return rb.setNextKinematicTranslation({ x: currentPosition.x, y: currentPosition.y, z: currentPosition.z })
     }
+    const direction = targetPosition.clone().sub(currentPosition).normalize()
+    const yaw = Math.atan2(direction.x, direction.z)
+    const quaternion = new Quaternion().setFromEuler(new Euler(0, yaw, 0, 'YXZ'))
 
-    ref.current?.lookAt(targetPosition.x, props.position?.y ?? 0, targetPosition.z)
+    rb?.setRotation(quaternion, true)
+
     const velocity = targetPosition
       .clone()
       .sub(currentPosition)
@@ -35,7 +39,6 @@ export function GameNode(props: Partial<Node>) {
       y: props.position?.y ?? 0,
       z: newPosition.z,
     })
-    if (ref.current) ref.current.position.set(newPosition.x, props.position?.y ?? 0, newPosition.z)
   })
 
   useEffect(() => {
