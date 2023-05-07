@@ -1,3 +1,5 @@
+'use client'
+
 import { toast } from '@/components/ui/use-toast'
 import { Game } from '@/lib/games/types'
 import { RigidBodyTypeString } from '@react-three/rapier'
@@ -246,5 +248,5 @@ export const useStore = create<Store>((set) => ({
 useStore?.subscribe(async (state) => {
   const db = await initDb()
   const nodes = state.nodes.map(meshToJson)
-  db.put('store', { user: state.user, nodes, inventory: state.inventory, scenes: state.scenes }, 0)
+  db?.put('store', { user: state.user, nodes, inventory: state.inventory, scenes: state.scenes }, 0)
 })

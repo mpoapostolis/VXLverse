@@ -1,3 +1,5 @@
+'use client'
+
 import { saveAs } from 'file-saver'
 import { openDB } from 'idb'
 import JSZip from 'jszip'
@@ -33,13 +35,23 @@ export const defaultGameConf: Partial<Store> = {
 }
 
 export async function initDb() {
-  return openDB('vxlverse', 1.2, {
-    upgrade(db) {
-      db.createObjectStore('store', {
-        autoIncrement: true,
+  try {
+    if (typeof window !== 'undefined') {
+      if (!window?.indexedDB) {
+        console.log('Your browser does not support IndexedDB')
+        throw new Error('Your browser does not support IndexedDB')
+      }
+      return openDB('vxlverse', 1.2, {
+        upgrade(db) {
+          db.createObjectStore('store', {
+            autoIncrement: true,
+          })
+        },
       })
-    },
-  })
+    }
+  } catch (error) {
+    Promise.reject(error)
+  }
 }
 
 export function meshToJson(mesh: Partial<Node>) {
@@ -145,7 +157,8 @@ export async function importGameZip(file: File) {
 }
 
 initDb().then(async (s) => {
-  const [store] = (await s.getAll('store')) as {
+  if (!s) return
+  const [store] = (await s?.getAll('store')) as {
     user: User
     nodes: Node[]
     scenes: Scene[]
