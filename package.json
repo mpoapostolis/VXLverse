@@ -62,6 +62,7 @@
   "devDependencies": {
     "@types/earcut": "^2.1.1",
     "@types/file-saver": "^2.0.5",
+    "@types/three": "^0.152.0",
     "@vercel/analytics": "^1.0.1",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.21",
