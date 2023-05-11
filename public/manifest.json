@@ -2,7 +2,7 @@
   "name": "VXLverse - Empower Your Creativity: Create and Play RPG Games with VXLverse",
   "short_name": "VXLverse",
   "description": "VXLverse is a revolutionary online platform designed to empower users to both create and play a wide variety of RPG games. Our mission is to provide an interactive and engaging space for game enthusiasts, offering them the opportunity to showcase their creativity and be rewarded for it.",
-  "start_url": "https://www.vxlverse.com/",
+  "start_url": "/",
   "icons": [
     {
       "src": "/icons/192x192.png",
@@ -33,7 +33,6 @@
       "purpose": "any"
     }
   ],
-  "scope":"/",
   "theme_color": "#000000",
   "background_color": "#000000",
   "display": "standalone",
