@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Menubar,
   MenubarContent,
@@ -275,9 +277,9 @@ export function Menu() {
             <MenubarSub>
               <MenubarSubTrigger>Find Node</MenubarSubTrigger>
               <MenubarSubContent>
-                {store.nodes.map((node) => (
+                {store.nodes.map((node, idx) => (
                   <MenubarItem
-                    key={node.uuid}
+                    key={`${node.uuid}${idx}`}
                     onClick={() => {
                       store.selectNode(node.uuid)
                     }}

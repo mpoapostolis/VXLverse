@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import Head from 'next/head'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
 
@@ -37,9 +36,6 @@ export default function Home() {
   const selected = store.nodes?.find((e) => e.uuid === store.selectedNode)
   return (
     <main className="h-screen overflow-hidden">
-      <Head>
-        <title>VXLverse</title>
-      </Head>
       <Menu />
 
       <div
