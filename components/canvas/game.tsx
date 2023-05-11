@@ -10,16 +10,14 @@ import { GRID_SIZE, useStore } from '@/store'
 import { Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { CuboidCollider, Physics, useRapier } from '@react-three/rapier'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { Suspense, useEffect } from 'react'
-import { EquirectangularReflectionMapping, sRGBEncoding } from 'three'
+import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
 
 function Env(props: { equirect: string }) {
   const texture = useTexture(props.equirect ?? '')
   // texture equriectangular
   texture.mapping = EquirectangularReflectionMapping
-  texture.encoding = sRGBEncoding
+  texture.colorSpace = SRGBColorSpace
   return <Environment background map={texture} />
 }
 
@@ -45,6 +43,7 @@ function Orbit() {
       store.clearInventory()
       store.setGame(game)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game])
 
   useEffect(() => {
@@ -93,7 +92,7 @@ function Orbit() {
   )
 }
 
-export default function GameCanvas() {
+export function GameCanvas(props: { id?: string }) {
   const store = useStore()
 
   function cb(shiftKey: boolean) {
@@ -103,9 +102,6 @@ export default function GameCanvas() {
     if (!hero?.uuid || hero.status === 'idle') return
     store.updateNode(hero.uuid, { status: shiftKey ? 'run' : 'walk' })
   }
-
-  const router = useRouter()
-  const id = router.query.id
 
   useEffect(() => {
     document.addEventListener('keydown', (e) => {
@@ -130,12 +126,9 @@ export default function GameCanvas() {
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
     <main className="relative h-screen overflow-hidden">
-      <Head>
-        <title>VXLverse</title>
-      </Head>
       <HelpModal />
 
-      {id && (
+      {props.id && (
         <video
           autoPlay
           muted

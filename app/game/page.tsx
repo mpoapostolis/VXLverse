@@ -1,4 +1,4 @@
-import GameCanvas from '@/components/canvas/game'
+import { GameCanvas } from '@/components/canvas/game'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -8,6 +8,6 @@ export const metadata: Metadata = {
   keywords: 'Game Development, RPG, VXLverse, 3D Modeling, Game Design, IndieDev, Gaming',
 }
 
-export default function Page() {
-  return <GameCanvas />
+export default function Page(props: { params: {}; searchParams: { id?: string } }) {
+  return <GameCanvas id={props.searchParams.id} />
 }
