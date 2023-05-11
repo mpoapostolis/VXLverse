@@ -125,7 +125,7 @@ export function Menu() {
   }
   const { toast } = useToast()
   function isInPWA() {
-    if (typeof window !== 'undefined' ? window : null) return false
+    if (typeof window === 'undefined') return false
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches
     const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches
     const isMinimalUI = window.matchMedia('(display-mode: minimal-ui)').matches
