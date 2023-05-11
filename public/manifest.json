@@ -35,6 +35,8 @@
   ],
   "theme_color": "#000000",
   "background_color": "#000000",
-  "display": "standalone",
+  "display":"standalone",
+  "scope": "/",
+  
   "orientation": "portrait"
 }
