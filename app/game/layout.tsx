@@ -1,5 +1,4 @@
 import { Analytics } from '@/components/analytics'
-import { Toaster } from '@/components/ui/toaster'
 import '@/styles/globals.css'
 import { Metadata } from 'next'
 import Head from 'next/head'
@@ -21,7 +20,6 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       <body className="overflow-hidden w-screen h-screen">
         <Analytics />
         {props.children}
-        <Toaster />
       </body>
     </html>
   )
