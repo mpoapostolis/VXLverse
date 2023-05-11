@@ -109,7 +109,7 @@ export function Menu() {
 
   useEffect(() => {
     if (!doIHaveHero) {
-      addGLTF(models?.find((m) => m.type === 'hero'))
+      addGLTF(models?.find((m) => m.name === 'Hero'))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [doIHaveHero, models])
