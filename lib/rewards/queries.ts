@@ -1,3 +1,4 @@
+'use client'
 import { AxiosError } from 'axios'
 import useSWR from 'swr'
 import { fetcher } from '../utils'

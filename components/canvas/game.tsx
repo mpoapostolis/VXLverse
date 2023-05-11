@@ -1,3 +1,5 @@
+'use client'
+
 import { Dialogue } from '@/components/dialogue'
 import { GameNode } from '@/components/gameNode'
 import { HelpModal } from '@/components/helpModal'
@@ -91,7 +93,7 @@ function Orbit() {
   )
 }
 
-export default function Home() {
+export default function GameCanvas() {
   const store = useStore()
 
   function cb(shiftKey: boolean) {

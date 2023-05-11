@@ -1,3 +1,5 @@
+'use client'
+
 import { Animations } from '../settings/animations'
 import { GameProperties } from '../settings/gameProperties'
 import { GlbModel } from '../settings/glbModel'

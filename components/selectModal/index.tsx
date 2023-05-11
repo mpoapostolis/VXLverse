@@ -1,3 +1,5 @@
+'use client'
+
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
 import { ContextMenu } from '@radix-ui/react-context-menu'

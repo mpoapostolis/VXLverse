@@ -1,3 +1,5 @@
+'use client'
+
 import { AxiosError } from 'axios'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'

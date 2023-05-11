@@ -1,9 +1,7 @@
 'use client'
 
 import { Controls } from '@/components/controls'
-import Editor from '@/components/editor'
 import { Node } from '@/components/node'
-import { cn } from '@/lib/utils'
 import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
@@ -35,11 +33,7 @@ export function EditorCanvas() {
 
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
-    <div
-      className={cn(
-        'grid h-full w-screen transition duration-150 lg:grid-cols-[1fr_25vw] xl:grid-cols-[1fr_20vw]  grid-rows-2 gap-4 lg:gap-0 lg:grid-rows-1',
-      )}
-    >
+    <>
       <div className="relative">
         <Controls />
         <Canvas camera={{ position: [10, 10, 10] }}>
@@ -68,10 +62,6 @@ export function EditorCanvas() {
           <img className="w-16 h-16" src="/logo.svg" alt="" />
         </picture>
       </div>
-      <Editor />
-      <picture className="hidden lg:block absolute bottom-4 left-4 z-50">
-        <img className="w-16 h-16" src="/logo.svg" alt="" />
-      </picture>
-    </div>
+    </>
   )
 }
