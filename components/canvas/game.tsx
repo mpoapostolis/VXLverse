@@ -21,7 +21,7 @@ function Env(props: { equirect: string }) {
   return <Environment background map={texture} />
 }
 
-function Orbit() {
+function Orbit(props: { id?: string }) {
   const t = useThree()
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
@@ -36,7 +36,7 @@ function Orbit() {
         status: 'walk',
       })
   }
-  const { data: game } = useGame()
+  const { data: game } = useGame(props.id)
 
   useEffect(() => {
     if (game) {
@@ -167,7 +167,7 @@ export function GameCanvas(props: { id?: string }) {
 
             <Plane args={[GRID_SIZE * 4, GRID_SIZE * 4]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
           </Physics>
-          <Orbit />
+          <Orbit id={props.id} />
           <Preload all />
         </Suspense>
       </Canvas>
