@@ -124,7 +124,14 @@ export function Menu() {
     store.setUser(authData?.meta?.rawUser as User)
   }
   const { toast } = useToast()
+  function isInPWA() {
+    if (typeof window !== 'undefined' ? window : null) return false
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+    const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches
+    const isMinimalUI = window.matchMedia('(display-mode: minimal-ui)').matches
 
+    return isStandalone || isFullscreen || isMinimalUI
+  }
   return (
     <Menubar>
       <MenubarMenu>
@@ -138,7 +145,7 @@ export function Menu() {
           </MenubarItem>
           <MenubarSeparator />
 
-          <Link href={'/game'} target="__blank">
+          <Link href={'/game'} target={isInPWA() ? '_self' : '_blank'}>
             <MenubarItem>
               Play{' '}
               <MenubarShortcut>
