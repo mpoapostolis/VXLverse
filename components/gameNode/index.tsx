@@ -78,7 +78,6 @@ export function GameNode(props: Partial<Node>) {
             if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
             if (props.gameType === 'item') store.addToInventory(props.uuid)
             if (props.quests) {
-              //   console.log('props.quests', props.quests)
               const firstActiveQuest = props.quests.find((quest) => quest.status === 'incomplete')
               if (firstActiveQuest) {
                 const isItCompleted = firstActiveQuest.requiredItemToComplete

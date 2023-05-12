@@ -15,7 +15,6 @@ export function Physics() {
         <Label className=" w-full ">type</Label>
         <Select<RigidBodyTypeString>
           onChange={(val) => {
-            console.log(val)
             if (!selected?.uuid) return
             store.updateNode(selected.uuid, { physics: val })
           }}

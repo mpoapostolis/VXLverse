@@ -16,7 +16,7 @@ export function Xyz(props: { onChange: (val: number[]) => void; label: string; v
             props.onChange(values)
           }}
           type="number"
-          value={Number(value.toFixed(2))}
+          value={Number(value?.toFixed(2))}
         />
       ))}
     </div>

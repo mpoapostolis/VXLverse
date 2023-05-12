@@ -16,9 +16,10 @@ import {
 } from '@/components/ui/menubar'
 import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
-import { Node, User, gameTypes, useStore } from '@/store'
+import { Node, User, useStore } from '@/store'
 import { exportGame, importGameZip, meshToJson } from '@/store/utils'
 
+import { ContextMenu } from '@radix-ui/react-context-menu'
 import {
   CheckCircledIcon,
   DownloadIcon,
@@ -35,11 +36,11 @@ import {
 import axios from 'axios'
 import Link from 'next/link'
 import PocketBase from 'pocketbase'
-import { useEffect } from 'react'
 import { Mesh, Vector3 } from 'three'
 import { Account } from '../account'
 import { Indicator } from '../indicator'
 import { SceneModal } from '../sceneModal'
+import { SelectHero } from '../selectHero'
 import { Label } from '../ui/label'
 import { useToast } from '../ui/use-toast'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
@@ -107,12 +108,17 @@ export function Menu() {
 
   const doIHaveHero = store.nodes?.some((n) => n.gameType === 'hero')
 
-  useEffect(() => {
-    if (!doIHaveHero) {
-      addGLTF(models?.find((m) => m.name === 'Hero'))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [doIHaveHero, models])
+  // useEffect(() => {
+  //   if (!doIHaveHero) {
+  //     const firstChar = models?.find((m) => m.type === 'characters')
+  //     if (firstChar)
+  //       addGLTF({
+  //         ...firstChar,
+  //         type: 'hero',
+  //       })
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [doIHaveHero, models])
 
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
 
@@ -227,24 +233,14 @@ export function Menu() {
       <MenubarMenu>
         <MenubarTrigger>Nodes</MenubarTrigger>
         <MenubarContent>
+          <ContextMenu>
+            <SelectHero onChange={(id) => addGLTF(models?.find((m) => m.id === id))}>
+              <div className="relative w-full   cursor-default hover:bg-secondary hover:text-secondary-foreground bg-opacity-10 select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none ">
+                RPG Entity
+              </div>
+            </SelectHero>
+          </ContextMenu>
           <MenubarSub>
-            <MenubarSubTrigger>RPG Entity</MenubarSubTrigger>
-            <MenubarSubContent>
-              {gameTypes.map((item) => (
-                <MenubarItem
-                  disabled={item === 'Hero' && doIHaveHero}
-                  key={item}
-                  onClick={() => {
-                    const node = models?.find((m) => m.type === item.toLowerCase())
-                    addGLTF(node)
-                  }}
-                  className="data-[highlighted]::to-mauve10 group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
-                >
-                  <Indicator classname="mr-2 capitalize" type={item} gameType="hero" />
-                  {item}
-                </MenubarItem>
-              ))}
-            </MenubarSubContent>
             <MenubarSub>
               <MenubarSubTrigger>Geometry</MenubarSubTrigger>
               <MenubarSubContent>

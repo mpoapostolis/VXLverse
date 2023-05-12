@@ -6,15 +6,27 @@ import JSZip from 'jszip'
 import { Mesh } from 'three'
 import { Inventory, Node, Scene, Store, User, useStore } from '.'
 
+const getUuid = () => {
+  const mesh = new Mesh()
+  return mesh.uuid
+}
 const defaultNodes = (
   [
     {
       name: 'DirectionalLight',
-      position: [2.3443115362954874, 0, 0.4895091354721197],
-      rotation: [0, 0, 0],
+      position: [-40, 20, 40],
+      rotation: [0, 0, 0, 'XYZ'],
       scale: [1, 1, 1],
-      type: 'DirectionalLight',
       scene: 'main',
+      type: 'DirectionalLight',
+    },
+    {
+      name: 'DirectionalLight',
+      position: [40, 20, -40],
+      rotation: [0, 0, 0, 'XYZ'],
+      scale: [1, 1, 1],
+      scene: 'main',
+      type: 'DirectionalLight',
     },
   ] as any[]
 ).map(jsonToMesh)
@@ -101,7 +113,8 @@ export function jsonToMesh(json: Node) {
   mesh.type = json.type
   mesh.showWhenInventoryHas = json.showWhenInventoryHas
   mesh.img = json.img
-  mesh.uuid = json.uuid
+  mesh.uuid = json.uuid ?? getUuid()
+
   return mesh
 }
 

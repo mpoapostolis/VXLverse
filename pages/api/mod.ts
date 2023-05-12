@@ -19,12 +19,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const files = await readdirSync('/home/tolis/Desktop/projects/vxlverse/public/models')
     files.map(async (file, idx) => {
       await sleep(idx * 200)
-      console.log(file + ' started')
       const formData = new FormData()
       // ls file
       const x = await readdirSync(`/home/tolis/Desktop/projects/vxlverse/public/models/${file}`)
       const thumb = x[2]
-      // console.log(files[0], thumb)
 
       const model = await axios.get(`http://localhost:3000/models/${file}/model.gltf`, {
         responseEncoding: 'binary',
@@ -55,7 +53,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }),
       res.status(200).json(files)
   } catch (error) {
-    console.log(error)
     res.status(500).json(error)
   }
 }

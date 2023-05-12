@@ -40,6 +40,7 @@
   /* make scroll smaller */
   ::-webkit-scrollbar {
     width: 0.5rem;
+    height: 4px;
   }
   /* Track */
   ::-webkit-scrollbar-track {

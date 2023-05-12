@@ -1,25 +1,29 @@
 'use client'
 
+import { Badge } from '@/components/ui/badge'
+import { Button, ButtonProps } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { MenubarShortcut } from '@/components/ui/menubar'
+import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
+import { gameTypes } from '@/store'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import { Label } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
 import { Fragment, useState } from 'react'
-import { Button, ButtonProps } from '../ui/button'
-import { Input } from '../ui/input'
-import { MenubarShortcut } from '../ui/menubar'
-import { Separator } from '../ui/separator'
 
 export function SelectModal(props: {
-  size?: ButtonProps['size']
   emptyMessage?: string
   children?: React.ReactNode
+  size?: ButtonProps['size']
+
   multiple?: boolean
   options?: {
     label: string
     value: string
     src: string
+    type?: string
   }[]
   onChange: (id?: string) => void
   value?: string | string[]
@@ -36,16 +40,19 @@ export function SelectModal(props: {
           return opt.value === props.value || opt.src === props.value
         })?.label
   const [searchTerm, setSearchTerm] = useState('')
+
   return (
     <Dialog onOpenChange={() => setSearchTerm('')}>
       <ContextMenu>
         <DialogTrigger asChild>
-          <Button className="w-full truncate" size={props.size}>
-            <span className="truncate">{label ?? 'Select'}</span>
-            <MenubarShortcut>
-              <ChevronDownIcon className="h-4 w-4 opacity-50" />
-            </MenubarShortcut>
-          </Button>
+          {props.children ?? (
+            <Button className="w-full truncate" size={props.size}>
+              <span className="truncate">{label ?? 'Select'}</span>
+              <MenubarShortcut>
+                <ChevronDownIcon className="h-4 w-4 opacity-50" />
+              </MenubarShortcut>
+            </Button>
+          )}
         </DialogTrigger>
       </ContextMenu>
       <DialogContent className="lg:w-[80vw] z-50 w-screen ">
@@ -63,47 +70,72 @@ export function SelectModal(props: {
           />
         </DialogHeader>
         <Separator />
-        <div className="grid ">
-          {props.options?.length === 0 && (
-            <div className="text-center h-20 w-full grid place-items-center text-muted text-sm">
-              <div>
-                {props.emptyMessage?.split('\\n').map((str, i) => (
-                  <div key={i} className=" text-center ">
-                    {str}
-                  </div>
-                ))}
+
+        <div className="grid lg:grid-cols-[200px_1fr]  gap-4">
+          <div className="lg:grid inline-flex gap-2 max-h-[75vh] overflow-auto pr-4  border-r">
+            {gameTypes.map((type, i) => (
+              <Button
+                variant="outline"
+                className={cn('text-xs  w-fit lg:w-full text-left', {
+                  'border-secondary': i === 0,
+                })}
+                key={type}
+              >
+                {type}
+              </Button>
+            ))}
+          </div>
+          <div className="grid place-items-start">
+            {props.options?.length === 0 && (
+              <div className="text-center h-20 w-full grid place-items-center text-muted text-sm">
+                <div>
+                  {props.emptyMessage?.split('\\n').map((str, i) => (
+                    <div key={i} className=" text-center ">
+                      {str}
+                    </div>
+                  ))}
+                </div>
               </div>
+            )}
+            <div className="grid  xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
+              {props.options
+                ?.filter((opt) => {
+                  if (!searchTerm) return true
+                  return opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+                })
+                ?.map((obj, i) => (
+                  <Comp key={obj.value}>
+                    <div
+                      onClick={() => {
+                        props.onChange(obj.value)
+                      }}
+                      className={cn('relative cursor-pointer duration-200  h-48')}
+                    >
+                      <picture>
+                        <img
+                          loading="lazy"
+                          src={obj.src ? `${obj.src}?thumb=190x190` : '/images/placeholder.png'}
+                          alt="preview"
+                          className="rounded-md w-full h-full object-scale-down bg-black "
+                        />
+                      </picture>
+                      <Label
+                        className={cn(
+                          'px-2 bg-opacity-60 flex items-center justify-center  absolute text-xs top-0 py-2 left-0 w-full bg-black ',
+                          {
+                            'border-2 border-secondary bg-black items-start bg-opacity-70 h-full w-full ':
+                              props.value?.includes(obj.value),
+                          },
+                        )}
+                      >
+                        <Badge variant="secondary" className="w-fit">
+                          {obj.label}
+                        </Badge>
+                      </Label>
+                    </div>
+                  </Comp>
+                ))}
             </div>
-          )}
-          <div className="grid xl:grid-cols-4 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
-            {props.options
-              ?.filter((opt) => {
-                if (!searchTerm) return true
-                return opt.label.toLowerCase().includes(searchTerm.toLowerCase())
-              })
-              ?.map((obj, i) => (
-                <Comp key={i}>
-                  <div
-                    onClick={() => {
-                      props.onChange(obj.value)
-                    }}
-                    className={cn('relative h-48 hover:border-2 border-secondary', {
-                      'border-2 border-dashed border-secondary': props.value?.includes(obj.value),
-                    })}
-                  >
-                    <picture>
-                      <img
-                        src={obj.src ? obj.src : '/images/placeholder.png'}
-                        alt="preview"
-                        className="rounded-md w-full h-full object-scale-down bg-black "
-                      />
-                    </picture>
-                    <Label className="pl-2 bg-opacity-60 absolute text-xs top-0 py-2 left-0 w-full bg-black ">
-                      {obj.label}
-                    </Label>
-                  </div>
-                </Comp>
-              ))}
           </div>
         </div>
       </DialogContent>
