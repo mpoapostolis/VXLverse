@@ -13,7 +13,7 @@ export function GlbModel() {
       <Label className="  w-full text-sm font-semibold mb-4 block text-secondary">3d Model</Label>
       <div className="grid  grid-cols-[1fr_2fr] xs place-items-center gap-4">
         <Label className=" w-full">3d Model</Label>
-        <SelectHero />
+        <SelectHero size={'sm'} />
       </div>
     </>
   ) : null

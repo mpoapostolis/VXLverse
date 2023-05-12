@@ -19,6 +19,7 @@ export function SelectHero(props: { children?: React.ReactNode; onChange?: (e?: 
           label: model.name,
         })) ?? []
       }
+      size={'sm'}
       onChange={(val) => {
         if (props.onChange) return props.onChange(val)
         if (!selected?.uuid || !val) return
