@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/menubar'
 import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
-import { Node, User, useStore } from '@/store'
+import { Node, User, gameTypes, useStore } from '@/store'
 import { exportGame, importGameZip, meshToJson } from '@/store/utils'
 
 import {
@@ -230,7 +230,7 @@ export function Menu() {
           <MenubarSub>
             <MenubarSubTrigger>RPG Entity</MenubarSubTrigger>
             <MenubarSubContent>
-              {['Npc', 'Monster', 'Item', 'portal'].map((item) => (
+              {gameTypes.map((item) => (
                 <MenubarItem
                   disabled={item === 'Hero' && doIHaveHero}
                   key={item}
@@ -240,7 +240,7 @@ export function Menu() {
                   }}
                   className="data-[highlighted]::to-mauve10 group relative flex h-[25px] select-none items-center rounded px-[10px] text-[13px] leading-none  outline-none data-[disabled]:pointer-events-none data-[state=open]:bg-mauve4 data-[highlighted]:bg-gradient-to-br data-[highlighted]:from-mauve9 data-[highlighted]:to-mauve10 data-[disabled]:text-mauve8 data-[highlighted]:text-mauve1 data-[state=open]: data-[state=open]:text-mauve12"
                 >
-                  <Indicator classname="mr-2" type={item} gameType="hero" />
+                  <Indicator classname="mr-2 capitalize" type={item} gameType="hero" />
                   {item}
                 </MenubarItem>
               ))}

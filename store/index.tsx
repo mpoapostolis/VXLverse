@@ -67,7 +67,47 @@ export type Quest = {
   status: 'incomplete' | 'completed'
 }
 
-export type GameType = 'hero' | 'monster' | 'npc' | 'item' | 'portal'
+export type GameType =
+  | 'hero'
+  | 'npc'
+  | 'monster'
+  | 'item'
+  | 'portal'
+  | 'vehicles'
+  | 'food'
+  | 'misc'
+  | 'architecture'
+  | 'furniture'
+  | 'animals'
+  | 'plants'
+  | 'health'
+  | 'characters'
+  | 'accessories'
+  | 'nature'
+  | 'instruments'
+  | 'scenes'
+
+export const gameTypes = [
+  'hero',
+  'npc',
+  'monster',
+  'item',
+  'portal',
+  'vehicles',
+  'food',
+  'misc',
+  'architecture',
+  'furniture',
+  'animals',
+  'plants',
+  'health',
+  'characters',
+  'accessories',
+  'nature',
+  'instruments',
+  'scenes',
+]
+
 export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
