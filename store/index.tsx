@@ -87,7 +87,7 @@ export type GameType =
   | 'instruments'
   | 'scenes'
 
-export const gameTypes = [
+export const gameTypes: GameType[] = [
   'hero',
   'npc',
   'monster',

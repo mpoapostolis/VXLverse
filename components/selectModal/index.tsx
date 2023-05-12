@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { MenubarShortcut } from '@/components/ui/menubar'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
-import { gameTypes } from '@/store'
+import { GameType, gameTypes } from '@/store'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import { Label } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
@@ -40,6 +40,7 @@ export function SelectModal(props: {
           return opt.value === props.value || opt.src === props.value
         })?.label
   const [searchTerm, setSearchTerm] = useState('')
+  const [filter, setFilter] = useState<GameType | undefined>()
 
   return (
     <Dialog onOpenChange={() => setSearchTerm('')}>
@@ -72,20 +73,24 @@ export function SelectModal(props: {
         <Separator />
 
         <div className="grid lg:grid-cols-[200px_1fr]  gap-4">
-          <div className="lg:grid inline-flex gap-2 max-h-[75vh] overflow-auto pr-4  border-r">
+          <div className="lg:grid inline-flex gap-2 h-[75vh] overflow-auto pr-4  border-r">
             {gameTypes.map((type, i) => (
               <Button
+                onClick={() => setFilter(filter === type ? undefined : type)}
                 variant="outline"
-                className={cn('text-xs  w-fit lg:w-full text-left', {
-                  'border-secondary': i === 0,
-                })}
+                className={cn(
+                  'text-xs  w-fit lg:w-full text-left hover:bg-transparent hover:text-card-foreground hover:border-secondary ',
+                  {
+                    'border-secondary': type === filter,
+                  },
+                )}
                 key={type}
               >
                 {type}
               </Button>
             ))}
           </div>
-          <div className="grid place-items-start">
+          <div className="grid place-items-start bg-black bg-opacity-25  ">
             {props.options?.length === 0 && (
               <div className="text-center h-20 w-full grid place-items-center text-muted text-sm">
                 <div>
@@ -97,8 +102,13 @@ export function SelectModal(props: {
                 </div>
               </div>
             )}
-            <div className="grid  xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
+            <div className="grid   xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
               {props.options
+                ?.filter((opt) => {
+                  if (!filter) return true
+                  return opt.type === filter
+                })
+
                 ?.filter((opt) => {
                   if (!searchTerm) return true
                   return opt.label.toLowerCase().includes(searchTerm.toLowerCase())
