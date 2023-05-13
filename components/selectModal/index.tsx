@@ -73,7 +73,7 @@ export function SelectModal(props: {
         <Separator />
 
         <div className="grid lg:grid-cols-[200px_1fr]  gap-4">
-          <div className="lg:grid inline-flex gap-2 h-[75vh] overflow-auto pr-4  border-r">
+          <div className="lg:grid inline-flex gap-2 lg:h-[75vh] overflow-auto pr-4  border-r">
             {gameTypes.map((type, i) => (
               <Button
                 onClick={() => setFilter(filter === type ? undefined : type)}
@@ -102,7 +102,7 @@ export function SelectModal(props: {
                 </div>
               </div>
             )}
-            <div className="grid   xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto max-h-[75vh]">
+            <div className="grid   xl:grid-cols-4 h-[75vh] lg:h-full w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto  max-h-[75vh]">
               {props.options
                 ?.filter((opt) => {
                   if (!filter) return true

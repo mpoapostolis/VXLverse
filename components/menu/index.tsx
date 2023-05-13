@@ -40,7 +40,7 @@ import { Mesh, Vector3 } from 'three'
 import { Account } from '../account'
 import { Indicator } from '../indicator'
 import { SceneModal } from '../sceneModal'
-import { SelectHero } from '../selectHero'
+import { SelectModel } from '../selectModal/selectModel'
 import { Label } from '../ui/label'
 import { useToast } from '../ui/use-toast'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
@@ -234,11 +234,11 @@ export function Menu() {
         <MenubarTrigger>Nodes</MenubarTrigger>
         <MenubarContent>
           <ContextMenu>
-            <SelectHero onChange={(id) => addGLTF(models?.find((m) => m.id === id))}>
+            <SelectModel onChange={(id) => addGLTF(models?.find((m) => m.id === id))}>
               <div className="relative w-full   cursor-default hover:bg-secondary hover:text-secondary-foreground bg-opacity-10 select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none ">
                 RPG Entity
               </div>
-            </SelectHero>
+            </SelectModel>
           </ContextMenu>
           <MenubarSub>
             <MenubarSub>

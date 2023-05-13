@@ -1,9 +1,9 @@
 import { useModels } from '@/lib/models/queries'
 import { useStore } from '@/store'
 import { Euler, Vector3 } from 'three'
-import { SelectModal } from '../selectModal'
+import { SelectModal } from '.'
 
-export function SelectHero(props: { children?: React.ReactNode; onChange?: (e?: string) => void }) {
+export function SelectModel(props: { children?: React.ReactNode; onChange?: (e?: string) => void }) {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const rot = selected?.rotation ?? new Euler(0, 0, 0)
