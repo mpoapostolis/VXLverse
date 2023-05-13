@@ -39,7 +39,7 @@
   }
   /* make scroll smaller */
   ::-webkit-scrollbar {
-    width: 0.5rem;
+    width: 0.25rem;
     height: 4px;
   }
   /* Track */

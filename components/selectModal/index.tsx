@@ -41,6 +41,17 @@ export function SelectModal(props: {
         })?.label
   const [searchTerm, setSearchTerm] = useState('')
   const [filter, setFilter] = useState<GameType | undefined>()
+  const emptyMessage = props.emptyMessage ?? `No ${filter ?? 'items'} found\\n🤷‍♂️ `
+  const options = props.options
+    ?.filter((opt) => {
+      if (!filter) return true
+      return opt.type === filter
+    })
+
+    ?.filter((opt) => {
+      if (!searchTerm) return true
+      return opt.label.toLowerCase().includes(searchTerm.toLowerCase())
+    })
 
   return (
     <Dialog onOpenChange={() => setSearchTerm('')}>
@@ -74,6 +85,15 @@ export function SelectModal(props: {
 
         <div className="grid lg:grid-cols-[200px_1fr]  gap-4">
           <div className="lg:grid inline-flex gap-2 lg:h-[75vh] overflow-auto pr-4  border-r">
+            <Button
+              onClick={() => setFilter(undefined)}
+              variant="outline"
+              className={cn(
+                'text-xs  w-fit lg:w-full text-left hover:bg-transparent hover:text-card-foreground hover:border-secondary ',
+              )}
+            >
+              All
+            </Button>
             {gameTypes.map((type, i) => (
               <Button
                 onClick={() => setFilter(filter === type ? undefined : type)}
@@ -90,62 +110,55 @@ export function SelectModal(props: {
               </Button>
             ))}
           </div>
-          <div className="grid place-items-start bg-black bg-opacity-25  ">
-            {props.options?.length === 0 && (
-              <div className="text-center h-20 w-full grid place-items-center text-muted text-sm">
+          <div className="grid place-items-start  h-[75vh]  overflow-auto  bg-black bg-opacity-25  ">
+            {options?.length === 0 ? (
+              <div className="text-center  h-full  w-full grid place-items-center text-muted text-sm">
                 <div>
-                  {props.emptyMessage?.split('\\n').map((str, i) => (
+                  {emptyMessage?.split('\\n').map((str, i) => (
                     <div key={i} className=" text-center ">
                       {str}
                     </div>
                   ))}
                 </div>
               </div>
-            )}
-            <div className="grid   xl:grid-cols-4 h-[75vh] lg:h-full w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto  max-h-[75vh]">
-              {props.options
-                ?.filter((opt) => {
-                  if (!filter) return true
-                  return opt.type === filter
-                })
-
-                ?.filter((opt) => {
-                  if (!searchTerm) return true
-                  return opt.label.toLowerCase().includes(searchTerm.toLowerCase())
-                })
-                ?.map((obj, i) => (
-                  <Comp key={obj.value}>
-                    <div
-                      onClick={() => {
-                        props.onChange(obj.value)
-                      }}
-                      className={cn('relative cursor-pointer duration-200  h-48')}
-                    >
-                      <picture>
-                        <img
-                          loading="lazy"
-                          src={obj.src ? `${obj.src}?thumb=190x190` : '/images/placeholder.png'}
-                          alt="preview"
-                          className="rounded-md w-full h-full object-scale-down bg-black "
-                        />
-                      </picture>
-                      <Label
-                        className={cn(
-                          'px-2 bg-opacity-60 flex items-center justify-center  absolute text-xs top-0 py-2 left-0 w-full bg-black ',
-                          {
-                            'border-2 border-secondary bg-black items-start bg-opacity-70 h-full w-full ':
-                              props.value?.includes(obj.value),
-                          },
-                        )}
+            ) : (
+              <div>
+                <div className="grid p-3  h-full xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto">
+                  {options?.map((obj, i) => (
+                    <Comp key={obj.value}>
+                      <div
+                        onClick={() => {
+                          props.onChange(obj.value)
+                        }}
+                        className={cn('relative cursor-pointer duration-200  h-48')}
                       >
-                        <Badge variant="secondary" className="w-fit">
-                          {obj.label}
-                        </Badge>
-                      </Label>
-                    </div>
-                  </Comp>
-                ))}
-            </div>
+                        <picture>
+                          <img
+                            loading="lazy"
+                            src={obj.src ? `${obj.src}?thumb=190x190` : '/images/placeholder.png'}
+                            alt="preview"
+                            className="rounded-md w-full h-full object-scale-down bg-black "
+                          />
+                        </picture>
+                        <Label
+                          className={cn(
+                            'px-2 bg-opacity-60 flex items-center justify-center  absolute text-xs top-0 py-2 left-0 w-full bg-black ',
+                            {
+                              'border-2 border-secondary bg-black items-start bg-opacity-70 h-full w-full ':
+                                props.value?.includes(obj.value),
+                            },
+                          )}
+                        >
+                          <Badge variant="secondary" className="w-fit">
+                            {obj.label}
+                          </Badge>
+                        </Label>
+                      </div>
+                    </Comp>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>
