@@ -1,5 +1,5 @@
 import { useModels } from '@/lib/models/queries'
-import { useStore } from '@/store'
+import { gameTypes, useStore } from '@/store'
 import { Euler, Vector3 } from 'three'
 import { SelectModal } from '.'
 
@@ -10,6 +10,7 @@ export function SelectModel(props: { children?: React.ReactNode; onChange?: (e?:
   const { data: models } = useModels()
   return (
     <SelectModal
+      filters={gameTypes}
       value={`${selected?.img}`}
       options={
         models?.map((model) => ({

@@ -1,7 +1,7 @@
 import { useRewards } from '@/lib/rewards/queries'
 import { Quest, useStore } from '@/store'
 import { Select } from '../select'
-import { SelectModal } from '../selectModal'
+import { SelectModel } from '../selectModal/selectModel'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
@@ -78,18 +78,10 @@ export function Quest() {
               />
 
               <Label className=" w-full text-xs font-medium">Reward</Label>
-              <SelectModal
+              <SelectModel
                 onChange={(val) => {
                   updateQuest({ ...obj, reward: val ? val : undefined })
                 }}
-                options={
-                  rewards?.map((node) => ({
-                    label: `${node.name}`,
-                    value: `${node.id}`,
-                    src: `${node.img}`,
-                  })) ?? []
-                }
-                value={obj.reward}
               />
               <div />
               <Button

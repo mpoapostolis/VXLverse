@@ -7,7 +7,6 @@ import { Input } from '@/components/ui/input'
 import { MenubarShortcut } from '@/components/ui/menubar'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
-import { GameType, gameTypes } from '@/store'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import { Label } from '@radix-ui/react-dropdown-menu'
 import { ChevronDownIcon } from 'lucide-react'
@@ -17,7 +16,7 @@ export function SelectModal(props: {
   emptyMessage?: string
   children?: React.ReactNode
   size?: ButtonProps['size']
-
+  filters?: string[]
   multiple?: boolean
   options?: {
     label: string
@@ -40,7 +39,7 @@ export function SelectModal(props: {
           return opt.value === props.value || opt.src === props.value
         })?.label
   const [searchTerm, setSearchTerm] = useState('')
-  const [filter, setFilter] = useState<GameType | undefined>()
+  const [filter, setFilter] = useState<string | undefined>()
   const emptyMessage = props.emptyMessage ?? `No ${filter ?? 'items'} found\\n🤷‍♂️ `
   const options = props.options
     ?.filter((opt) => {
@@ -83,8 +82,16 @@ export function SelectModal(props: {
         </DialogHeader>
         <Separator />
 
-        <div className="grid lg:grid-cols-[200px_1fr]  gap-4">
-          <div className="lg:grid inline-flex gap-2 lg:h-[75vh] overflow-auto pr-4  border-r">
+        <div
+          className={cn('grid   gap-4', {
+            'lg:grid-cols-[200px_1fr]': props.filters,
+          })}
+        >
+          <div
+            className={cn('lg:grid inline-flex gap-2 lg:h-[75vh] overflow-auto pr-4  border-r', {
+              'lg:hidden hidden': !props.filters,
+            })}
+          >
             <Button
               onClick={() => setFilter(undefined)}
               variant="outline"
@@ -94,7 +101,7 @@ export function SelectModal(props: {
             >
               All
             </Button>
-            {gameTypes.map((type, i) => (
+            {props.filters?.map((type, i) => (
               <Button
                 onClick={() => setFilter(filter === type ? undefined : type)}
                 variant="outline"
@@ -112,7 +119,7 @@ export function SelectModal(props: {
           </div>
           <div className="grid place-items-start  h-[75vh]  overflow-auto  bg-black bg-opacity-25  ">
             {options?.length === 0 ? (
-              <div className="text-center  h-full  w-full grid place-items-center text-muted text-sm">
+              <div className="text-center  h-full   w-full grid place-items-center text-muted text-sm">
                 <div>
                   {emptyMessage?.split('\\n').map((str, i) => (
                     <div key={i} className=" text-center ">
@@ -122,8 +129,8 @@ export function SelectModal(props: {
                 </div>
               </div>
             ) : (
-              <div>
-                <div className="grid p-3  h-full xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto">
+              <div className="w-full">
+                <div className="grid p-3    h-full xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto">
                   {options?.map((obj, i) => (
                     <Comp key={obj.value}>
                       <div
