@@ -103,7 +103,7 @@ export function SelectModal(props: {
             </Button>
             {props.filters?.map((type, i) => (
               <Button
-                onClick={() => setFilter(filter === type ? undefined : type)}
+                onClick={() => setFilter(filter)}
                 variant="outline"
                 className={cn(
                   'text-xs  w-fit lg:w-full text-left hover:bg-transparent hover:text-card-foreground hover:border-secondary ',
