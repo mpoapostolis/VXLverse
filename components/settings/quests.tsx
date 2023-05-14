@@ -1,10 +1,10 @@
+import { Quest } from '@/components/quest'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import type { Quest as QuestType } from '@/store'
 import { useStore } from '@/store'
 import { PlusIcon } from 'lucide-react'
-import { Quest } from '../quest'
-import { Button } from '../ui/button'
-import { Label } from '../ui/label'
 
 const newQuest = (num: number) =>
   ({
@@ -22,7 +22,7 @@ export function Quests() {
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const quests = selected?.quests ?? []
 
-  return selected?.gameType === 'npc' ? (
+  return selected ? (
     <>
       <Separator className="my-4" />
       <Label className=" truncate w-full text-sm font-semibold mb-4 block text-secondary ">Quests</Label>

@@ -1,10 +1,10 @@
+import { Gltf } from '@/components/gltf'
+import { Light } from '@/components/lights'
+import { MeshGeometry } from '@/components/meshGeometry'
 import { Node, NodeType, useStore } from '@/store'
 import { Html, TransformControls, useHelper } from '@react-three/drei'
 import { Suspense, useRef } from 'react'
 import { BoxHelper, Euler } from 'three'
-import { Gltf } from '../gltf'
-import { Light } from '../lights'
-import { MeshGeometry } from '../meshGeometry'
 
 export const lights: any[] = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 

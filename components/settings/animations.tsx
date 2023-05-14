@@ -1,10 +1,10 @@
+import { Select } from '@/components/select'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
 import { CharStatus, CharStatuss } from '@/store/utils'
 import clsx from 'clsx'
 import { Fragment } from 'react'
-import { Select } from '../select'
 
 export function Animations() {
   const store = useStore()

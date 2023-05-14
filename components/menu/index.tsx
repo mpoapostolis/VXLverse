@@ -19,6 +19,12 @@ import { Model } from '@/lib/models/types'
 import { Node, User, useStore } from '@/store'
 import { exportGame, importGameZip, meshToJson } from '@/store/utils'
 
+import { Account } from '@/components/account'
+import { Indicator } from '@/components/indicator'
+import { SceneModal } from '@/components/sceneModal'
+import { SelectModel } from '@/components/selectModal/selectModel'
+import { Label } from '@/components/ui/label'
+import { useToast } from '@/components/ui/use-toast'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import {
   CheckCircledIcon,
@@ -37,12 +43,6 @@ import axios from 'axios'
 import Link from 'next/link'
 import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
-import { Account } from '../account'
-import { Indicator } from '../indicator'
-import { SceneModal } from '../sceneModal'
-import { SelectModel } from '../selectModal/selectModel'
-import { Label } from '../ui/label'
-import { useToast } from '../ui/use-toast'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
 export const geometries = [

@@ -7,10 +7,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
-import { Separator } from '../ui/separator'
 
 export function SceneModal(props: { onClick?: () => void; new?: boolean; children?: React.ReactNode }) {
   const store = useStore()

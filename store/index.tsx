@@ -69,10 +69,6 @@ export type Quest = {
 
 export type GameType =
   | 'hero'
-  | 'npc'
-  | 'monster'
-  | 'item'
-  | 'portal'
   | 'vehicles'
   | 'food'
   | 'misc'
@@ -89,10 +85,6 @@ export type GameType =
 
 export const gameTypes: GameType[] = [
   'hero',
-  'npc',
-  'monster',
-  'item',
-  'portal',
   'vehicles',
   'food',
   'misc',
@@ -111,6 +103,7 @@ export const gameTypes: GameType[] = [
 export type Node = Partial<Mesh> & {
   scene?: string
   url?: string
+  collectable?: boolean
   goTo?: Vector3
   velocity?: number
   blob?: Blob

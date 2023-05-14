@@ -1,9 +1,9 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { Xyz } from '@/components/xyz'
 import { useStore } from '@/store'
 import { Euler, Vector3 } from 'three'
-import { Xyz } from '../xyz'
 
 export function TransformSettings() {
   const store = useStore()

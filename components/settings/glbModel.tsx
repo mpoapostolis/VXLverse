@@ -1,7 +1,7 @@
+import { SelectModel } from '@/components/selectModal/selectModel'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
-import { SelectModel } from '../selectModal/selectModel'
 
 export function GlbModel() {
   const store = useStore()

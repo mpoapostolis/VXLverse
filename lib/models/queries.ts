@@ -1,9 +1,9 @@
 'use client'
 
+import { Model } from '@/lib/models/types'
+import { fetcher } from '@/lib/utils'
 import { AxiosError } from 'axios'
 import useSWR from 'swr'
-import { fetcher } from '../utils'
-import { Model } from './types'
 
 export function useModels() {
   const { data, error } = useSWR<Model[], AxiosError>(`/api/models`, fetcher)

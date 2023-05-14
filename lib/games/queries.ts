@@ -1,8 +1,8 @@
 'use client'
 
+import { fetcher } from '@/lib/utils'
 import { AxiosError } from 'axios'
 import useSWR from 'swr'
-import { fetcher } from '../utils'
 import { Game } from './types'
 
 export function useGame(id?: string) {

@@ -1,11 +1,11 @@
+import { Select } from '@/components/select'
+import { SelectModel } from '@/components/selectModal/selectModel'
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { useRewards } from '@/lib/rewards/queries'
 import { Quest, useStore } from '@/store'
-import { Select } from '../select'
-import { SelectModel } from '../selectModal/selectModel'
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion'
-import { Button } from '../ui/button'
-import { Input } from '../ui/input'
-import { Label } from '../ui/label'
 
 export function Quest() {
   const store = useStore()

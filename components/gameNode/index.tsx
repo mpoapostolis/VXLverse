@@ -1,10 +1,10 @@
+import { Gltf } from '@/components/gltf'
+import { MeshGeometry } from '@/components/meshGeometry'
 import { Node, useStore } from '@/store'
 import { useFrame } from '@react-three/fiber'
 import { RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
 import { Suspense, useEffect, useRef } from 'react'
 import { Euler, Mesh, Quaternion, Vector3 } from 'three'
-import { Gltf } from '../gltf'
-import { MeshGeometry } from '../meshGeometry'
 
 export function GameNode(props: Partial<Node>) {
   const store = useStore()
@@ -54,7 +54,7 @@ export function GameNode(props: Partial<Node>) {
   }, [props.rotation])
 
   const invHas = (item: string) => store.inventory.includes(item)
-  const isCollected = props.gameType === 'item' && store.inventory.includes(props.uuid ?? '')
+  const isCollected = store.inventory.includes(props.uuid ?? '')
   const doIHaveTheReqItems = props.showWhenInventoryHas?.every(invHas) ?? true
   const isVisible = doIHaveTheReqItems && !isCollected
   const rigidBody = useRef<RapierRigidBody>(null)
@@ -76,7 +76,7 @@ export function GameNode(props: Partial<Node>) {
             )
 
             if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
-            if (props.gameType === 'item') store.addToInventory(props.uuid)
+            if (props.collectable) store.addToInventory(props.uuid)
             if (props.quests) {
               const firstActiveQuest = props.quests.find((quest) => quest.status === 'incomplete')
               if (firstActiveQuest) {

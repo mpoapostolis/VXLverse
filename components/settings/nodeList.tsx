@@ -1,6 +1,6 @@
+import { Indicator } from '@/components/indicator'
 import { useStore } from '@/store'
 import clsx from 'clsx'
-import { Indicator } from '../indicator'
 
 export function NodeList() {
   const store = useStore()

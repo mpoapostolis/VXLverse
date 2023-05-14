@@ -1,6 +1,6 @@
+import { getPocketBase } from '@/lib/pocketBase'
+import { Reward } from '@/lib/rewards/types'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getPocketBase } from '../pocketBase'
-import { Reward } from './types'
 
 export async function getRewards(_req: NextApiRequest, res: NextApiResponse) {
   const pb = await getPocketBase()

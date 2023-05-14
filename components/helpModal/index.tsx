@@ -1,5 +1,5 @@
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { HelpCircleIcon } from 'lucide-react'
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 
 export function HelpModal() {
   return (

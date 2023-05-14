@@ -1,5 +1,5 @@
+import { getPocketBase } from '@/lib/pocketBase'
 import { NextApiRequest, NextApiResponse } from 'next'
-import { getPocketBase } from '../pocketBase'
 import { Model } from './types'
 
 export async function getModels(_req: NextApiRequest, res: NextApiResponse) {
