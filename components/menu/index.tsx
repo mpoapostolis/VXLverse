@@ -41,6 +41,7 @@ import {
 } from '@radix-ui/react-icons'
 import axios from 'axios'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
@@ -106,20 +107,6 @@ export function Menu() {
     })
   }
 
-  const doIHaveHero = store.nodes?.some((n) => n.gameType === 'hero')
-
-  // useEffect(() => {
-  //   if (!doIHaveHero) {
-  //     const firstChar = models?.find((m) => m.type === 'characters')
-  //     if (firstChar)
-  //       addGLTF({
-  //         ...firstChar,
-  //         type: 'hero',
-  //       })
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [doIHaveHero, models])
-
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
 
   const login = async () => {
@@ -138,6 +125,7 @@ export function Menu() {
 
     return isStandalone || isFullscreen || isMinimalUI
   }
+  const router = useRouter()
   return (
     <Menubar>
       <MenubarMenu>
