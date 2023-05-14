@@ -44,6 +44,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
+import { QuestModal } from '../questModal'
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
 export const geometries = [
@@ -218,6 +219,7 @@ export function Menu() {
           </MenubarItem>
         </MenubarContent>
       </MenubarMenu>
+
       <MenubarMenu>
         <MenubarTrigger>Nodes</MenubarTrigger>
         <MenubarContent>
@@ -347,7 +349,9 @@ export function Menu() {
           </SceneModal>
         </MenubarContent>
       </MenubarMenu>
-
+      <MenubarMenu>
+        <QuestModal />
+      </MenubarMenu>
       <MenubarMenu>
         <MenubarTrigger>Help</MenubarTrigger>
         <MenubarContent>

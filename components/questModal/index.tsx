@@ -1,6 +1,7 @@
 'use client'
 
 import { useStore } from '@/store'
+import { ContextMenu } from '@radix-ui/react-context-menu'
 import { useCallback, useEffect, useState } from 'react'
 import ReactFlow, {
   Background,
@@ -13,11 +14,14 @@ import ReactFlow, {
   OnConnect,
   OnEdgesChange,
   OnNodesChange,
+  Panel,
   addEdge,
   applyEdgeChanges,
   applyNodeChanges,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
+import { Select } from '../select'
+import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 
 const initialNodes: Node[] = [
   { id: '1', data: { label: 'Node 1' }, position: { x: 5, y: 5 } },
@@ -36,7 +40,7 @@ const defaultEdgeOptions: DefaultEdgeOptions = {
 
 const nodeTypes: NodeTypes = {}
 
-export function Flow() {
+export function QuestModal() {
   const [nodes, setNodes] = useState<Node[]>(initialNodes)
   const [edges, setEdges] = useState<Edge[]>(initialEdges)
 
@@ -61,21 +65,47 @@ export function Flow() {
   }, [store.nodes])
 
   return (
-    <div className="w-full lg:h-[90vh] h-[37vh] border">
-      <ReactFlow
-        nodes={nodes}
-        edges={edges}
-        onNodesChange={onNodesChange}
-        onEdgesChange={onEdgesChange}
-        onConnect={onConnect}
-        fitView
-        fitViewOptions={fitViewOptions}
-        defaultEdgeOptions={defaultEdgeOptions}
-        nodeTypes={nodeTypes}
-      >
-        <Background />
-        <Controls />
-      </ReactFlow>
-    </div>
+    <Dialog>
+      <ContextMenu>
+        <DialogTrigger asChild>
+          <div className="relative  cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none ">
+            Quest
+          </div>
+        </DialogTrigger>
+      </ContextMenu>
+      <DialogContent className="z-50 w-[90vw] h-[90vh] ">
+        <div className="w-[85vw] h-[85vh]">
+          <ReactFlow
+            nodes={nodes}
+            edges={edges}
+            onNodesChange={onNodesChange}
+            onEdgesChange={onEdgesChange}
+            onConnect={onConnect}
+            fitView
+            fitViewOptions={fitViewOptions}
+            defaultEdgeOptions={defaultEdgeOptions}
+            nodeTypes={nodeTypes}
+          >
+            <Panel position="top-left">
+              <Select
+                value={store.selectedNode}
+                label="Select node"
+                options={
+                  store.nodes
+                    ?.filter((e) => e.type === 'GLTF')
+                    .map((node) => ({
+                      label: `${node.name}`,
+                      value: `${node.uuid}`,
+                    })) ?? []
+                }
+                onChange={(val) => val && store.selectNode(val)}
+              />
+            </Panel>
+            <Background />
+            <Controls />
+          </ReactFlow>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }

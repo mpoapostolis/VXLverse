@@ -1,4 +1,5 @@
-import EditorLayout from '@/components/layout/editorLayout'
+import { EditorCanvas } from '@/components/canvas/editor'
+import Editor from '@/components/editor'
 import { Menu } from '@/components/menu'
 
 export default function Page() {
@@ -7,7 +8,15 @@ export default function Page() {
       <header>
         <Menu />
       </header>
-      <EditorLayout />
+      <div className="grid h-full transition-all ease-in  duration-500 lg:grid-cols-[1fr_25vw] xl:grid-cols-[1fr_20vw] w-screen grid-rows-2  grid-flow-col lg:grid-rows-1">
+        <EditorCanvas />
+        <div className="w-full p-4 pb-12 border-l ">
+          <Editor />
+        </div>
+        <picture className="hidden lg:block absolute bottom-4 left-4 z-50">
+          <img className="w-16 h-16" src="/logo.svg" alt="" />
+        </picture>
+      </div>
     </>
   )
 }
