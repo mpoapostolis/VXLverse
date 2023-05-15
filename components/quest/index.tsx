@@ -4,14 +4,12 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useRewards } from '@/lib/rewards/queries'
 import { Quest, useStore } from '@/store'
 
 export function Quest() {
   const store = useStore()
   const selectedNode = store?.nodes.find((node) => node.uuid === store.selectedNode)
   const quests = selectedNode?.quests ?? []
-  const { data: rewards } = useRewards()
   const updateQuest = (quest: Quest) => {
     store.updateNode(`${selectedNode?.uuid}`, {
       ...selectedNode,
