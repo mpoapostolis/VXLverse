@@ -12,6 +12,8 @@ const APP_DESCRIPTION =
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
+  keywords: 'Game Development, RPG, VXLverse, 3D Modeling, Game Design, IndieDev, Gaming',
+
   title: {
     default: APP_DEFAULT_TITLE,
     template: APP_TITLE_TEMPLATE,
