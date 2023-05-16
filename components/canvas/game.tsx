@@ -173,7 +173,7 @@ export function GameCanvas(props: { id?: string }) {
       </Canvas>
 
       <picture className="fixed top-4 left-4 z-50">
-        <img className="w-16 h-16" src="/logo.png" alt="" />
+        <img loading="lazy" className="w-16 h-16" src="/logo.png" alt="" />
       </picture>
       <Dialogue />
       <Loader />
