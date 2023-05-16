@@ -1,10 +1,12 @@
 'use client'
 
-import { Quest, useStore } from '@/store'
+import { useStore } from '@/store'
 import { ContextMenu } from '@radix-ui/react-context-menu'
+import { Trash2 } from 'lucide-react'
 import { useCallback, useState } from 'react'
 import ReactFlow, {
   Background,
+  ControlButton,
   Controls,
   DefaultEdgeOptions,
   Edge,
@@ -29,54 +31,137 @@ import { QuestName } from './questName'
 import { RequiredItemNode } from './requiredItemNode'
 import { SelectRequiredItem } from './selectRequiredItem'
 
+const groupStyle = {
+  border: '1px solid var(--border)',
+  width: 820,
+  height: 320,
+  color: 'var(--text-primary)',
+  background: '#fff2',
+}
+
+const DY = 330
+const generateNodes = (idx: number) => {
+  const q = Math.floor(idx / 5)
+  return [
+    {
+      id: `group-${q}`,
+      type: 'group',
+      data: { label: null },
+      position: { x: 150, y: DY * q + 20 },
+
+      style: groupStyle,
+    },
+    {
+      id: `horizontal-${idx + 1}`,
+      style: nodeStyle,
+      sourcePosition: Position.Right,
+      type: 'input',
+      data: { label: <QuestName /> },
+      position: { x: 40, y: 20 },
+      parentNode: `group-${q}`,
+      extent: 'parent',
+    },
+    {
+      id: `horizontal-${idx + 2}`,
+      style: nodeStyle,
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      data: { label: <RequiredItemNode /> },
+      position: { x: 40, y: 200 },
+      parentNode: `group-${q}`,
+      extent: 'parent',
+    },
+    {
+      id: `horizontal-${idx + 3}`,
+      style: nodeStyle,
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      data: {
+        label: (
+          <QuestDialogue
+            placeholder="Dialogue appears if player or quest lacks required item."
+            label="Initial dialogue"
+          />
+        ),
+      },
+      position: { x: 350, y: 20 },
+      parentNode: `group-${q}`,
+      extent: 'parent',
+    },
+    {
+      id: `horizontal-${idx + 4}`,
+      style: nodeStyle,
+      sourcePosition: Position.Right,
+      targetPosition: Position.Left,
+      data: {
+        label: (
+          <QuestDialogue placeholder="Dialogue appears after player has required item" label="Have Required Item" />
+        ),
+      },
+      position: { x: 350, y: 173 },
+      parentNode: `group-${q}`,
+      extent: 'parent',
+    },
+    {
+      id: `horizontal-${idx + 5}`,
+      style: nodeStyle,
+      targetPosition: Position.Left,
+      type: 'output',
+      data: { label: <SelectRequiredItem /> },
+      position: { x: 650, y: 120 },
+      parentNode: `group-${q}`,
+      extent: 'parent',
+      deletable: true,
+    },
+  ] as Node[]
+}
+
+function generateEdges(idx: number) {
+  return [
+    {
+      id: `horizontal-${idx + 1}-${idx + 2}`,
+      source: `horizontal-${idx + 1}`,
+      target: `horizontal-${idx + 2}`,
+      animated: true,
+      type: 'smoothstep',
+    },
+
+    {
+      id: `horizontal-${idx + 2}-${idx + 3}`,
+      source: `horizontal-${idx + 2}`,
+      target: `horizontal-${idx + 3}`,
+      animated: true,
+      type: 'smoothstep',
+    },
+    {
+      id: `horizontal-${idx + 2}-${idx + 4}`,
+      source: `horizontal-${idx + 2}`,
+      target: `horizontal-${idx + 4}`,
+      animated: true,
+      type: 'smoothstep',
+    },
+    {
+      id: `horizontal-${idx + 4}-${idx + 5}`,
+      source: `horizontal-${idx + 4}`,
+      target: `horizontal-${idx + 5}`,
+      animated: true,
+      type: 'smoothstep',
+    },
+    {
+      id: `horizontal-${idx + 3}-${idx + 5}`,
+      source: `horizontal-${idx + 3}`,
+      target: `horizontal-${idx + 5}`,
+      animated: true,
+      type: 'smoothstep',
+    },
+  ] as Edge[]
+}
+
 const nodeStyle = {
   border: '1px solid var(--border)',
   color: 'var(--text-primary)',
   background: 'var(--card)',
 }
-
-const initialNodes: Node[] = [
-  {
-    id: 'horizontal-1',
-    style: nodeStyle,
-    sourcePosition: Position.Right,
-    type: 'input',
-    data: { label: <QuestName /> },
-    position: { x: 0, y: 80 },
-  },
-  {
-    id: 'horizontal-2',
-    style: nodeStyle,
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    data: { label: <RequiredItemNode /> },
-    position: { x: 250, y: 80 },
-  },
-  {
-    id: 'horizontal-3',
-    style: nodeStyle,
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    data: { label: <SelectRequiredItem /> },
-    position: { x: 500, y: 80 },
-  },
-  {
-    id: 'horizontal-4',
-    style: nodeStyle,
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    data: { label: <SelectRequiredItem /> },
-    position: { x: 500, y: 80 },
-  },
-  {
-    id: 'horizontal-5',
-    style: nodeStyle,
-    sourcePosition: Position.Right,
-    targetPosition: Position.Left,
-    data: { label: <SelectRequiredItem /> },
-    position: { x: 500, y: 80 },
-  },
-]
 
 const initialEdges = []
 
@@ -105,41 +190,39 @@ export function QuestModal() {
   )
   const onConnect: OnConnect = useCallback((connection) => setEdges((eds) => addEdge(connection, eds)), [setEdges])
   const store = useStore()
-  const selectedNode = store?.nodes.find((node) => node.uuid === store.selectedNode)
+  const [selected, setSelected] = useState<string>()
 
-  const updateQuest = (quest: Quest) => {
-    store.updateNode(`${selectedNode?.uuid}`, {
-      ...selectedNode,
-      quests: selectedNode?.quests?.map((obj) => (obj.uuid === quest.uuid ? quest : obj)),
-    })
+  function selectQuest(groupId: string) {
+    const _nodes = nodes.map((node) => {
+      if (node.type !== 'group') return node
+      const style = {
+        ...groupStyle,
+      }
+      if (node.id === groupId) style.border = '1px dashed goldenrod'
+      return { ...node, style }
+    }) as Node[]
+    setNodes(_nodes)
+    setSelected(groupId)
   }
-
-  const q: Quest = {
-    name: 'test',
-    initialDialog: 'test',
-    status: 'incomplete',
-    uuid: 'test',
-    questCompleteDialog: 'test',
-    requiredItemToComplete: '',
-    reward: '',
-  }
-
   return (
     <Dialog>
       <ContextMenu>
         <DialogTrigger asChild>
-          <div className="relative  cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none ">
+          <div className="relative   cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none ">
             Quest
           </div>
         </DialogTrigger>
       </ContextMenu>
-      <DialogContent className="z-50 w-[90vw] h-[90vh] ">
-        <div className="w-[85vw] h-[85vh]">
+      <DialogContent className="z-50 lg:w-[90vw] lg:h-[90vh] w-screen h-screen ">
+        <div className="lg:w-[85vw] lg:h-[85vh] w-full h-full">
           <ReactFlow
             className="bg-black"
             nodes={nodes}
             edges={edges}
-            onChange={console.log}
+            onNodeClick={(e, node) => {
+              const groupId = node.parentNode ?? node.id
+              selectQuest(groupId)
+            }}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
@@ -164,57 +247,55 @@ export function QuestModal() {
             </Panel>
             <Panel position="top-right">
               <Button
-                onClick={() => [
-                  setNodes([
-                    ...nodes,
-
-                    {
-                      id: 'horizontal-1',
-                      style: nodeStyle,
-                      sourcePosition: Position.Right,
-                      type: 'input',
-                      data: { label: <QuestName /> },
-                      position: { x: 0, y: 80 },
-                    },
-                    {
-                      id: 'horizontal-2',
-                      style: nodeStyle,
-                      sourcePosition: Position.Right,
-                      targetPosition: Position.Left,
-                      data: { label: <RequiredItemNode /> },
-                      position: { x: 200, y: 80 },
-                    },
-                    {
-                      id: 'horizontal-4',
-                      style: nodeStyle,
-                      sourcePosition: Position.Right,
-                      targetPosition: Position.Left,
-                      data: { label: <QuestDialogue label="Initial / Fail dialogue" /> },
-                      position: { x: 400, y: -20 },
-                    },
-                    {
-                      id: 'horizontal-5',
-                      style: nodeStyle,
-                      sourcePosition: Position.Right,
-                      targetPosition: Position.Left,
-                      data: { label: <QuestDialogue label="Success dialogue" /> },
-                      position: { x: 400, y: 140 },
-                    },
-                    {
-                      id: 'horizontal-6',
-                      style: nodeStyle,
-                      targetPosition: Position.Left,
-                      data: { label: <SelectRequiredItem /> },
-                      position: { x: 600, y: 80 },
-                    },
-                  ]),
-                ]}
+                onClick={() => {
+                  setNodes([])
+                  setEdges([])
+                  setSelected(undefined)
+                }}
+              >
+                Clear
+              </Button>
+              {selected && (
+                <Button
+                  className="border-l"
+                  onClick={() => {
+                    setSelected(undefined)
+                    setNodes(
+                      nodes
+                        .filter((node) => (node?.parentNode ?? node.id) !== selected)
+                        .map((node, idx) => {
+                          if (node.type !== 'group') return node
+                          return {
+                            ...node,
+                            position: { x: 150, y: DY * Math.floor(idx / 5) + 20 },
+                          }
+                        }),
+                    )
+                    const groupIdx = nodes.findIndex((node) => node.id === selected)
+                    setEdges(edges.filter((_, idx) => idx < groupIdx * 5 || idx >= groupIdx * 5 + 5))
+                  }}
+                >
+                  Delete Quest
+                </Button>
+              )}
+              <Button
+                className="border-l"
+                onClick={() => {
+                  const newNode = generateNodes(nodes.length)
+                  if (newNode?.length === 0) return
+                  setNodes([...nodes, ...generateNodes(nodes.length)])
+                  setEdges([...edges, ...generateEdges(nodes.length)])
+                }}
               >
                 New Quest
               </Button>
             </Panel>
             <Background />
-            <Controls />
+            <Controls showInteractive={false}>
+              <ControlButton onClick={(e) => console.log(e.target)}>
+                <Trash2 className="text-black" color="#000" />
+              </ControlButton>
+            </Controls>
           </ReactFlow>
         </div>
       </DialogContent>
