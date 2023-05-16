@@ -6,7 +6,7 @@ import { HelpModal } from '@/components/helpModal'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { useGame } from '@/lib/games/queries'
-import { GRID_SIZE, useStore } from '@/store'
+import { GRID_SIZE, init, useStore } from '@/store'
 import { Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { CuboidCollider, Physics, useRapier } from '@react-three/rapier'
@@ -123,6 +123,8 @@ export function GameCanvas(props: { id?: string }) {
       })
     }
   }, [])
+  useEffect(init, [])
+
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
     <main className="relative h-screen overflow-hidden">

@@ -1,14 +1,15 @@
 import { Indicator } from '@/components/indicator'
+import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
-import clsx from 'clsx'
 
 export function NodeList() {
   const store = useStore()
+
   const currentScene = store.scenes.find((scene) => scene.uuid === store.currentScene)
   return (
     <div className="relative h-40 border-black border-opacity-0 overflow-auto border bg-card">
       <div
-        className={clsx('absolute  h-full w-full text-xs', {
+        className={cn('absolute  h-full w-full text-xs', {
           hidden: store.nodes.length > 0,
         })}
       >
@@ -25,7 +26,7 @@ export function NodeList() {
         .map((node, idx) => (
           <button
             onClick={() => store.selectNode(node.uuid)}
-            className={clsx(
+            className={cn(
               'flex w-full items-center  border-opacity-10  border-b border-black px-4 py-1 text-left text-xs  ',
               {
                 'bg-secondary text-secondary-foreground': `${node?.uuid}` === store.selectedNode,

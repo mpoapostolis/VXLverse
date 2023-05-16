@@ -1,16 +1,17 @@
 'use client'
 
+export const VXLverseVersion = 'VXLverse_v0.6.0'
+
 import { saveAs } from 'file-saver'
-import { openDB } from 'idb'
 import JSZip from 'jszip'
 import { Mesh } from 'three'
-import { Inventory, Node, Scene, Store, User, useStore } from '.'
+import { Node, Scene, Store, useStore } from '.'
 
 const getUuid = () => {
   const mesh = new Mesh()
   return mesh.uuid
 }
-const defaultNodes = (
+export const defaultNodes = (
   [
     {
       name: 'DirectionalLight',
@@ -31,7 +32,7 @@ const defaultNodes = (
   ] as any[]
 ).map(jsonToMesh)
 
-const defaultScenes: Scene[] = [
+export const defaultScenes: Scene[] = [
   {
     uuid: 'main',
     name: 'Main',
@@ -44,26 +45,6 @@ export const defaultGameConf: Partial<Store> = {
   nodes: defaultNodes,
   scenes: defaultScenes,
   currentScene: defaultScenes?.at(0)?.uuid,
-}
-
-export async function initDb() {
-  try {
-    if (typeof window !== 'undefined') {
-      if (!window?.indexedDB) {
-        console.log('Your browser does not support IndexedDB')
-        throw new Error('Your browser does not support IndexedDB')
-      }
-      return openDB('vxlverse', 1.2, {
-        upgrade(db) {
-          db.createObjectStore('store', {
-            autoIncrement: true,
-          })
-        },
-      })
-    }
-  } catch (error) {
-    Promise.reject(error)
-  }
 }
 
 export function meshToJson(mesh: Partial<Node>) {
@@ -192,29 +173,10 @@ export async function importGameZip(file: File) {
   })
 }
 
-initDb().then(async (s) => {
-  if (!s) return
-  const [store] = (await s?.getAll('store')) as {
-    user: User
-    nodes: Node[]
-    scenes: Scene[]
-    inventory: Inventory
-  }[]
-
-  const scenes =
-    store?.scenes?.map((obj) => ({
-      ...obj,
-      equirect: obj.blob ? URL.createObjectURL(obj.blob) : undefined,
-    })) ?? defaultGameConf?.scenes
-  useStore?.setState({
-    user: store?.user,
-    nodes: store?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
-    scenes,
-    inventory: store?.inventory ?? [],
-    selectedNode: undefined,
-    currentScene: scenes?.at(0)?.uuid,
-  })
-})
+export function getLocalStorage() {
+  if (typeof window === 'undefined') return
+  return window.localStorage
+}
 
 export type CharStatus = 'walk' | 'run' | 'attack' | 'jump' | 'die' | 'idle' | 'hit' | 'interact'
 
@@ -231,3 +193,8 @@ export const CharStatuss: {
   { label: 'Hit', value: 'hit' },
   { label: 'Interact', value: 'interact' },
 ]
+
+// sleep
+export function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}

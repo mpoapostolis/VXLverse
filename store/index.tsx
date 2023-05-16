@@ -5,7 +5,16 @@ import { Game } from '@/lib/games/types'
 import { RigidBodyTypeString } from '@react-three/rapier'
 import { AnimationAction, Mesh, Vector3 } from 'three'
 import { create } from 'zustand'
-import { CharStatus, defaultGameConf, initDb, jsonToMesh, meshToJson } from './utils'
+import {
+  CharStatus,
+  VXLverseVersion,
+  defaultGameConf,
+  defaultNodes,
+  defaultScenes,
+  getLocalStorage,
+  jsonToMesh,
+  meshToJson,
+} from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -279,7 +288,30 @@ export const useStore = create<Store>((set) => ({
 }))
 
 useStore?.subscribe(async (state) => {
-  const db = await initDb()
-  const nodes = state.nodes.map(meshToJson)
-  db?.put('store', { user: state.user, nodes, inventory: state.inventory, scenes: state.scenes }, 0)
+  const localstorage = getLocalStorage()
+  const nodes = state.nodes.map(meshToJson) ?? []
+  localstorage?.setItem(
+    VXLverseVersion,
+    JSON.stringify({ user: state.user, nodes, inventory: state.inventory, scenes: state.scenes }),
+  )
 })
+
+export function init() {
+  const localStorage = getLocalStorage()
+  const store = localStorage?.getItem(VXLverseVersion)
+  const parsedStore = store
+    ? JSON.parse(store)
+    : {
+        nodes: defaultNodes,
+        scenes: defaultScenes,
+      }
+
+  useStore?.setState({
+    user: parsedStore?.user,
+    nodes: parsedStore?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
+    scenes: parsedStore.scenes ?? defaultGameConf?.scenes,
+    inventory: parsedStore?.inventory ?? [],
+    selectedNode: undefined,
+    currentScene: parsedStore?.scenes?.at(0)?.uuid,
+  })
+}

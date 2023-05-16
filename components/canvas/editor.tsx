@@ -2,7 +2,7 @@
 
 import { Controls } from '@/components/controls'
 import { Node } from '@/components/node'
-import { GRID_SIZE, useStore } from '@/store'
+import { GRID_SIZE, init, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { useEffect } from 'react'
@@ -30,6 +30,8 @@ export function EditorCanvas() {
     return () => window.removeEventListener('keydown', onKeyDown)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(init, [])
 
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
