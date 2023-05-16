@@ -20,7 +20,7 @@ export function Account() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="relative ml-auto h-8 w-8 rounded-full">
+        <Button role="menuitem" className="relative ml-auto h-8 w-8 rounded-full">
           <Avatar className="h-8 w-8">
             <AvatarImage src={user?.picture} alt={user?.email} />
             <AvatarFallback>{user?.email}</AvatarFallback>

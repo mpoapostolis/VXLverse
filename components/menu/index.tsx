@@ -380,16 +380,18 @@ export function Menu() {
           {store.user ? (
             <Account />
           ) : (
-            <button
-              onClick={login}
-              type="button"
-              className="ml-auto h-full flex items-center font-semibold bg-card px-4"
-            >
-              <picture>
-                <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
-              </picture>
-              <span className="hidden lg:block">Login with google</span>
-            </button>
+            <div className="ml-auto lg:mr-3" role="menuitem">
+              <button
+                onClick={login}
+                className=" h-full flex items-center font-semibold bg-card px-4 py-0.5 "
+                type="button"
+              >
+                <picture>
+                  <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
+                </picture>
+                <span className="hidden lg:block">Login with google</span>
+              </button>
+            </div>
           )}
         </div>
       </MenubarMenu>

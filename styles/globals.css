@@ -92,9 +92,20 @@
     --radius: 0.5rem;
   }
 }
-canvas {
+.canvas {
   width: 100%;
   height: 100%;
+}
+
+.canvas-editor {
+  width: 100%;
+  height: 100%;
+}
+/* media query screen over 1024px */
+@media (min-width: 1024px) {
+  .canvas-editor {
+    height: calc(100vh - 40px);
+  }
 }
 
 @layer base {

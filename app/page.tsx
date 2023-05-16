@@ -13,9 +13,6 @@ export default function Page() {
         <div className="w-full p-4 h-full overflow-auto pb-12 border-l ">
           <Editor />
         </div>
-        <picture className="hidden lg:block absolute bottom-4 left-4 z-50">
-          <img loading="lazy" className="w-16 h-16" src="/logo.png" alt="" />
-        </picture>
       </div>
     </>
   )

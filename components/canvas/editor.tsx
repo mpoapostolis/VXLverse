@@ -34,7 +34,7 @@ export function EditorCanvas() {
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (
     <>
-      <div className="relative">
+      <div className="relative  canvas-editor ">
         <Controls />
         <Canvas camera={{ position: [10, 10, 10] }}>
           <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
@@ -58,8 +58,8 @@ export function EditorCanvas() {
           <OrbitControls maxDistance={1000} makeDefault enableDamping={false} />
           <Preload all />
         </Canvas>
-        <picture className="absolute block lg:hidden   bottom-4 left-4 z-50">
-          <img loading="lazy" className="w-16 h-16" src="/logo.png" alt="" />
+        <picture className="absolute block  bottom-4 left-4 z-50">
+          <img className="w-16 h-16" src="/logo.webp" alt="" />
         </picture>
       </div>
     </>

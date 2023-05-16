@@ -208,7 +208,10 @@ export function QuestModal() {
     <Dialog>
       <ContextMenu>
         <DialogTrigger asChild>
-          <div className="relative   cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none ">
+          <div
+            role="menuitem"
+            className="relative   cursor-default select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none "
+          >
             Quest
           </div>
         </DialogTrigger>
