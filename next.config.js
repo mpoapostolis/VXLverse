@@ -7,10 +7,6 @@ module.exports =
   process.env.NODE_ENV === 'development'
     ? {
         reactStrictMode: true,
-        productionBrowserSourceMaps: true,
-        experimental: {
-          legacyBrowsers: false,
-        },
       }
     : withPWA({
         // Next.js config
