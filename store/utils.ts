@@ -89,6 +89,27 @@ export function meshToJson(mesh: Partial<Node>) {
   }
 }
 
+export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
+
+export const geometries = [
+  'Box',
+  'Capsule',
+  'Circle',
+  'Cylinder',
+  'Dodecahedron',
+  'Icosahedron',
+  'Lathe',
+  'Octahedron',
+  'Plane',
+  'Ring',
+  'Sphere',
+  'Sprite',
+  'Tetrahedron',
+  'Torus',
+  'TorusKnot',
+  'Tube',
+]
+
 export function jsonToMesh(json: Node) {
   const v3 = (json?.position ?? [0, 0, 0]) as number[]
   const e3 = (json.rotation ?? [0, 0, 0]) as number[]

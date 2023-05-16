@@ -17,7 +17,7 @@ import {
 import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
 import { Node, User, useStore } from '@/store'
-import { exportGame, importGameZip, meshToJson } from '@/store/utils'
+import { exportGame, geometries, importGameZip, lights, meshToJson } from '@/store/utils'
 
 import { Account } from '@/components/account'
 import { Indicator } from '@/components/indicator'
@@ -45,33 +45,6 @@ import { useRouter } from 'next/navigation'
 import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
 import { QuestModal } from '../questModal'
-export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
-
-export const geometries = [
-  'Box',
-  'Capsule',
-  'Circle',
-  'Cylinder',
-  'Dodecahedron',
-  'Icosahedron',
-  'Lathe',
-  'Octahedron',
-  'Plane',
-  'Ring',
-  'Sphere',
-  'Sprite',
-  'Tetrahedron',
-  'Torus',
-  'TorusKnot',
-  'Tube',
-]
-
-export interface UserInfo {
-  id: string
-  email: string
-  name: string
-  picture: string
-}
 
 export function Menu() {
   const store = useStore()
@@ -380,10 +353,10 @@ export function Menu() {
           {store.user ? (
             <Account />
           ) : (
-            <div className="ml-auto lg:mr-3" role="menuitem">
+            <div className="ml-auto lg:mr-2" role="menuitem">
               <button
                 onClick={login}
-                className=" h-full flex items-center font-semibold bg-card px-4 py-0.5 "
+                className=" h-full flex items-center font-semibold bg-card px-4 py-1 "
                 type="button"
               >
                 <picture>

@@ -1,5 +1,5 @@
-import { geometries, lights } from '@/components/menu'
 import { cn } from '@/lib/utils'
+import { geometries, lights } from '@/store/utils'
 
 export function Indicator(props: { type: string; gameType?: string; classname?: string }) {
   let color = '#000'
