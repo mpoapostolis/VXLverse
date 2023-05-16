@@ -14,7 +14,7 @@ export default function Page() {
           <Editor />
         </div>
         <picture className="hidden lg:block absolute bottom-4 left-4 z-50">
-          <img className="w-16 h-16" src="/logo.svg" alt="" />
+          <img className="w-16 h-16" src="/logo.png" alt="" />
         </picture>
       </div>
     </>
