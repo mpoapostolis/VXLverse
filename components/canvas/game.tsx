@@ -137,10 +137,10 @@ export function GameCanvas(props: { id?: string }) {
           onEnded={(e) => {
             e.currentTarget.className = 'hidden'
           }}
-          className="absolute top-0 left-0 w-full h-full object-cover z-50"
+          className="absolute top-0 left-0 w-full h-full object-cover z-50 pointer-events-none"
         >
           <source
-            src="https://admin.vxlverse.com/api/files/0n6p62xtlxvyuk8/fcrguwi3qkpn8ie/logo_8CIsGhj0he.webm"
+            src="https://admin.vxlverse.com/api/files/0n6p62xtlxvyuk8/fcrguwi3qkpn8ie/untitled_design_510UNrpbGB.webm?token="
             type="video/webm"
           />
         </video>
