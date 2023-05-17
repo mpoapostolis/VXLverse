@@ -18,6 +18,21 @@ export function Quest(props: Quest) {
   }
   return (
     <div className=" p-4 w-ull bg-card shadow-lg grid gap-2 h-fit border ">
+      <div className="flex">
+        <Button
+          onClick={() => {
+            store.updateNode(`${selectedNode?.uuid}`, {
+              ...selectedNode,
+              quests: selectedNode?.quests?.filter((obj) => {
+                return obj.uuid !== props.uuid
+              }),
+            })
+          }}
+          className="w-fit ml-auto text-xs border border-dashed border-red-400 text-red-400 bg-transparent"
+        >
+          Delete Quest
+        </Button>
+      </div>
       <Label className=" w-full text-xs font-medium">Name</Label>
       <Input
         onChange={(evt) => {
@@ -76,19 +91,6 @@ export function Quest(props: Quest) {
         </Button>
       </SelectModel>
       <div />
-      <Button
-        onClick={() => {
-          store.updateNode(`${selectedNode?.uuid}`, {
-            ...selectedNode,
-            quests: selectedNode?.quests?.filter((obj) => {
-              return obj.uuid !== props.uuid
-            }),
-          })
-        }}
-        className="w-full text-xs border border-dashed border-red-400 text-red-400 bg-transparent"
-      >
-        Delete Quest
-      </Button>
     </div>
   )
 }

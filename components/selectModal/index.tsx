@@ -80,7 +80,7 @@ export function SelectModal(props: {
             placeholder="🔍 Search..."
           />
         </DialogHeader>
-        <Separator />
+        <Separator className="my-4" />
 
         <div
           className={cn('grid   gap-4', {
