@@ -44,7 +44,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PocketBase from 'pocketbase'
 import { Mesh, Vector3 } from 'three'
-import { QuestModal } from '../questModal'
 
 export function Menu() {
   const store = useStore()
@@ -322,9 +321,7 @@ export function Menu() {
           </SceneModal>
         </MenubarContent>
       </MenubarMenu>
-      <MenubarMenu>
-        <QuestModal />
-      </MenubarMenu>
+
       <MenubarMenu>
         <MenubarTrigger>Help</MenubarTrigger>
         <MenubarContent>

@@ -1,10 +1,8 @@
-import { Quest } from '@/components/quest'
-import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import type { Quest as QuestType } from '@/store'
 import { useStore } from '@/store'
-import { PlusIcon } from 'lucide-react'
+import { QuestModal } from '../questModal'
 
 const newQuest = (num: number) =>
   ({
@@ -26,18 +24,7 @@ export function Quests() {
     <>
       <Separator className="my-4" />
       <Label className=" truncate w-full text-sm font-semibold mb-4 block text-secondary ">Quests</Label>
-      <Quest />
-      <Button
-        onClick={() => {
-          store.updateNode(`${selected?.uuid}`, {
-            quests: [...quests, newQuest(quests?.length ?? 0)],
-          })
-        }}
-        className="w-full "
-      >
-        <PlusIcon className="mr-2 w-4 h-4" />
-        New Quest
-      </Button>
+      <QuestModal />
     </>
   ) : null
 }
