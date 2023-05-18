@@ -51,6 +51,7 @@ export function Menu() {
     store.addNode({
       uuid: getUuid(),
       gameType,
+      scale: [1, 1, 1],
       scene: store.currentScene,
       position: [0, 0, 0],
       type: type,
