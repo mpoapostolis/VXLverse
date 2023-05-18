@@ -3,13 +3,10 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Xyz } from '@/components/xyz'
 import { useStore } from '@/store'
-import { Euler, Vector3 } from 'three'
 
 export function TransformSettings() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
-  const rot = selected?.rotation ?? new Euler(0, 0, 0)
-
   return !selected ? null : (
     <>
       <Separator className="my-4" />
@@ -37,32 +34,29 @@ export function TransformSettings() {
       <Xyz
         onChange={(val) => {
           const [x, y, z] = val
-          const position = new Vector3(x, y, z)
-          if (!selected?.uuid || !position) return
-          store.updateNode(selected.uuid, { position })
+          if (!selected?.uuid) return
+          store.updateNode(selected.uuid, { position: [x, y, z] })
         }}
         label="Position"
-        values={selected?.position?.toArray() ?? [0, 0, 0]}
+        values={selected?.position ?? [0, 0, 0]}
       />
       <Xyz
         onChange={(val) => {
           const [x, y, z] = val
-          const rotation = new Euler(x, y, z)
-          if (!selected?.uuid || !rotation) return
-          store.updateNode(selected.uuid, { rotation })
+          if (!selected?.uuid) return
+          store.updateNode(selected.uuid, { rotation: [x, y, z] })
         }}
         label="Rotation"
-        values={[rot.x, rot.y, rot.z]}
+        values={selected?.rotation ?? [0, 0, 0]}
       />
       <Xyz
         onChange={(val) => {
           const [x, y, z] = val
-          const scale = new Vector3(x, y, z)
-          if (!selected?.uuid || !scale) return
-          store.updateNode(selected.uuid, { scale })
+          if (!selected?.uuid) return
+          store.updateNode(selected.uuid, { scale: [x, y, z] })
         }}
         label="Scale"
-        values={selected?.scale?.toArray() ?? [0, 0, 0]}
+        values={selected?.scale ?? [0, 0, 0]}
       />
     </>
   )

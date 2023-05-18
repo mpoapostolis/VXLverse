@@ -17,7 +17,7 @@ import {
 import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
 import { Node, User, useStore } from '@/store'
-import { exportGame, geometries, importGameZip, lights, meshToJson } from '@/store/utils'
+import { exportGame, geometries, getUuid, importGameZip, lights } from '@/store/utils'
 
 import { Account } from '@/components/account'
 import { Indicator } from '@/components/indicator'
@@ -43,18 +43,16 @@ import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PocketBase from 'pocketbase'
-import { Mesh, Vector3 } from 'three'
 
 export function Menu() {
   const store = useStore()
 
   function addMesh(type: Node['type'], gameType?: Node['gameType']) {
-    const mesh = new Mesh()
     store.addNode({
-      ...mesh,
+      uuid: getUuid(),
       gameType,
       scene: store.currentScene,
-      position: new Vector3(0, 0, 0),
+      position: [0, 0, 0],
       type: type,
     })
   }
@@ -62,21 +60,22 @@ export function Menu() {
 
   function addGLTF(node?: Model) {
     if (!node) return
-    const mesh = new Mesh()
+
     const defaultPosition = node?.defaultPosition ?? [0, 0, 0]
+    const scale = node?.scale ?? 1
     store.addNode({
-      ...mesh,
+      uuid: getUuid(),
       img: node.img,
       gameType: node.type,
       scene: store.currentScene,
-      position: new Vector3(...defaultPosition),
+      position: defaultPosition,
       url: node.url,
       type: 'GLTF',
       physics: 'fixed',
       animation: node.defaultAnimation,
       name: node.name,
       statusToAnimation: node.statusToAnimation,
-      scale: new Vector3(node?.scale ?? 1, node?.scale ?? 1, node?.scale ?? 1),
+      scale: [scale, scale, scale],
     })
   }
 
@@ -154,7 +153,7 @@ export function Menu() {
             onClick={async () => {
               const id = await axios
                 .post('/api/publish', {
-                  nodes: store.nodes.filter((e) => !e.blob).map(meshToJson),
+                  nodes: store.nodes.filter((e) => !e.blob),
                   scenes: store.scenes,
                 })
                 .then((d) => {
@@ -307,9 +306,8 @@ export function Menu() {
           <MenubarSeparator />
           <SceneModal
             onClick={() => {
-              const mesh = new Mesh()
               store.addScene({
-                uuid: mesh.uuid,
+                uuid: getUuid(),
                 type: 'color',
                 name: 'Scene ' + Number(store.scenes.length + 1),
                 color: '#000',

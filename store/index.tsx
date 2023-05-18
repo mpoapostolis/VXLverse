@@ -3,18 +3,9 @@
 import { toast } from '@/components/ui/use-toast'
 import { Game } from '@/lib/games/types'
 import { RigidBodyTypeString } from '@react-three/rapier'
-import { AnimationAction, Mesh, Vector3 } from 'three'
+import { AnimationAction, Vector3 } from 'three'
 import { create } from 'zustand'
-import {
-  CharStatus,
-  VXLverseVersion,
-  defaultGameConf,
-  defaultNodes,
-  defaultScenes,
-  getLocalStorage,
-  jsonToMesh,
-  meshToJson,
-} from './utils'
+import { CharStatus, VXLverseVersion, defaultGameConf, getLocalStorage } from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -109,11 +100,17 @@ export const gameTypes: GameType[] = [
   'scenes',
 ]
 
-export type Node = Partial<Mesh> & {
+export type Node = {
+  uuid?: string
+  name?: string
+
   scene?: string
   url?: string
+  position?: number[]
+  rotation?: number[]
+  scale?: number[]
   collectable?: boolean
-  goTo?: Vector3
+  goTo?: number[]
   velocity?: number
   blob?: Blob
   animation?: string
@@ -235,6 +232,7 @@ export const useStore = create<Store>((set) => ({
   reset: () =>
     set({
       ...defaultGameConf,
+      nodes: defaultGameConf?.nodes,
     }),
   deleteNode: () => {
     const { nodes, selectedNode } = useStore.getState()
@@ -282,14 +280,18 @@ export const useStore = create<Store>((set) => ({
 
   setGame: (game) =>
     set({
-      nodes: game.nodes.map(jsonToMesh),
+      nodes: game.nodes,
       scenes: game.scenes,
     }),
 }))
 
 useStore?.subscribe(async (state) => {
   const localstorage = getLocalStorage()
-  const nodes = state.nodes.map(meshToJson) ?? []
+  const nodes =
+    state.nodes?.map((e) => ({
+      ...e,
+      actions: undefined,
+    })) ?? []
   localstorage?.setItem(
     VXLverseVersion,
     JSON.stringify({ user: state.user, nodes, inventory: state.inventory, scenes: state.scenes }),
@@ -299,16 +301,17 @@ useStore?.subscribe(async (state) => {
 export function init() {
   const localStorage = getLocalStorage()
   const store = localStorage?.getItem(VXLverseVersion)
+
   const parsedStore = store
     ? JSON.parse(store)
     : {
-        nodes: defaultNodes,
-        scenes: defaultScenes,
+        nodes: defaultGameConf.nodes,
+        scenes: defaultGameConf.scenes,
       }
 
   useStore?.setState({
     user: parsedStore?.user,
-    nodes: parsedStore?.nodes?.map(jsonToMesh) ?? defaultGameConf?.nodes,
+    nodes: parsedStore?.nodes,
     scenes: parsedStore.scenes ?? defaultGameConf?.scenes,
     inventory: parsedStore?.inventory ?? [],
     selectedNode: undefined,

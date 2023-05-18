@@ -11,7 +11,7 @@ import { Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { CuboidCollider, Physics, useRapier } from '@react-three/rapier'
 import { Suspense, useEffect } from 'react'
-import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
+import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
 
 function Env(props: { equirect: string }) {
   const texture = useTexture(props.equirect ?? '')
@@ -32,7 +32,7 @@ function Orbit(props: { id?: string }) {
     const intersects = raycaster.intersectObjects(t.scene.children)
     if (intersects?.at(0)?.point)
       store.updateNode(hero?.uuid ?? '', {
-        goTo: intersects?.at(0)?.point,
+        goTo: intersects?.at(0)?.point?.toArray(),
         status: 'walk',
       })
   }
@@ -81,7 +81,7 @@ function Orbit(props: { id?: string }) {
 
   return (
     <OrbitControls
-      target={hero?.position}
+      target={new Vector3(...(hero?.position, [0, 0, 0]))}
       enablePan={false}
       maxDistance={40.1}
       minDistance={4}
@@ -158,7 +158,7 @@ export function GameCanvas(props: { id?: string }) {
           <Physics debug>
             {store.nodes.map((node, idx) =>
               lights.includes(node.type) ? (
-                <mesh key={idx} position={node.position}>
+                <mesh key={idx} position={new Vector3(...(node?.position ?? [0, 0, 0]))}>
                   <Light type={node?.type ?? 'DirectionalLight'} />
                 </mesh>
               ) : (

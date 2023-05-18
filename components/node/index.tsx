@@ -4,7 +4,7 @@ import { MeshGeometry } from '@/components/meshGeometry'
 import { Node, NodeType, useStore } from '@/store'
 import { Html, TransformControls, useHelper } from '@react-three/drei'
 import { Suspense, useRef } from 'react'
-import { BoxHelper, Euler } from 'three'
+import { BoxHelper, Euler, Vector3 } from 'three'
 
 export const lights: any[] = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
@@ -17,43 +17,45 @@ export function Node(
   const ref = useRef(null)
   useHelper(props.selected && ref.current && ref, BoxHelper, 'yellow')
   // rotation degrees to rad
-  const rotation = props.rotation
-    ? new Euler(
-        (props.rotation.x * Math.PI) / 180,
-        (props.rotation.y * Math.PI) / 180,
-        (props.rotation.z * Math.PI) / 180,
-      )
-    : new Euler(0, 0, 0)
+
+  const rotation = new Euler(...(props.rotation?.map((r) => (r * Math.PI) / 180) ?? [0, 0, 0]))
+  const position = new Vector3(...(props.position ?? [0, 0, 0]))
+  const scale = new Vector3(...(props.scale ?? [0, 0, 0]))
+
   return (
     <TransformControls
       mode={store.mode}
-      position={props.position ?? [0, 0, 0]}
+      position={position}
       rotation={rotation}
-      scale={props.scale ?? [0, 0, 0]}
+      scale={scale}
       onMouseUp={(e) => {
         const obj = e?.target.object
         if (obj && props.uuid) {
-          if (store.mode === 'translate')
+          if (store.mode === 'translate') {
+            const { x, y, z } = obj.position
             store.updateNode(props.uuid, {
-              position: obj.position,
+              position: [x, y, z],
             })
+          }
 
           if (store.mode === 'rotate') {
+            const { x, y, z } = obj.rotation
+
             // rad to degress
-            const rotation = new Euler(
-              (obj.rotation.x * 180) / Math.PI,
-              (obj.rotation.y * 180) / Math.PI,
-              (obj.rotation.z * 180) / Math.PI,
-            )
+            const rotation = [x, y, z].map((r) => (r * 180) / Math.PI)
+
             store.updateNode(props.uuid, {
               rotation,
             })
           }
 
-          if (store.mode === 'scale')
+          if (store.mode === 'scale') {
+            const { x, y, z } = obj.scale
+
             store.updateNode(props.uuid, {
-              scale: obj.scale,
+              scale: [x, y, z],
             })
+          }
         }
       }}
       enabled={props.selected}

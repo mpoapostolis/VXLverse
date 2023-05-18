@@ -1,12 +1,11 @@
 import { useModels } from '@/lib/models/queries'
 import { gameTypes, useStore } from '@/store'
-import { Euler, Vector3 } from 'three'
 import { SelectModal } from '.'
 
 export function SelectModel(props: { children?: React.ReactNode; onChange?: (e?: string) => void }) {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
-  const rot = selected?.rotation ?? new Euler(0, 0, 0)
+  const rot = selected?.rotation ?? [0, 0, 0]
   const { data: models } = useModels()
   return (
     <SelectModal
@@ -31,8 +30,8 @@ export function SelectModel(props: { children?: React.ReactNode; onChange?: (e?:
           url: model?.url ?? '',
           name: model?.name ?? '',
           img: model?.img,
-          scale: new Vector3(model?.scale ?? 1, model?.scale ?? 1, model?.scale ?? 1),
-          rotation: new Euler(rot.x, rot.y, rot.z),
+          scale: [model?.scale ?? 1, model?.scale ?? 1, model?.scale ?? 1],
+          rotation: rot,
           type: 'GLTF',
           animation: model?.defaultAnimation,
           statusToAnimation: model?.statusToAnimation,

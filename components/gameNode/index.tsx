@@ -9,8 +9,12 @@ import { Euler, Mesh, Quaternion, Vector3 } from 'three'
 export function GameNode(props: Partial<Node>) {
   const store = useStore()
   const ref = useRef<Mesh>(null)
+  const [x, y, z] = props.goTo ?? [0, 0, 0]
+  const targetPosition = new Vector3(x, ref?.current?.position.y, z)
 
-  const targetPosition = new Vector3(props.goTo?.x, ref?.current?.position.y, props?.goTo?.z)
+  const rotation = new Euler(...(props.rotation?.map((r) => (r * Math.PI) / 180) ?? [0, 0, 0]))
+  const position = new Vector3(...(props.position ?? [0, 0, 0]))
+  const scale = new Vector3(...(props.scale ?? [0, 0, 0]))
 
   useFrame(() => {
     const rb = rigidBody.current
@@ -36,20 +40,15 @@ export function GameNode(props: Partial<Node>) {
 
     rigidBody?.current?.setNextKinematicTranslation({
       x: newPosition.x,
-      y: props.position?.y ?? 0,
+      y: position?.y ?? 0,
       z: newPosition.z,
     })
   })
 
   useEffect(() => {
     if (!ref.current) return
-    const rotation = props.rotation
-      ? new Euler(
-          (props.rotation.x * Math.PI) / 180,
-          (props.rotation.y * Math.PI) / 180,
-          (props.rotation.z * Math.PI) / 180,
-        )
-      : new Euler(0, 0, 0)
+    const rotation = new Euler(...(props.rotation?.map((r) => (r * Math.PI) / 180) ?? [0, 0, 0]))
+
     ref.current.rotation.set(rotation.x, rotation.y, rotation.z)
   }, [props.rotation])
 
@@ -63,9 +62,9 @@ export function GameNode(props: Partial<Node>) {
     <Suspense fallback={null}>
       <RigidBody
         ref={rigidBody}
-        rotation={props.rotation}
-        scale={props.scale ?? [0, 0, 0]}
-        position={props.position ?? [0, 0, 0]}
+        rotation={rotation}
+        scale={scale}
+        position={position}
         type={props.gameType === 'hero' ? 'kinematicPosition' : props.physics ?? 'fixed'}
       >
         <mesh
