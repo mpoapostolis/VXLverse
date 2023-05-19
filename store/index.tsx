@@ -100,10 +100,50 @@ export const gameTypes: GameType[] = [
   'scenes',
 ]
 
+export type MaterialType =
+  | 'fabric'
+  | 'concrete'
+  | 'floors'
+  | 'ground'
+  | 'metals'
+  | 'models'
+  | 'organic'
+  | 'roads'
+  | 'stone'
+  | 'synthetic'
+  | 'trees'
+  | 'walls'
+  | 'wood'
+
+export const materialTypes: MaterialType[] = [
+  'fabric',
+  'concrete',
+  'floors',
+  'ground',
+  'metals',
+  'models',
+  'organic',
+  'roads',
+  'stone',
+  'synthetic',
+  'trees',
+  'walls',
+  'wood',
+]
+
+export type NodeMaterial = {
+  map?: string
+  displacement?: string
+  metalness?: string
+  normal?: string
+  roughness?: string
+  preview?: string
+  type?: MaterialType
+}
+
 export type Node = {
   uuid?: string
   name?: string
-
   scene?: string
   url?: string
   position?: number[]
@@ -120,6 +160,7 @@ export type Node = {
   status: CharStatus
   gameType?: GameType
   img?: string
+  material?: NodeMaterial
   physics?: RigidBodyTypeString
   actions?: {
     [x: string]: AnimationAction | null

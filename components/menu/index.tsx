@@ -54,6 +54,7 @@ export function Menu() {
       scale: [1, 1, 1],
       scene: store.currentScene,
       position: [0, 0, 0],
+      name: type,
       type: type,
     })
   }

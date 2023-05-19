@@ -14,7 +14,7 @@ export function SelectModel(props: { children?: React.ReactNode; onChange?: (e?:
       options={
         models?.map((model) => ({
           value: model.id,
-          src: model.img,
+          src: `${model.img}?thumb=190x190`,
           type: model.type,
           label: model.name,
         })) ?? []

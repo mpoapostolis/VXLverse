@@ -46,12 +46,10 @@ export function SelectModal(props: {
       if (!filter) return true
       return opt.type === filter
     })
-
     ?.filter((opt) => {
       if (!searchTerm) return true
       return opt.label.toLowerCase().includes(searchTerm.toLowerCase())
     })
-
   return (
     <Dialog onOpenChange={() => setSearchTerm('')}>
       <ContextMenu>
@@ -142,7 +140,7 @@ export function SelectModal(props: {
                         <picture>
                           <img
                             loading="lazy"
-                            src={obj.src ? `${obj.src}?thumb=190x190` : '/images/placeholder.png'}
+                            src={obj.src ? `${obj.src}` : '/images/placeholder.png'}
                             alt="preview"
                             className="rounded-md w-full h-full object-scale-down bg-black "
                           />
