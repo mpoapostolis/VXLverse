@@ -17,7 +17,7 @@ export function Material() {
             if (!selected?.uuid) return
             store.updateNode(selected.uuid, { color: evt.target.value })
           }}
-          value={selected?.color ?? '#999'}
+          value={selected?.color ?? '#ffffff'}
           type="color"
           className="ml-auto h-12 w-12"
         />

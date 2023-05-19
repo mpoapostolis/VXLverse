@@ -153,7 +153,7 @@ export function GameCanvas(props: { id?: string }) {
           {selectedScene?.equirect ? (
             <Env equirect={selectedScene.equirect} />
           ) : (
-            <color attach="background" args={[selectedScene?.color ?? '#999']} />
+            <color attach="background" args={[selectedScene?.color ?? '#999999']} />
           )}
           <Physics debug>
             {store.nodes.map((node, idx) =>

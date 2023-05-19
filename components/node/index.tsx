@@ -1,10 +1,12 @@
 import { Gltf } from '@/components/gltf'
 import { Light } from '@/components/lights'
 import { MeshGeometry } from '@/components/meshGeometry'
-import { Node, NodeMaterial, NodeType, useStore } from '@/store'
-import { Html, TransformControls, useHelper, useTexture } from '@react-three/drei'
+import { Node, NodeType, useStore } from '@/store'
+import { TransformControls, useHelper } from '@react-three/drei'
 import { Suspense, useRef } from 'react'
 import { BoxHelper, Euler, Vector3 } from 'three'
+import { Loader } from '../loader'
+import { Material } from '../material'
 
 export const lights: any[] = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
 
@@ -21,21 +23,6 @@ export function Node(
   const rotation = new Euler(...(props.rotation?.map((r) => (r * Math.PI) / 180) ?? [0, 0, 0]))
   const position = new Vector3(...(props.position ?? [0, 0, 0]))
   const scale = new Vector3(...(props.scale ?? [0, 0, 0]))
-
-  let textureMap: NodeMaterial = {}
-  if (props.material?.map) textureMap.map = props.material.map
-  if (props.material?.displacement) textureMap.displacement = props.material.displacement
-  if (props.material?.metalness) textureMap.metalness = props.material.metalness
-  if (props.material?.normal) textureMap.normal = props.material.normal
-  if (props.material?.roughness) textureMap.roughness = props.material.roughness
-
-  const objMap = useTexture<{
-    map?: string
-    displacement?: string
-    metalness?: string
-    normal?: string
-    roughness?: string
-  }>(textureMap)
 
   return (
     <TransformControls
@@ -90,32 +77,15 @@ export function Node(
               props.uuid && store.selectNode(props.uuid)
             }}
           >
-            <Suspense
-              fallback={
-                <Html>
-                  <div
-                    className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-primary rounded-full"
-                    role="status"
-                    aria-label="loading"
-                  >
-                    <span className="sr-only">Loading...</span>
-                  </div>
-                </Html>
-              }
-            >
+            <Suspense fallback={<Loader />}>
               {props.url && props.uuid && props.type === 'GLTF' && (
                 <Gltf key={props.url} animation={props.animation} uuid={props.uuid} url={props.url} />
               )}
             </Suspense>
             {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
-
-            <meshStandardMaterial
-              map={objMap.map}
-              metalnessMap={objMap?.metalness ?? undefined}
-              normalMap={objMap?.normal ?? undefined}
-              roughnessMap={objMap?.roughness ?? undefined}
-              color={props.color}
-            />
+            <Suspense fallback={<Loader />}>
+              <Material material={props.material} color={props.color} />
+            </Suspense>
           </mesh>
         )}
       </>

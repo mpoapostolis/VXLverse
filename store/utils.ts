@@ -44,6 +44,7 @@ export const defaultScenes: Scene[] = [
 ]
 
 export const defaultGameConf: Partial<Store> = {
+  selectedNode: undefined,
   nodes: defaultNodes,
   scenes: defaultScenes,
   currentScene: defaultScenes?.at(0)?.uuid,
