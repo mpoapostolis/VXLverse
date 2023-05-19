@@ -11,7 +11,7 @@ export function Xyz(props: { onChange: (val: number[]) => void; label: string; v
           placeholder={idxToLabel[idx]}
           key={idx}
           onChange={(e) => {
-            const values = props.values
+            const values = [...props.values]
             values[idx] = parseFloat(e.target.value)
             props.onChange(values)
           }}

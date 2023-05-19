@@ -24,6 +24,7 @@ export function EditorCanvas() {
     if (e.key.toLocaleLowerCase() === 'r') store.setMode('scale')
     if (e.key.toLocaleLowerCase() === 'delete') store.deleteNode()
     if (e.key.toLocaleLowerCase() === 'escape') store.selectNode(undefined)
+    if (e.key.toLocaleLowerCase() === 'd' && e.shiftKey) store.duplicateNode()
   }
   useEffect(() => {
     window.addEventListener('keydown', onKeyDown)

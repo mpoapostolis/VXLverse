@@ -3,7 +3,6 @@ import { Light } from '@/components/lights'
 import { MeshGeometry } from '@/components/meshGeometry'
 import { Node, NodeMaterial, NodeType, useStore } from '@/store'
 import { Html, TransformControls, useHelper, useTexture } from '@react-three/drei'
-import { useThree } from '@react-three/fiber'
 import { Suspense, useRef } from 'react'
 import { BoxHelper, Euler, Vector3 } from 'three'
 
@@ -37,8 +36,7 @@ export function Node(
     normal?: string
     roughness?: string
   }>(textureMap)
-  const t = useThree()
-  const rref = useRef(null)
+
   return (
     <TransformControls
       mode={store.mode}

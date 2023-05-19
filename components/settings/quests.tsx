@@ -18,7 +18,6 @@ const newQuest = (num: number) =>
 export function Quests() {
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
-  const quests = selected?.quests ?? []
 
   return selected ? (
     <>

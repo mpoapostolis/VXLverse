@@ -303,11 +303,13 @@ export const useStore = create<Store>((set) => ({
 
   duplicateNode: () =>
     set((state) => {
+      if (!state.selectedNode) return state
       const node = state.nodes.find((n) => n.uuid === state.selectedNode)
       const uuid = getUuid()
+
       return {
         selectedNode: uuid,
-        nodes: [...state.nodes, { ...node, uuid }],
+        nodes: [{ ...node, uuid }, ...state.nodes],
       }
     }),
 
@@ -325,7 +327,7 @@ export const useStore = create<Store>((set) => ({
   addNode(node) {
     set((state) => ({
       selectedNode: node.uuid,
-      nodes: [...state.nodes, node],
+      nodes: [node, ...state.nodes],
     }))
   },
   scenes: [],
