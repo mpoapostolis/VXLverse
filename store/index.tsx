@@ -5,7 +5,7 @@ import { Game } from '@/lib/games/types'
 import { RigidBodyTypeString } from '@react-three/rapier'
 import { AnimationAction, Vector3 } from 'three'
 import { create } from 'zustand'
-import { CharStatus, VXLverseVersion, defaultGameConf, getLocalStorage } from './utils'
+import { CharStatus, VXLverseVersion, defaultGameConf, getLocalStorage, getUuid } from './utils'
 
 export type NodeType =
   | 'GLTF'
@@ -216,6 +216,7 @@ export type Store = {
   selectedNode?: string
   addNode: (node: Partial<Node>) => void
   deleteNode: () => void
+  duplicateNode: () => void
   selectNode: (uuid?: string) => void
   updateNode: (uuid: string, node: Partial<Node>) => void
 
@@ -285,6 +286,7 @@ export const useStore = create<Store>((set) => ({
         description: 'You can change the hero 3d model in the settings tab',
       })
     set((state) => ({
+      selectedNode: undefined,
       nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
     }))
   },
@@ -296,6 +298,16 @@ export const useStore = create<Store>((set) => ({
       return {
         currentScene: firstSceneAfterDelete?.uuid,
         scenes: state.scenes.filter((scene) => scene.uuid !== state.currentScene),
+      }
+    }),
+
+  duplicateNode: () =>
+    set((state) => {
+      const node = state.nodes.find((n) => n.uuid === state.selectedNode)
+      const uuid = getUuid()
+      return {
+        selectedNode: uuid,
+        nodes: [...state.nodes, { ...node, uuid }],
       }
     }),
 
