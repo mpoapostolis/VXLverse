@@ -7,8 +7,9 @@ import Head from 'next/head'
 const APP_NAME = 'VXLverse'
 const APP_DEFAULT_TITLE = 'VXLverse'
 const APP_TITLE_TEMPLATE = 'VXLverse'
-const APP_DESCRIPTION =
-  'VXLverse is a revolutionary online platform designed to empower users to both create and play a wide variety of RPG games. Our mission is to provide an interactive and engaging space for game enthusiasts, offering them the opportunity to showcase their creativity and be rewarded for it.'
+const APP_DESCRIPTION = `Imagine you're playing with your favorite toy set, 
+placing characters around, and creating fun stories with them. 
+That's exactly what VXLverse does, but in a digital world.`
 
 export const metadata: Metadata = {
   applicationName: APP_NAME,
