@@ -8,7 +8,7 @@ import Link from 'next/link'
 const APP_NAME = 'VXLverse'
 const APP_DEFAULT_TITLE = 'VXLverse'
 const APP_TITLE_TEMPLATE = 'VXLverse'
-const APP_CONTENT = '/logo-op.png'
+const APP_CONTENT = 'logo-op.png'
 const APP_DESCRIPTION = `Imagine you're playing with your favorite toy set, 
 placing characters around, and creating fun stories with them. 
 That's exactly what VXLverse does, but in a digital world.`
@@ -57,8 +57,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <Link rel="icon" href="/favicon.ico" />
+        <Link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#000000" />
+        <meta name="theme-color" content="#000000" />
       </Head>
 
       <body className="overflow-hidden w-screen h-screen">

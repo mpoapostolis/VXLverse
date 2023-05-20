@@ -1,6 +1,6 @@
 # VXLverse
 
-VXLverse is an intuitive WebGL-based editor designed for the creation of 3D story games. It's a comprehensive platform that bridges the gap between game development and storytelling, providing users with a suite of tools to craft immersive narratives within dynamic three-dimensional environments.
+VXLverse is like a toy box for building your own 3D video games. Imagine you're playing with your favorite toy set, placing characters around, and creating fun stories with them. That's exactly what VXLverse does, but in a digital world.
 
 ## Key Features
 
