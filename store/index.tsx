@@ -57,13 +57,50 @@ export type KeyBindings = {
   default?: string
 } & Record<string, string>
 
+// const y = [
+// {
+//   name: 'Quest 1',
+//   initialDialog: 'Hello what do you want to eat',
+//   options: [
+//     {
+//       option: 'i want an ice cream',
+//       dialogue: 'What flavor do you want?',
+//       options: [
+//         {
+//           dialogue: 'Here is your ice cream with chocolate',
+//           option: 'Chocolate',
+//           reward: 'item:123',
+//         },
+//         {
+//           dialogue: 'Here is your ice cream with vanilla',
+//           option: 'Vanilla',
+//           reward: 'item:123',
+//         },
+//       ],
+//     },
+//     {
+//       option: 'i want a potato',
+//       dialogue: 'Ok here is your potato',
+//       reward: 'item:123',
+//     },
+//   ],
+// },
+// ]
+export type QuestOptionType = {
+  uuid: string
+  x?: number
+  y?: number
+  optionName: string
+  npcText: string
+  parrentId?: string
+  tree?: string[]
+}
+
 export type Quest = {
   uuid: string
   name: string
-  initialDialog: string
-  requiredItemToComplete?: string
-  questCompleteDialog?: string
-  reward?: string
+  npctext: string
+  options?: QuestOptionType[]
   status: 'incomplete' | 'completed'
 }
 

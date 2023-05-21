@@ -1,18 +1,23 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { ChevronDownIcon } from 'lucide-react'
 import { Select } from '../select'
 import { SelectModel } from '../selectModal/selectModel'
 import { Button } from '../ui/button'
 
-export function Quest() {
+export function QuestOption(props: { selected?: boolean }) {
   const store = useStore()
   const selectedNode = store?.nodes?.find((node) => node.uuid === store.selectedNode)
 
   return (
-    <div className=" p-4 w-80 bg-card shadow-lg grid gap-2 h-fit border ">
-      <Label className=" w-full text-xs font-medium">Name</Label>
+    <div
+      className={cn('p-4 w-80 bg-card shadow-lg grid gap-2 h-fit border', {
+        'border-secondary border-dashed': props.selected,
+      })}
+    >
+      <Label className=" w-full text-xs font-medium">Option name</Label>
       <Input type="text" className="bg-background" />
 
       <Label className=" w-full text-xs font-medium">NPC Text</Label>
@@ -31,36 +36,7 @@ export function Quest() {
           <ChevronDownIcon className="w-4 h-4 ml-auto" />
         </Button>
       </SelectModel>
+      <div />
     </div>
   )
 }
-
-const y = [
-  {
-    name: 'Quest 1',
-    initialDialog: 'Hello what do you want to eat',
-    options: [
-      {
-        option: 'i want an ice cream',
-        dialogue: 'What flavor do you want?',
-        options: [
-          {
-            dialogue: 'Here is your ice cream with chocolate',
-            option: 'Chocolate',
-            reward: 'item:123',
-          },
-          {
-            dialogue: 'Here is your ice cream with vanilla',
-            option: 'Vanilla',
-            reward: 'item:123',
-          },
-        ],
-      },
-      {
-        option: 'i want a potato',
-        dialogue: 'Ok here is your potato',
-        reward: 'item:123',
-      },
-    ],
-  },
-]
