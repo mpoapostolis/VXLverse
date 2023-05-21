@@ -78,24 +78,24 @@ export function GameNode(props: Partial<Node>) {
 
             if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
             if (props.collectable) store.addToInventory(props.uuid)
-            if (props.quests) {
-              const firstActiveQuest = props.quests.find((quest) => quest.status === 'incomplete')
-              if (firstActiveQuest) {
-                const isItCompleted = firstActiveQuest.requiredItemToComplete
-                  ? invHas(firstActiveQuest.requiredItemToComplete ?? '')
-                  : true
+            // if (props.quests) {
+            //   const firstActiveQuest = props.quests.find((quest) => quest.status === 'incomplete')
+            //   if (firstActiveQuest) {
+            //     const isItCompleted = firstActiveQuest.requiredItemToComplete
+            //       ? invHas(firstActiveQuest.requiredItemToComplete ?? '')
+            //       : true
 
-                if (isItCompleted && firstActiveQuest.reward) store.addToInventory(firstActiveQuest.reward)
+            //     if (isItCompleted && firstActiveQuest.reward) store.addToInventory(firstActiveQuest.reward)
 
-                store.setDialogue({
-                  src: props.img,
-                  dialogue:
-                    isItCompleted && firstActiveQuest.questCompleteDialog
-                      ? firstActiveQuest.questCompleteDialog
-                      : firstActiveQuest.initialDialog,
-                })
-              }
-            }
+            //     store.setDialogue({
+            //       src: props.img,
+            //       dialogue:
+            //         isItCompleted && firstActiveQuest.questCompleteDialog
+            //           ? firstActiveQuest.questCompleteDialog
+            //           : firstActiveQuest.initialDialog,
+            //     })
+            //   }
+            // }
           }}
           type={props.gameType}
           visible={isVisible}

@@ -18,15 +18,15 @@ export function GameProperties() {
       id: item.uuid,
     }))
 
-  const questItems = store.nodes
-    // .filter((node) => node.gameType === 'npc')
-    .map((node) => node.quests?.map((q) => q.reward))
-    .flat()
-    .filter((reward) => reward)
+  // const questItems = store.nodes
+  //   // .filter((node) => node.gameType === 'npc')
+  //   .map((node) => node.quests?.map((q) => q.reward))
+  //   .flat()
+  //   .filter((reward) => reward)
 
-  const r = rewards.filter((reward) => questItems.includes(reward.id))
+  // const r = rewards.filter((reward) => questItems.includes(reward.id))
 
-  const options = [...items, ...r].map((item) => ({
+  const options = [...items].map((item) => ({
     label: `${item.name}`,
     value: `${item.id}`,
     src: `${item.img}`,
