@@ -57,51 +57,25 @@ export type KeyBindings = {
   default?: string
 } & Record<string, string>
 
-// const y = [
-// {
-//   name: 'Quest 1',
-//   initialDialog: 'Hello what do you want to eat',
-//   options: [
-//     {
-//       option: 'i want an ice cream',
-//       dialogue: 'What flavor do you want?',
-//       options: [
-//         {
-//           dialogue: 'Here is your ice cream with chocolate',
-//           option: 'Chocolate',
-//           reward: 'item:123',
-//         },
-//         {
-//           dialogue: 'Here is your ice cream with vanilla',
-//           option: 'Vanilla',
-//           reward: 'item:123',
-//         },
-//       ],
-//     },
-//     {
-//       option: 'i want a potato',
-//       dialogue: 'Ok here is your potato',
-//       reward: 'item:123',
-//     },
-//   ],
-// },
-// ]
-export type QuestOptionType = {
+export type OptionQuestType = {
   uuid: string
+  name: string
   x?: number
   y?: number
-  optionName: string
-  npcText: string
+  npcText?: string
   parrentId?: string
   tree?: string[]
 }
-
-export type Quest = {
+export type QuestType = {
   uuid: string
+  x?: number
+  y?: number
   name: string
-  npctext?: string
-  options?: QuestOptionType[]
-  status: 'incomplete' | 'completed'
+  npcText?: string
+  tree?: string[]
+  nodeId?: string
+  options?: OptionQuestType[]
+  status?: 'incomplete' | 'completed'
 }
 
 export type GameType =
@@ -202,7 +176,6 @@ export type Node = {
   actions?: {
     [x: string]: AnimationAction | null
   }
-  quests?: Quest[]
   type: NodeType
 }
 export type SceneType = 'color' | 'equirect'
@@ -258,6 +231,13 @@ export type Store = {
   updateNode: (uuid: string, node: Partial<Node>) => void
 
   setGame: (game: Game) => void
+
+  quests?: QuestType[]
+  newQuest: () => void
+  updateQuest: (quest: Partial<QuestType>) => void
+  deleteQuest: (uuid: string) => void
+  selectedQuest?: string
+  setSelectedQuest: (uuid?: string) => void
 }
 
 export const useStore = create<Store>((set) => ({
@@ -375,6 +355,35 @@ export const useStore = create<Store>((set) => ({
       nodes: game.nodes,
       scenes: game.scenes,
     }),
+
+  newQuest: () => {
+    set((state) => {
+      const uuid = getUuid()
+      const quests = state.quests ?? []
+      const newQuest = {
+        uuid,
+        name: 'New Quest',
+        status: 'incomplete',
+        nodeId: state.selectedNode,
+        options: [],
+      } as QuestType
+      return {
+        quests: [newQuest, ...quests],
+      }
+    })
+  },
+  deleteQuest: (uuid) => {
+    set((state) => ({
+      quests: state.quests?.filter((q) => q.uuid !== uuid),
+    }))
+  },
+  updateQuest: (quest) => {
+    set((state) => ({
+      quests: state.quests?.map((q) => (q.uuid === state.selectedQuest ? { ...q, ...quest } : q)),
+    }))
+  },
+
+  setSelectedQuest: (uuid) => set({ selectedQuest: uuid }),
 }))
 
 useStore?.subscribe(async (state) => {

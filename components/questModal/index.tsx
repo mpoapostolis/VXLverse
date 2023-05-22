@@ -1,25 +1,23 @@
 'use client'
 
-import type { QuestOptionType, Quest as QuestType } from '@/store'
-import { useStore } from '@/store'
 import { getUuid } from '@/store/utils'
 import { select, zoom } from 'd3'
-import { useEffect, useRef, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { Quest } from '../quest'
 
-import { EditIcon } from 'lucide-react'
+import { OptionQuestType, useStore } from '@/store'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 
-const WIDTH = 320
-const HEIGHT = 240
+const WIDTH = 500
+const HEIGHT = 400
 const DX = 60
-const DY = 60
+const DY = 120
 
 const X = 60
-const Y = 60
+const Y = 120
 
-function calcPos(nodes: QuestOptionType[]) {
+function calcPos(nodes: OptionQuestType[]) {
   return nodes.map((q, idx) => {
     if (!q.parrentId) {
       q.x = 460
@@ -31,22 +29,22 @@ function calcPos(nodes: QuestOptionType[]) {
       const index = siblings.indexOf(q)
       const parrentX = parent?.x ?? 0
       const parrentY = parent?.y ?? 0
-      q.x = parrentX + 500
-      q.y = parrentY + index * 400
+      q.x = parrentX + WIDTH
+      q.y = parrentY + index * HEIGHT
       return q
     }
   })
 }
 
 function Paths(props: {
-  selected?: QuestOptionType
+  selected?: OptionQuestType
   startingX: number
   startingY: number
   uuid: string
-  options: QuestOptionType[]
+  options: OptionQuestType[]
 }) {
   const children = props.options.filter((child) => child.parrentId === props.uuid)
-  const shouldIshow = (q: QuestOptionType) => {
+  const shouldIshow = (q: OptionQuestType) => {
     const isSibling = q.parrentId === props.selected?.parrentId
     const isInTree = props?.selected?.tree?.includes(q.uuid)
     const isSelf = q.uuid === props.selected?.uuid
@@ -76,7 +74,10 @@ function Paths(props: {
   )
 }
 
-function D3Component(props: QuestType) {
+function D3Component() {
+  const store = useStore()
+  const quest = store.quests?.find((q) => q.uuid === store.selectedQuest)!
+
   const ref = useRef<SVGSVGElement>(null) // provide type to useRef
 
   useEffect(() => {
@@ -93,19 +94,17 @@ function D3Component(props: QuestType) {
     svg.call(zoomBehavior)
   }, [])
 
-  const store = useStore()
-  const [options, setOptions] = useState<QuestOptionType[]>([])
-  const [selected, setSelected] = useState<QuestOptionType | undefined>({
-    uuid: props.uuid,
+  const options = quest?.options ?? []
+  const [selected, setSelected] = useState<OptionQuestType | undefined>({
+    uuid: quest?.uuid,
     x: DX,
     y: DY,
-    optionName: 'New Option',
-    npcText: 'New Option',
+    name: quest.name,
   })
 
   const siblings = options.filter((sibling) => sibling.parrentId === selected?.parrentId)
 
-  const shouldIShow = (q: QuestOptionType) => {
+  const shouldIShow = (q: OptionQuestType) => {
     if (!selected) return true
     const isInTree = selected?.tree?.includes(q.uuid)
     const isSibling = siblings.includes(q)
@@ -116,7 +115,7 @@ function D3Component(props: QuestType) {
 
   return (
     <div className="w-full border h-full bg-black">
-      {selected && (
+      {store.selectedQuest && (
         <div className="absolute top-12 lg:left-10 lg:w-fit w-full   h-fit ">
           <Button
             onClick={() => {
@@ -128,14 +127,17 @@ function D3Component(props: QuestType) {
                 uuid: uuid,
                 x,
                 y,
-                optionName: 'New Option',
+                name: 'New Option',
                 npcText: 'New Option',
                 reward: '',
                 requiredItem: '',
                 parrentId: selected?.uuid,
                 tree: [...tree, selected?.uuid],
-              } as QuestOptionType
-              setOptions([...options, newOption])
+              } as OptionQuestType
+              store.updateQuest({
+                ...quest,
+                options: [...options, newOption],
+              })
             }}
             className="border text-xs  w-fit m-2"
           >
@@ -143,13 +145,14 @@ function D3Component(props: QuestType) {
           </Button>
           <Button
             onClick={() => {
-              setOptions(
-                options
+              store.updateQuest({
+                ...quest,
+                options: options
                   .filter((q) => {
                     return !q.tree?.includes(selected?.uuid ?? '')
                   })
                   .filter((q) => q.uuid !== selected?.uuid),
-              )
+              })
             }}
             className="w-fit m-2 text-xs border border-dashed border-red-400 text-red-400 bg-black"
           >
@@ -162,27 +165,23 @@ function D3Component(props: QuestType) {
           <foreignObject
             onClick={() => {
               setSelected({
-                uuid: props.uuid,
+                uuid: quest.uuid,
                 x: DX,
                 y: DY,
-                optionName: 'New Option',
+                name: 'New Option',
                 npcText: 'New Option',
               })
             }}
             x={X}
             y={Y}
             width="100%"
-            height="1000%"
+            height="100%"
           >
-            <Quest
-              name={props.name}
-              options={options.filter((e) => e.parrentId === props.uuid)}
-              selected={selected?.uuid === props.uuid}
-            />
+            <Quest options={options.filter((e) => e.parrentId === quest.uuid)} />
           </foreignObject>
-          <Paths selected={selected} startingX={X} startingY={Y} uuid={props.uuid} options={options} />
+          <Paths selected={selected} startingX={X} startingY={Y} uuid={quest.uuid} options={options} />
 
-          {calcPos(options)
+          {calcPos(quest?.options ?? [])
             ?.filter((q) => shouldIShow(q))
             ?.map((q) => (
               <g key={q.uuid}>
@@ -193,29 +192,11 @@ function D3Component(props: QuestType) {
                     setSelected(q)
                   }}
                   width="100%"
-                  height="1000%"
+                  height="100%"
                 >
                   <Quest options={options.filter((e) => e.parrentId === q.uuid)} selected={selected?.uuid === q.uuid} />
                 </foreignObject>
                 <Paths selected={selected} startingX={q.x!} startingY={q.y!} uuid={q.uuid} options={options} />
-
-                {/* {options
-                  ?.filter((l) => l.parrentId === q.uuid)
-                  ?.filter((l) => shouldIShow(l))
-                  ?.map((l, idx) => (
-                    <path
-                      key={idx}
-                      d={`
-                      M${q.x! + 330} ${q.y! + 220 + idx * 25} 
-                      L;${q.x! + +290 + 220 - idx * 25} ${q.y! + 220 + idx * 25}
-                      l 0 ${(idx % 1) * q.y! + idx * 330} 
-                      l ${idx * 30} 0
-                      `}
-                      fill="transparent"
-                      stroke="goldenrod"
-                      strokeWidth={2}
-                    />
-                  ))} */}
               </g>
             ))}
         </g>
@@ -224,17 +205,13 @@ function D3Component(props: QuestType) {
   )
 }
 
-export function QuestModal(props: QuestType) {
+export function QuestModal(props: { children?: ReactNode }) {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Button variant="ghost" className="p-0 w-full">
-          <EditIcon className="w-4 bg-transparent  h-4" />
-        </Button>
-      </DialogTrigger>
+      <DialogTrigger asChild>{props.children}</DialogTrigger>
 
       <DialogContent className="z-50  lg:w-[90vw] lg:h-[90vh] w-screen h-screen ">
-        <D3Component {...props} />
+        <D3Component />
       </DialogContent>
     </Dialog>
   )
