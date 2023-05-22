@@ -3,6 +3,7 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { OptionQuestType, useStore } from '@/store'
 import { ChevronDownIcon } from 'lucide-react'
+import { useState } from 'react'
 import { Select } from '../select'
 import { SelectModel } from '../selectModal/selectModel'
 import { Button } from '../ui/button'
@@ -23,16 +24,22 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
     })
   }
 
+  const [action, setAction] = useState<string | undefined>(undefined)
+
   return (
-    <div
-      className={cn('p-4 w-80 bg-card shadow-lg grid gap-2 h-fit border', {
-        'border-secondary border-2 ': props.selected,
+    <form
+      onBlur={(evt) => {
+        // const values = Object.fromEntries(new FormData(evt.target as HTMLFormElement))
+        console.log(evt.target.value)
+      }}
+      className={cn('p-4 w-96 bg-card shadow-lg grid gap-2 h-fit border', {
+        'border border-secondary': props.selected,
       })}
     >
       <Label className=" w-full text-xs font-medium">Option name</Label>
       <Input
-        value={name ?? ''}
-        onChange={(e) => {
+        defaultValue={name ?? ''}
+        onBlur={(e) => {
           if (props.optionId) updateOption({ name: e.target.value })
           else store.updateQuest({ name: e.target.value })
         }}
@@ -42,28 +49,79 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
 
       <Label className=" w-full text-xs font-medium">NPC Text</Label>
       <textarea
-        value={npcText ?? ''}
-        onChange={(e) => {
+        defaultValue={npcText ?? ''}
+        onBlur={(e) => {
           if (props.optionId) updateOption({ npcText: e.target.value })
           else store.updateQuest({ npcText: e.target.value })
         }}
         rows={4}
         className="flex w-full     py-2.5 pl-2.5 bg-background  text-xs ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       />
+
       <Separator className="my-2" />
 
       {props.options?.length === 0 && (
         <>
-          <Label className=" w-full text-xs font-medium">Required item to complete</Label>
-          <Select className="bg-background" options={[]} onChange={(val) => {}} />
+          <div>
+            <Label className=" w-full text-xs font-medium">Required item</Label>
+            <Select className="bg-background text-xs" options={[]} onChange={(val) => {}} />
+          </div>
 
-          <Label className=" w-full text-xs font-medium">Reward</Label>
-          <SelectModel>
-            <Button size={'sm'} className="flex w-full py-2.5 pl-2.5 bg-background  text-xs">
-              <div>Select reward</div>
-              <ChevronDownIcon className="w-4 h-4 ml-auto" />
-            </Button>
-          </SelectModel>
+          <Label className=" w-fulltext-xs font-medium">Action</Label>
+          <Select
+            className="bg-background text-xs"
+            options={[
+              { value: 'showImage', label: 'Show image' },
+              { value: 'showVideo', label: 'Show video' },
+              { value: 'giveReward', label: 'Give reward' },
+              { value: 'goToScene', label: 'Go to scene' },
+              { value: 'openWebsite', label: 'Open website' },
+            ]}
+            value={action}
+            onChange={setAction}
+          />
+          {action === 'giveReward' && (
+            <>
+              <Label className=" w-full  text-xs font-medium">Reward</Label>
+              <SelectModel>
+                <Button size={'sm'} className="flex w-full py-2.5 pl-2.5 bg-background  text-xs">
+                  <div>Select reward</div>
+                  <ChevronDownIcon className="w-4 h-4 ml-auto" />
+                </Button>
+              </SelectModel>
+            </>
+          )}
+          {action === 'goToScene' && (
+            <>
+              <Label className=" w-full  text-xs font-medium">Go to Scene</Label>
+              <Select
+                className="bg-background text-xs"
+                options={store.scenes?.map((e) => ({
+                  value: e.uuid!,
+                  label: e.name!,
+                }))}
+                onChange={() => 0}
+              />
+            </>
+          )}
+          {action === 'showImage' && (
+            <>
+              <Label className=" w-full  text-xs font-medium">Image url</Label>
+              <Input placeholder="https://www.example.com" onBlur={(e) => {}} type="text" className="bg-background" />
+            </>
+          )}
+          {action === 'openWebsite' && (
+            <>
+              <Label className=" w-full  text-xs font-medium">Open Website</Label>
+              <Input placeholder="https://www.example.com" onBlur={(e) => {}} type="text" className="bg-background" />
+            </>
+          )}
+          {action === 'showVideo' && (
+            <>
+              <Label className=" w-full  text-xs font-medium">Video url</Label>
+              <Input placeholder="https://www.example.com" onBlur={(e) => {}} type="text" className="bg-background" />
+            </>
+          )}
         </>
       )}
 
@@ -78,6 +136,6 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
         )
       })}
       <div />
-    </div>
+    </form>
   )
 }

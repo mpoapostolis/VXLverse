@@ -9,8 +9,8 @@ import { OptionQuestType, useStore } from '@/store'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
 
-const WIDTH = 500
-const HEIGHT = 400
+const WIDTH = 580
+const HEIGHT = 450
 const DX = 60
 const DY = 120
 
@@ -21,7 +21,7 @@ function calcPos(nodes: OptionQuestType[]) {
   return nodes.map((q, idx) => {
     if (!q.parrentId) {
       q.x = 460
-      q.y = DY + idx * 400
+      q.y = DY + idx * 500
       return q
     } else {
       const parent = nodes.find((parent) => parent.uuid === q.parrentId)
@@ -49,7 +49,7 @@ function Paths(props: {
     const isInTree = props?.selected?.tree?.includes(q.uuid)
     const isSelf = q.uuid === props.selected?.uuid
     const isChild = q.parrentId === props.selected?.uuid
-    return isInTree || isSelf || isChild || isSibling
+    return isInTree || isSelf || isChild
   }
   return (
     <>
@@ -59,13 +59,13 @@ function Paths(props: {
             <path
               key={q.uuid}
               d={`
-              M ${props.startingX + 325} ${props.startingY + 220 + idx * 25}
-              l ${80 - idx * 15} 0
+              M ${props.startingX + 390} ${props.startingY + 222 + idx * 25}
+              l ${100 - idx * 15} 0
               l 0 ${q.y! - props.startingY - idx * 25}
               l ${q.x! - props.startingX - 325} 0
               `}
               fill="transparent"
-              stroke="goldenrod"
+              stroke="#ffbe3d"
               strokeWidth={2}
             />
           ),
@@ -176,7 +176,7 @@ function D3Component() {
             }}
             x={X}
             y={Y}
-            width="100%"
+            width="396px"
             height="100%"
           >
             <Quest
@@ -196,7 +196,7 @@ function D3Component() {
                   onClick={() => {
                     setSelected(q)
                   }}
-                  width="100%"
+                  width="396px"
                   height="100%"
                 >
                   <Quest

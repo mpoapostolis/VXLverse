@@ -19,6 +19,8 @@ function Env(props: { equirect: string }) {
 export function EditorCanvas() {
   const store = useStore()
   const onKeyDown = (e: KeyboardEvent) => {
+    const target = e.target as HTMLElement
+    if (target?.tagName !== 'BODY') return
     if (e.key.toLocaleLowerCase() === 'w') store.setMode('translate')
     if (e.key.toLocaleLowerCase() === 'e') store.setMode('rotate')
     if (e.key.toLocaleLowerCase() === 'r') store.setMode('scale')
@@ -27,8 +29,8 @@ export function EditorCanvas() {
     if (e.key.toLocaleLowerCase() === 'd' && e.shiftKey) store.duplicateNode()
   }
   useEffect(() => {
-    window.addEventListener('keydown', onKeyDown)
-    return () => window.removeEventListener('keydown', onKeyDown)
+    window?.addEventListener('keydown', onKeyDown)
+    return () => window?.removeEventListener('keydown', onKeyDown)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
