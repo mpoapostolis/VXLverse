@@ -40,11 +40,11 @@ export function GameNode(props: Partial<Node>) {
       .multiplyScalar(props.status === 'run' ? 0.4 : 0.2)
     const newPosition = currentPosition.clone().add(velocity)
 
-    rigidBody?.current?.setNextKinematicTranslation({
-      x: newPosition.x,
-      y: position?.y ?? 0,
-      z: newPosition.z,
-    })
+    // rigidBody?.current?.setNextKinematicTranslation({
+    //   x: newPosition.x,
+    //   y: position?.y ?? 0,
+    //   z: newPosition.z,
+    // })
   })
 
   useEffect(() => {
@@ -59,7 +59,6 @@ export function GameNode(props: Partial<Node>) {
   const doIHaveTheReqItems = props.showWhenInventoryHas?.every(invHas) ?? true
   const isVisible = doIHaveTheReqItems && !isCollected
   const rigidBody = useRef<RapierRigidBody>(null)
-
   return (
     <Suspense fallback={null}>
       <RigidBody
@@ -78,24 +77,8 @@ export function GameNode(props: Partial<Node>) {
 
             if (doIHaveInteract) store.updateNode(props.uuid, { status: 'interact' })
             if (props.collectable) store.addToInventory(props.uuid)
-            // if (props.quests) {
-            //   const firstActiveQuest = props.quests.find((quest) => quest.status === 'incomplete')
-            //   if (firstActiveQuest) {
-            //     const isItCompleted = firstActiveQuest.requiredItemToComplete
-            //       ? invHas(firstActiveQuest.requiredItemToComplete ?? '')
-            //       : true
-
-            //     if (isItCompleted && firstActiveQuest.reward) store.addToInventory(firstActiveQuest.reward)
-
-            //     store.setDialogue({
-            //       src: props.img,
-            //       dialogue:
-            //         isItCompleted && firstActiveQuest.questCompleteDialog
-            //           ? firstActiveQuest.questCompleteDialog
-            //           : firstActiveQuest.initialDialog,
-            //     })
-            //   }
-            // }
+            const quest = store?.quests?.find((quest) => quest.nodeId === props.uuid && quest.status === 'incomplete')
+            if (quest) store.setSelectedQuest(quest.uuid)
           }}
           type={props.gameType}
           visible={isVisible}

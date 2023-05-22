@@ -124,6 +124,7 @@ export function GameCanvas(props: { id?: string }) {
     }
   }, [])
   useEffect(init, [])
+  console.log('render')
 
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   return (

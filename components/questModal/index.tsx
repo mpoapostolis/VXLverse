@@ -145,6 +145,8 @@ function D3Component() {
           </Button>
           <Button
             onClick={() => {
+              const parrent = options.find((q) => q.uuid === selected?.parrentId)
+              setSelected(parrent ?? quest)
               store.updateQuest({
                 ...quest,
                 options: options
