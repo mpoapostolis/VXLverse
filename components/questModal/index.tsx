@@ -47,10 +47,11 @@ function Paths(props: {
 }) {
   const children = props.options.filter((child) => child.parrentId === props.uuid)
   const shouldIshow = (q: QuestOptionType) => {
+    const isSibling = q.parrentId === props.selected?.parrentId
     const isInTree = props?.selected?.tree?.includes(q.uuid)
     const isSelf = q.uuid === props.selected?.uuid
     const isChild = q.parrentId === props.selected?.uuid
-    return isInTree || isSelf || isChild
+    return isInTree || isSelf || isChild || isSibling
   }
   return (
     <>
