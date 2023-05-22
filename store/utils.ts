@@ -48,6 +48,7 @@ export const defaultGameConf: Partial<Store> = {
   nodes: defaultNodes,
   scenes: defaultScenes,
   currentScene: defaultScenes?.at(0)?.uuid,
+  quests: [],
 }
 
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
@@ -87,6 +88,7 @@ export function exportGame() {
         return rest
       }),
       scenes,
+      quests: state.quests,
     }),
   )
 
@@ -104,6 +106,7 @@ export async function importGameZip(file: File) {
   useStore?.setState({
     nodes: gameConfJson?.nodes ?? [],
     scenes: gameConfJson?.scenes ?? [],
+    quests: gameConfJson?.quests ?? [],
     selectedNode: undefined,
     currentScene: gameConfJson?.scenes?.at(0)?.uuid,
   })

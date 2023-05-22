@@ -177,7 +177,10 @@ function D3Component() {
             width="100%"
             height="100%"
           >
-            <Quest options={options.filter((e) => e.parrentId === quest.uuid)} />
+            <Quest
+              selected={selected?.uuid === quest.uuid}
+              options={options.filter((e) => e.parrentId === quest.uuid)}
+            />
           </foreignObject>
           <Paths selected={selected} startingX={X} startingY={Y} uuid={quest.uuid} options={options} />
 
@@ -194,7 +197,11 @@ function D3Component() {
                   width="100%"
                   height="100%"
                 >
-                  <Quest options={options.filter((e) => e.parrentId === q.uuid)} selected={selected?.uuid === q.uuid} />
+                  <Quest
+                    optionId={q.uuid}
+                    options={options.filter((e) => e.parrentId === q.uuid)}
+                    selected={selected?.uuid === q.uuid}
+                  />
                 </foreignObject>
                 <Paths selected={selected} startingX={q.x!} startingY={q.y!} uuid={q.uuid} options={options} />
               </g>

@@ -65,6 +65,8 @@ export type OptionQuestType = {
   npcText?: string
   parrentId?: string
   tree?: string[]
+  reward?: string
+  requiredItem?: string
 }
 export type QuestType = {
   uuid: string
@@ -75,6 +77,8 @@ export type QuestType = {
   tree?: string[]
   nodeId?: string
   options?: OptionQuestType[]
+  reward?: string
+  requiredItem?: string
   status?: 'incomplete' | 'completed'
 }
 
@@ -393,9 +397,10 @@ useStore?.subscribe(async (state) => {
       ...e,
       actions: undefined,
     })) ?? []
+
   localstorage?.setItem(
     VXLverseVersion,
-    JSON.stringify({ user: state.user, nodes, inventory: state.inventory, scenes: state.scenes }),
+    JSON.stringify({ user: state.user, nodes, quests: state.quests, inventory: state.inventory, scenes: state.scenes }),
   )
 })
 
@@ -416,6 +421,8 @@ export function init() {
     scenes: parsedStore.scenes ?? defaultGameConf?.scenes,
     inventory: parsedStore?.inventory ?? [],
     selectedNode: undefined,
+    quests: parsedStore?.quests ?? [],
+
     currentScene: parsedStore?.scenes?.at(0)?.uuid,
   })
 }
