@@ -99,7 +99,7 @@ export type QuestOptionType = {
 export type Quest = {
   uuid: string
   name: string
-  npctext: string
+  npctext?: string
   options?: QuestOptionType[]
   status: 'incomplete' | 'completed'
 }

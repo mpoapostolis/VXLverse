@@ -1,16 +1,14 @@
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
-import { QuestOptionType, useStore } from '@/store'
+import { QuestOptionType } from '@/store'
 import { ChevronDownIcon } from 'lucide-react'
 import { Select } from '../select'
 import { SelectModel } from '../selectModal/selectModel'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 
-export function Quest(props: { selected?: boolean; options?: QuestOptionType[] }) {
-  const store = useStore()
-
+export function Quest(props: { name?: string; selected?: boolean; options?: QuestOptionType[] }) {
   return (
     <div
       className={cn('p-4 w-80 bg-card shadow-lg grid gap-2 h-fit border', {
@@ -18,7 +16,7 @@ export function Quest(props: { selected?: boolean; options?: QuestOptionType[] }
       })}
     >
       <Label className=" w-full text-xs font-medium">Option name</Label>
-      <Input type="text" className="bg-background" />
+      <Input value={props.name} type="text" className="bg-background" />
 
       <Label className=" w-full text-xs font-medium">NPC Text</Label>
       <textarea
