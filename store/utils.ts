@@ -32,6 +32,38 @@ export const defaultNodes = [
     scene: 'main',
     type: 'DirectionalLight',
   },
+  {
+    uuid: getUuid(),
+    img: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/272a4yltqlop3ry/screenshot_from_2023_05_18_11_26_08_229vE69PYJ.webp',
+    gameType: 'hero',
+    scene: 'main',
+    position: [0, 0, 0],
+    url: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/272a4yltqlop3ry/model_vx0aomIwWV.gltf',
+    type: 'GLTF',
+    physics: 'fixed',
+    animation: 'pose_chapeau',
+    name: 'Hero',
+    statusToAnimation: {
+      course_chapeau: 'walk',
+      pose_chapeau: 'idle',
+    },
+    scale: [4, 4, 4],
+  },
+  {
+    uuid: getUuid(),
+    img: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/94qi995e8fdxpsk/blob_4fsWvSgE0y.png',
+    gameType: 'characters',
+    scene: 'main',
+    position: [0.09574299132549347, 0, 7.714465982228768],
+    url: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/94qi995e8fdxpsk/model_R1EitgmWlH.gltf',
+    type: 'GLTF',
+    physics: 'fixed',
+    animation: '',
+    name: 'Male Skater',
+    statusToAnimation: null,
+    scale: [1, 1, 1],
+    rotation: [0, 180, 0],
+  },
 ] as any[]
 
 export const defaultScenes: Scene[] = [

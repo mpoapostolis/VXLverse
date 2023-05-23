@@ -8,8 +8,8 @@ import { lights } from '@/components/node'
 import { useGame } from '@/lib/games/queries'
 import { GRID_SIZE, init, useStore } from '@/store'
 import { Box, Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { CuboidCollider, Physics, RigidBody, useRapier } from '@react-three/rapier'
+import { Canvas, useThree } from '@react-three/fiber'
+import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
 import { Suspense, useEffect } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
 import { Hero } from '../gameNode/hero'
@@ -27,7 +27,6 @@ function Orbit(props: { id?: string }) {
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
 
-  const rapier = useRapier()
   function goTo() {
     const raycaster = t.raycaster
     raycaster.setFromCamera(t.pointer, t.camera)
@@ -71,19 +70,10 @@ function Orbit(props: { id?: string }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hero?.uuid])
 
-  const pos = t.scene.getObjectByProperty('type', 'hero')
-  useFrame((t) => {
-    try {
-      // @ts-ignore
-      t.controls.target = pos.position
-    } catch (error) {}
-  })
-
   return (
     <OrbitControls
-      target={new Vector3(...(hero?.position, [0, 0, 0]))}
       enablePan={false}
-      maxDistance={40.1}
+      maxDistance={10.1}
       minDistance={4}
       position={[0, -5, 0]}
       makeDefault
@@ -154,7 +144,9 @@ export function GameCanvas(props: { id?: string }) {
                 position={[store.goTo.x, 1, store.goTo.z]}
                 restitution={0}
               >
-                <Box args={[1, 1, 1]} />
+                <Box args={[1, 0.2, 1]}>
+                  <meshBasicMaterial color="blue" attach="material" transparent opacity={0.5} />
+                </Box>
               </RigidBody>
             )}
 

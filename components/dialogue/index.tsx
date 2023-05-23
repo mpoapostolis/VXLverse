@@ -37,7 +37,7 @@ export function Dialogue() {
               onClick={() => {
                 setOptionId(option.uuid)
               }}
-              className="w-full mb-2 bg-input"
+              className="w-full mb-2 "
             >
               {option.name}
             </Button>

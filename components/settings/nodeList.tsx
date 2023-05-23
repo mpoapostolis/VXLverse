@@ -7,7 +7,7 @@ export function NodeList() {
 
   const currentScene = store.scenes.find((scene) => scene.uuid === store.currentScene)
   return (
-    <div className="relative h-40 border-black border-opacity-0 overflow-auto border bg-card">
+    <div className="relative h-40 border-black border-opacity-0 overflow-auto border bg-card" id="nodeList">
       <div
         className={cn('absolute  h-full w-full text-xs', {
           hidden: store.nodes.length > 0,
@@ -25,6 +25,7 @@ export function NodeList() {
         })
         .map((node, idx) => (
           <button
+            data-uuid={node.uuid}
             onClick={() => store.selectNode(node.uuid)}
             className={cn(
               'flex w-full items-center  border-opacity-10  border-b border-black px-4 py-1 text-left text-xs  ',

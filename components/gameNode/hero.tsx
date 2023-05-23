@@ -1,5 +1,6 @@
 import { Gltf } from '@/components/gltf'
 import { Node, useStore } from '@/store'
+import { useFrame } from '@react-three/fiber'
 import { RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
 import { Suspense, useEffect, useRef } from 'react'
 import { Euler, Mesh, Quaternion, Vector3 } from 'three'
@@ -19,6 +20,13 @@ export function Hero(props: Partial<Node>) {
   const goTo = store.goTo
   const gameType = props.gameType
   const pos = vec3(rb?.translation())
+
+  useFrame((t) => {
+    const pos = vec3(rb?.translation())
+    const newPos = new Vector3(pos.x, pos.y + 5, pos.z)
+    // @ts-ignore
+    t?.controls?.target?.copy(newPos)
+  })
 
   useEffect(() => {
     if (!rb) return
@@ -40,7 +48,7 @@ export function Hero(props: Partial<Node>) {
     // Calculate the normalized direction vector
     const dirX = distX / dist
     const dirZ = distZ / dist
-    const speed = 10
+    const speed = 5
     rb.setLinvel(
       {
         x: dirX * speed,
