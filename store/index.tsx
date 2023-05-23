@@ -242,6 +242,8 @@ export type Store = {
   deleteQuest: (uuid: string) => void
   selectedQuest?: string
   setSelectedQuest: (uuid?: string) => void
+  goTo?: Vector3
+  setGoTo: (goTo?: Vector3) => void
 }
 
 export const useStore = create<Store>((set) => ({
@@ -388,6 +390,7 @@ export const useStore = create<Store>((set) => ({
   },
 
   setSelectedQuest: (uuid) => set({ selectedQuest: uuid }),
+  setGoTo: (goTo) => set({ goTo }),
 }))
 
 useStore?.subscribe(async (state) => {

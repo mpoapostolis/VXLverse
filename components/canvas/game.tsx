@@ -7,11 +7,12 @@ import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { useGame } from '@/lib/games/queries'
 import { GRID_SIZE, init, useStore } from '@/store'
-import { Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
+import { Box, Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { CuboidCollider, Physics, useRapier } from '@react-three/rapier'
+import { CuboidCollider, Physics, RigidBody, useRapier } from '@react-three/rapier'
 import { Suspense, useEffect } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
+import { Hero } from '../gameNode/hero'
 
 function Env(props: { equirect: string }) {
   const texture = useTexture(props.equirect ?? '')
@@ -26,15 +27,15 @@ function Orbit(props: { id?: string }) {
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
 
+  const rapier = useRapier()
   function goTo() {
     const raycaster = t.raycaster
     raycaster.setFromCamera(t.pointer, t.camera)
     const intersects = raycaster.intersectObjects(t.scene.children)
-    if (intersects?.at(0)?.point)
-      store.updateNode(hero?.uuid ?? '', {
-        goTo: intersects?.at(0)?.point?.toArray(),
-        status: 'walk',
-      })
+    if (intersects?.at(0)?.point) {
+      store.updateNode(hero?.uuid ?? '', { status: 'walk' })
+      store.setGoTo(intersects?.at(0)?.point!)
+    }
   }
   const { data: game } = useGame(props.id)
 
@@ -71,7 +72,6 @@ function Orbit(props: { id?: string }) {
   }, [hero?.uuid])
 
   const pos = t.scene.getObjectByProperty('type', 'hero')
-  const r = useRapier()
   useFrame((t) => {
     try {
       // @ts-ignore
@@ -95,38 +95,10 @@ function Orbit(props: { id?: string }) {
 export function GameCanvas(props: { id?: string }) {
   const store = useStore()
 
-  function cb(shiftKey: boolean) {
-    const state = useStore.getState()
-    const hero = state?.nodes?.find((node) => node.gameType === 'hero')
-
-    if (!hero?.uuid || hero.status === 'idle') return
-    store.updateNode(hero.uuid, { status: shiftKey ? 'run' : 'walk' })
-  }
-
-  useEffect(() => {
-    document.addEventListener('keydown', (e) => {
-      if (e.repeat) return
-      cb(e.shiftKey)
-    })
-    document.addEventListener('keyup', (e) => {
-      if (e.repeat) return
-      cb(e.shiftKey)
-    })
-    return () => {
-      document.removeEventListener('keydown', (e) => {
-        if (e.repeat) return
-        cb(e.shiftKey)
-      })
-      document.removeEventListener('keyup', (e) => {
-        if (e.repeat) return
-        cb(e.shiftKey)
-      })
-    }
-  }, [])
   useEffect(init, [])
-  console.log('render')
 
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
+  const hero = store.nodes?.find((node) => node.gameType === 'hero')
   return (
     <main className="relative h-screen overflow-hidden">
       <HelpModal />
@@ -156,21 +128,39 @@ export function GameCanvas(props: { id?: string }) {
           ) : (
             <color attach="background" args={[selectedScene?.color ?? '#999999']} />
           )}
-          <Physics debug>
+          <Physics timeStep="vary" debug>
             {store.nodes.map((node, idx) =>
               lights.includes(node.type) ? (
                 <mesh key={idx} position={new Vector3(...(node?.position ?? [0, 0, 0]))}>
                   <Light type={node?.type ?? 'DirectionalLight'} />
                 </mesh>
+              ) : node.gameType === 'hero' ? (
+                <Hero key={idx} {...node} />
               ) : (
                 <GameNode key={idx} {...node} />
               ),
             )}
-            <CuboidCollider position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.5, GRID_SIZE * 4]} />
+            <CuboidCollider name="WTF" position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.5, GRID_SIZE * 4]} />
+
+            {store?.goTo && hero?.uuid && (
+              <RigidBody
+                type="dynamic"
+                onCollisionEnter={(t) => {
+                  if (t.target.rigidBodyObject?.name !== 'hero') return
+                  store.updateNode(hero?.uuid!, { status: 'idle' })
+                  store.setGoTo(undefined)
+                }}
+                name="goTo"
+                position={[store.goTo.x, 1, store.goTo.z]}
+                restitution={0}
+              >
+                <Box args={[1, 1, 1]} />
+              </RigidBody>
+            )}
 
             <Plane args={[GRID_SIZE * 4, GRID_SIZE * 4]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
+            <Orbit id={props.id} />
           </Physics>
-          <Orbit id={props.id} />
           <Preload all />
         </Suspense>
       </Canvas>
