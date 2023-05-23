@@ -67,6 +67,11 @@ export type OptionQuestType = {
   tree?: string[]
   reward?: string
   requiredItem?: string
+  imgUrl?: string
+  videoUrl?: string
+  goToScene?: string
+  url?: string
+  action?: string
 }
 export type QuestType = {
   uuid: string
@@ -79,6 +84,11 @@ export type QuestType = {
   options?: OptionQuestType[]
   reward?: string
   requiredItem?: string
+  imgUrl?: string
+  videoUrl?: string
+  goToScene?: string
+  url?: string
+  action?: string
   status?: 'incomplete' | 'completed'
 }
 

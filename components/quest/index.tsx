@@ -3,7 +3,6 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { OptionQuestType, useStore } from '@/store'
 import { ChevronDownIcon } from 'lucide-react'
-import { useState } from 'react'
 import { Select } from '../select'
 import { SelectModel } from '../selectModal/selectModel'
 import { Button } from '../ui/button'
@@ -15,6 +14,12 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
   const option = quest?.options?.find((o) => o.uuid === props.optionId)
   const name = props.optionId ? option?.name : quest?.name
   const npcText = props.optionId ? option?.npcText : quest?.npcText
+  const imgUrl = props.optionId ? option?.imgUrl : quest?.imgUrl
+  const videoUrl = props.optionId ? option?.videoUrl : quest?.videoUrl
+  const url = props.optionId ? option?.url : quest?.url
+  const goToScene = props.optionId ? option?.goToScene : quest?.goToScene
+  const action = props.optionId ? option?.action : quest?.action
+
   const requiredItem = props.optionId ? option?.requiredItem : quest?.requiredItem
   const reward = props.optionId ? option?.reward : quest?.reward
 
@@ -24,14 +29,8 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
     })
   }
 
-  const [action, setAction] = useState<string | undefined>(undefined)
-
   return (
     <form
-      onBlur={(evt) => {
-        // const values = Object.fromEntries(new FormData(evt.target as HTMLFormElement))
-        console.log(evt.target.value)
-      }}
       className={cn('p-4 w-96 bg-card shadow-lg grid gap-2 h-fit border', {
         'border border-secondary': props.selected,
       })}
@@ -78,7 +77,13 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
               { value: 'openWebsite', label: 'Open website' },
             ]}
             value={action}
-            onChange={setAction}
+            onChange={(action) => {
+              if (props.optionId)
+                updateOption({
+                  action: action ?? undefined,
+                })
+              else store.updateQuest({ action: action ?? undefined })
+            }}
           />
           {action === 'giveReward' && (
             <>
@@ -100,26 +105,59 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
                   value: e.uuid!,
                   label: e.name!,
                 }))}
-                onChange={() => 0}
+                value={goToScene}
+                onChange={(goToScene) => {
+                  if (!goToScene) return
+                  if (props.optionId) updateOption({ goToScene })
+                  else store.updateQuest({ goToScene })
+                }}
               />
             </>
           )}
           {action === 'showImage' && (
             <>
               <Label className=" w-full  text-xs font-medium">Image url</Label>
-              <Input placeholder="https://www.example.com" onBlur={(e) => {}} type="text" className="bg-background" />
+              <Input
+                placeholder="https://www.example.com"
+                onBlur={(e) => {
+                  if (props.optionId) updateOption({ imgUrl: e.target.value })
+                  else store.updateQuest({ imgUrl: e.target.value })
+                }}
+                defaultValue={imgUrl ?? ''}
+                type="text"
+                className="bg-background"
+              />
             </>
           )}
           {action === 'openWebsite' && (
             <>
               <Label className=" w-full  text-xs font-medium">Open Website</Label>
-              <Input placeholder="https://www.example.com" onBlur={(e) => {}} type="text" className="bg-background" />
+              <Input
+                onBlur={(e) => {
+                  console.log(e.target.value)
+                  if (props.optionId) updateOption({ url: e.target.value })
+                  else store.updateQuest({ url: e.target.value })
+                }}
+                defaultValue={url ?? ''}
+                placeholder="https://www.example.com"
+                type="url"
+                className="bg-background"
+              />
             </>
           )}
           {action === 'showVideo' && (
             <>
               <Label className=" w-full  text-xs font-medium">Video url</Label>
-              <Input placeholder="https://www.example.com" onBlur={(e) => {}} type="text" className="bg-background" />
+              <Input
+                onBlur={(e) => {
+                  if (props.optionId) updateOption({ videoUrl: e.target.value })
+                  else store.updateQuest({ videoUrl: e.target.value })
+                }}
+                defaultValue={videoUrl ?? ''}
+                placeholder="https://www.example.com"
+                type="text"
+                className="bg-background"
+              />
             </>
           )}
         </>

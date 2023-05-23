@@ -119,17 +119,19 @@ export function GameCanvas(props: { id?: string }) {
             <color attach="background" args={[selectedScene?.color ?? '#999999']} />
           )}
           <Physics timeStep="vary" debug>
-            {store.nodes.map((node, idx) =>
-              lights.includes(node.type) ? (
-                <mesh key={idx} position={new Vector3(...(node?.position ?? [0, 0, 0]))}>
-                  <Light type={node?.type ?? 'DirectionalLight'} />
-                </mesh>
-              ) : node.gameType === 'hero' ? (
-                <Hero key={idx} {...node} />
-              ) : (
-                <GameNode key={idx} {...node} />
-              ),
-            )}
+            {hero && <Hero {...hero} />}
+
+            {store.nodes
+              ?.filter((node) => node.scene === store.currentScene && node.gameType !== 'hero')
+              .map((node, idx) =>
+                lights.includes(node.type) ? (
+                  <mesh key={idx} position={new Vector3(...(node?.position ?? [0, 0, 0]))}>
+                    <Light type={node?.type ?? 'DirectionalLight'} />
+                  </mesh>
+                ) : (
+                  <GameNode key={idx} {...node} />
+                ),
+              )}
             <CuboidCollider name="WTF" position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.5, GRID_SIZE * 4]} />
 
             {store?.goTo && hero?.uuid && (
