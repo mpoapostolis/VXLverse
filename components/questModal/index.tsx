@@ -219,7 +219,7 @@ export function QuestModal(props: { children?: ReactNode }) {
     <Dialog>
       <DialogTrigger asChild>{props.children}</DialogTrigger>
 
-      <DialogContent className="z-50  lg:w-[90vw] lg:h-[90vh] w-screen h-screen ">
+      <DialogContent className="z-50   w-screen h-screen ">
         <D3Component />
       </DialogContent>
     </Dialog>

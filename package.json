@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "ncu": "ncu -u",
+    "ncu-ls": "ncu -ls"
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^8.4.1",
@@ -68,6 +70,7 @@
     "@types/three": "^0.152.0",
     "@vercel/analytics": "^1.0.1",
     "autoprefixer": "^10.4.14",
+    "npm-check-updates": "^16.10.12",
     "postcss": "^8.4.23",
     "prettier": "^2.8.8",
     "prettier-plugin-organize-imports": "^3.2.2",
