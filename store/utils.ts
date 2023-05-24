@@ -60,6 +60,7 @@ export const defaultNodes = [
     physics: 'fixed',
     animation: '',
     name: 'Male Skater',
+
     statusToAnimation: null,
     scale: [1, 1, 1],
     rotation: [0, 180, 0],

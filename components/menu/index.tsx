@@ -155,7 +155,12 @@ export function Menu() {
             onClick={async () => {
               const id = await axios
                 .post('/api/publish', {
-                  nodes: store.nodes.filter((e) => !e.blob),
+                  nodes:
+                    store.nodes?.map((e) => ({
+                      ...e,
+                      actions: undefined,
+                    })) ?? [],
+                  quests: store.quests,
                   scenes: store.scenes,
                 })
                 .then((d) => {

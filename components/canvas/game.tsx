@@ -39,10 +39,9 @@ function Orbit(props: { id?: string }) {
   const { data: game } = useGame(props.id)
 
   useEffect(() => {
-    if (game) {
-      store.clearInventory()
-      store.setGame(game)
-    }
+    if (!game) return
+    store.clearInventory()
+    store.setGame(game)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [game])
 
@@ -74,6 +73,7 @@ function Orbit(props: { id?: string }) {
     <OrbitControls
       enablePan={false}
       maxDistance={10.1}
+      maxPolarAngle={Math.PI / 2}
       minDistance={4}
       position={[0, -5, 0]}
       makeDefault

@@ -23,7 +23,7 @@ export function Hero(props: Partial<Node>) {
 
   useFrame((t) => {
     const pos = vec3(rb?.translation())
-    const newPos = new Vector3(pos.x, pos.y + 5, pos.z)
+    const newPos = new Vector3(pos.x, pos.y + 2, pos.z)
     // @ts-ignore
     t?.controls?.target?.copy(newPos)
   })

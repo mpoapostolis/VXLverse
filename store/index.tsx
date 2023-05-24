@@ -339,10 +339,18 @@ export const useStore = create<Store>((set) => ({
       if (!state.selectedNode) return state
       const node = state.nodes.find((n) => n.uuid === state.selectedNode)
       const uuid = getUuid()
-
+      const quests =
+        state.quests
+          ?.filter((q) => q.nodeId === state.selectedNode)
+          ?.map((e) => ({
+            ...e,
+            uuid: getUuid(),
+            nodeId: state.selectedNode,
+          })) ?? []
       return {
         selectedNode: uuid,
         nodes: [{ ...node, uuid }, ...state.nodes],
+        quests: [...(state?.quests ?? []), ...quests],
       }
     }),
 
@@ -370,6 +378,7 @@ export const useStore = create<Store>((set) => ({
     set({
       nodes: game.nodes,
       scenes: game.scenes,
+      quests: game.quests,
     }),
 
   newQuest: () => {
@@ -425,6 +434,7 @@ export function init() {
     ? JSON.parse(store)
     : {
         nodes: defaultGameConf.nodes,
+        quests: defaultGameConf.quests,
         scenes: defaultGameConf.scenes,
       }
 
