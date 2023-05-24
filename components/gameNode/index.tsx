@@ -45,8 +45,11 @@ export function GameNode(props: Partial<Node>) {
             switch (quest?.action) {
               case 'showImage':
                 store.updateNode(props.uuid, { showVideo: undefined, showImg: quest.imgUrl })
+                break
+
               case 'showVideo':
                 store.updateNode(props.uuid, { showVideo: quest.videoUrl, showImg: undefined })
+                break
 
               case 'openWebsite':
                 return window.open(quest.url, '_blank')

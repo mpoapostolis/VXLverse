@@ -2,7 +2,6 @@ import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { X } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 
 export function Dialogue() {
@@ -23,25 +22,26 @@ export function Dialogue() {
         hidden: !store.selectedQuest,
       })}
     >
-      <div className=" w-full grid grid-cols-[100px_1fr] relative rounded  gap-4 bg-black bg-opacity-70 p-4 text-white">
+      <div className=" w-full grid grid-cols-[100px_1fr] relative rounded  gap-4 bg-black bg-opacity-80 p-4 text-white">
         <picture className="h-24 border bg-black flex justify-center">
           <img className="object-contain h-full" src={currentNode?.img + '?thumb=190x190'} alt="" />
         </picture>
-        <div className="text-lg w-full">
-          <div>{npcDialogue}</div>
+        <div className="text-lg h-full w-full">
+          <div className="text-2xl mt-2 font-bold">{npcDialogue}</div>
           <Separator className="my-4" />
           {options?.map((option) => (
-            <Button
-              variant="outline"
+            <button
               key={option.uuid}
               onClick={() => {
                 setOptionId(option.uuid)
-                if (store.selectedNode)
+                if (currentQuest?.nodeId)
                   switch (option?.action) {
                     case 'showImage':
-                      store.updateNode(store.selectedNode, { showVideo: undefined, showImg: option.imgUrl })
+                      store.updateNode(currentQuest?.nodeId, { showVideo: undefined, showImg: option.imgUrl })
+                      break
                     case 'showVideo':
-                      store.updateNode(store.selectedNode, { showVideo: option.videoUrl, showImg: undefined })
+                      store.updateNode(currentQuest?.nodeId, { showVideo: option.videoUrl, showImg: undefined })
+                      break
 
                     case 'openWebsite':
                       return window.open(option.url, '_blank')
@@ -53,10 +53,10 @@ export function Dialogue() {
                       break
                   }
               }}
-              className="w-full mb-2 "
+              className="w-full p-1 font-semibold text-xl  bg-white bg-opacity-10 border-none  mb-2 "
             >
               {option.name}
-            </Button>
+            </button>
           ))}
         </div>
         <X
