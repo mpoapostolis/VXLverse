@@ -4,7 +4,7 @@ import { Node, useStore } from '@/store'
 import { Html } from '@react-three/drei'
 import { RigidBody } from '@react-three/rapier'
 import { XIcon } from 'lucide-react'
-import { Suspense, useRef, useState } from 'react'
+import { Suspense, useRef } from 'react'
 import { Euler, Mesh, Vector3 } from 'three'
 import { Loader } from '../loader'
 import { Material } from '../material'
@@ -21,11 +21,12 @@ export function GameNode(props: Partial<Node>) {
   const isCollected = store.inventory.includes(props.uuid ?? '')
   const doIHaveTheReqItems = props.showWhenInventoryHas?.every(invHas) ?? true
   const isVisible = doIHaveTheReqItems && !isCollected
-  const [showImage, setShowImage] = useState<string>()
-  const [showVideo, setShowVideo] = useState<string>()
   const clear = () => {
-    setShowImage(undefined)
-    setShowVideo(undefined)
+    if (!props.uuid) return
+    store.updateNode(props.uuid, {
+      showVideo: undefined,
+      showImg: undefined,
+    })
   }
   return (
     <Suspense fallback={null}>
@@ -43,9 +44,10 @@ export function GameNode(props: Partial<Node>) {
             const quest = store?.quests?.find((quest) => quest.nodeId === props.uuid && quest.status === 'incomplete')
             switch (quest?.action) {
               case 'showImage':
-                return setShowImage(quest.imgUrl)
+                store.updateNode(props.uuid, { showVideo: undefined, showImg: quest.imgUrl })
               case 'showVideo':
-                return setShowVideo(quest.videoUrl)
+                store.updateNode(props.uuid, { showVideo: quest.videoUrl, showImg: undefined })
+
               case 'openWebsite':
                 return window.open(quest.url, '_blank')
 
@@ -63,20 +65,20 @@ export function GameNode(props: Partial<Node>) {
           ref={ref}
         >
           <Html transform position={[0, 8, 0]} onClick={clear}>
-            {showImage && (
+            {props.showImg && (
               <div onClick={clear} className=" w-96 h-96 inset-0 z-50 flex items-center justify-center select-none">
                 <picture>
-                  <img src={showImage} alt="quest" className="w-full h-full object-contain" />
+                  <img src={props.showImg} alt="quest" className="w-full h-full object-contain" />
                 </picture>
               </div>
             )}
-            {showVideo && (
+            {props.showVideo && (
               <div onClick={clear} className=" w-96 h-96 inset-0 z-50 flex items-center justify-center select-none">
                 <XIcon className="w-20 h-20" />
                 <iframe
                   width="960"
                   height="480"
-                  src={`https://www.youtube.com/embed/${showVideo}`}
+                  src={`https://www.youtube.com/embed/${props.showVideo}`}
                   title="YouTube video player"
                   allowFullScreen
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"

@@ -190,6 +190,8 @@ export type Node = {
   actions?: {
     [x: string]: AnimationAction | null
   }
+  showImg?: string
+  showVideo?: string
   type: NodeType
 }
 export type SceneType = 'color' | 'equirect'

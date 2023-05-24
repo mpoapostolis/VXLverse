@@ -36,6 +36,22 @@ export function Dialogue() {
               key={option.uuid}
               onClick={() => {
                 setOptionId(option.uuid)
+                if (store.selectedNode)
+                  switch (option?.action) {
+                    case 'showImage':
+                      store.updateNode(store.selectedNode, { showVideo: undefined, showImg: option.imgUrl })
+                    case 'showVideo':
+                      store.updateNode(store.selectedNode, { showVideo: option.videoUrl, showImg: undefined })
+
+                    case 'openWebsite':
+                      return window.open(option.url, '_blank')
+
+                    case 'goToScene':
+                      return store.setCurrentScene(option.goToScene)
+
+                    default:
+                      break
+                  }
               }}
               className="w-full mb-2 "
             >
