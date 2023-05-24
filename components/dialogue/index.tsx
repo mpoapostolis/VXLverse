@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { X } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Separator } from '../ui/separator'
 
 export function Dialogue() {
@@ -9,6 +9,11 @@ export function Dialogue() {
   const currentQuest = store.quests?.find((q) => q.uuid === store.selectedQuest)
   const currentNode = store.nodes?.find((o) => o.uuid === currentQuest?.nodeId)
   const [optionId, setOptionId] = useState<string | undefined>(undefined)
+
+  useEffect(() => {
+    setOptionId(undefined)
+  }, [currentQuest])
+
   const npcDialogue = optionId
     ? currentQuest?.options?.find((o) => o.uuid === optionId)?.npcText
     : currentQuest?.npcText
