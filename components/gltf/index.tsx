@@ -4,7 +4,7 @@ import { useAnimations, useGLTF } from '@react-three/drei'
 import { useEffect, useMemo } from 'react'
 import { SkeletonUtils } from 'three-stdlib'
 
-// same url multiple GLTF instance
+// same url multiple GLTF instances
 function useGltfMemo(url: string) {
   const gltf = useGLTF(url)
   const scene = useMemo(() => SkeletonUtils.clone(gltf.scene), [gltf.scene])

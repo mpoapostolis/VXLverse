@@ -64,6 +64,7 @@ export type OptionQuestType = {
   y?: number
   npcText?: string
   parrentId?: string
+  saidBy?: string
   tree?: string[]
   reward?: string
   requiredItem?: string

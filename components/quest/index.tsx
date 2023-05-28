@@ -3,12 +3,18 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import { OptionQuestType, useStore } from '@/store'
 import { ChevronDownIcon } from 'lucide-react'
+import { useRef } from 'react'
 import { Select } from '../select'
 import { SelectModel } from '../selectModal/selectModel'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 
-export function Quest(props: { optionId?: string; selected?: boolean; options?: OptionQuestType[] }) {
+export function Quest(props: {
+  parrent?: boolean
+  optionId?: string
+  selected?: boolean
+  options?: OptionQuestType[]
+}) {
   const store = useStore()
   const quest = store.quests?.find((q) => q.uuid === store.selectedQuest)
   const option = quest?.options?.find((o) => o.uuid === props.optionId)
@@ -29,24 +35,47 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
     })
   }
 
+  const ref = useRef<HTMLInputElement>(null)
+  const heroNode = store.nodes?.find((n) => n.gameType === 'hero')
+  const uuidToName = (uuid: string) => store.nodes?.find((n) => n.uuid === uuid)?.name
+
   return (
     <form
       className={cn('p-4 w-96 bg-card shadow-lg grid gap-2 h-fit border', {
         'border border-secondary': props.selected,
       })}
     >
-      <Label className=" w-full text-xs font-medium">Option name</Label>
-      <Input
-        defaultValue={name ?? ''}
-        onBlur={(e) => {
-          if (props.optionId) updateOption({ name: e.target.value })
-          else store.updateQuest({ name: e.target.value })
-        }}
-        type="text"
-        className="bg-background"
-      />
-
-      <Label className=" w-full text-xs font-medium">NPC Text</Label>
+      {!props.parrent && (
+        <div>
+          <Label className=" w-full text-xs font-medium">Option name</Label>
+          <Input
+            disabled={Boolean(props.optionId) && option?.saidBy === heroNode?.uuid}
+            ref={ref}
+            defaultValue={name ?? ''}
+            onBlur={(e) => {
+              if (props.optionId) updateOption({ name: e.target.value })
+              else store.updateQuest({ name: e.target.value })
+            }}
+            type="text"
+            className="bg-background"
+          />
+        </div>
+      )}
+      <Label className=" w-full text-xs flex items-center font-medium gap-2">
+        <Select
+          className="bg-background text-xs w-fit "
+          options={
+            store.nodes?.filter((n) => n.type === 'GLTF')?.map((n) => ({ value: n.uuid!, label: n.name! })) ?? []
+          }
+          onChange={(e) => {
+            const isHero = e === heroNode?.uuid
+            if (isHero && ref?.current?.value) ref.current.value = ''
+            if (props.optionId && e) updateOption({ saidBy: e, name: isHero ? '' : option?.name })
+          }}
+          value={option?.saidBy ?? store.selectedNode}
+        />
+        <span>{option?.saidBy === heroNode?.uuid ? 'Thinking...' : 'Say'}</span>
+      </Label>
       <textarea
         defaultValue={npcText ?? ''}
         onBlur={(e) => {
@@ -56,9 +85,7 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
         rows={4}
         className="flex w-full     py-2.5 pl-2.5 bg-background  text-xs ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
       />
-
       <Separator className="my-2" />
-
       {props.options?.length === 0 && (
         <>
           <div>
@@ -162,7 +189,6 @@ export function Quest(props: { optionId?: string; selected?: boolean; options?: 
           )}
         </>
       )}
-
       {props.options?.map((e, idx) => {
         return (
           <div key={e.name + idx} className="flex  w-full relative  items-center justify-between">

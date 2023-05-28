@@ -38,6 +38,7 @@ function calcPos(nodes: OptionQuestType[]) {
 
 function Paths(props: {
   selected?: OptionQuestType
+  parrent?: boolean
   startingX: number
   startingY: number
   uuid: string
@@ -59,7 +60,7 @@ function Paths(props: {
             <path
               key={q.uuid}
               d={`
-              M ${props.startingX + 390} ${props.startingY + 222 + idx * 25}
+              M ${props.startingX + 390} ${props.startingY + 230 + idx * 25 - (props.parrent ? 55 : 0)}
               l ${100 - idx * 15} 0
               l 0 ${q.y! - props.startingY - idx * 25}
               l ${q.x! - props.startingX - 325} 0
@@ -86,12 +87,15 @@ function D3Component() {
     const svg = select(ref.current)
     const board = svg.select('g')
 
-    const zoomBehavior = zoom().on('zoom', (event) => {
-      board.attr('transform', event.transform)
-    })
+    const zoomBehavior = zoom()
+      .filter((event) => event.type !== 'dblclick')
+      .on('zoom', (event) => {
+        board.attr('transform', event.transform)
+      })
 
     // @ts-ignore
     svg.call(zoomBehavior)
+    select('svg')
   }, [])
 
   const options = quest?.options ?? []
@@ -180,11 +184,12 @@ function D3Component() {
             height="100%"
           >
             <Quest
+              parrent
               selected={selected?.uuid === quest.uuid}
               options={options.filter((e) => e.parrentId === quest.uuid)}
             />
           </foreignObject>
-          <Paths selected={selected} startingX={X} startingY={Y} uuid={quest.uuid} options={options} />
+          <Paths parrent selected={selected} startingX={X} startingY={Y} uuid={quest.uuid} options={options} />
 
           {calcPos(quest?.options ?? [])
             ?.filter((q) => shouldIShow(q))

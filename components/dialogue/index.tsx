@@ -2,7 +2,6 @@ import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { Separator } from '../ui/separator'
 
 export function Dialogue() {
   const store = useStore()
@@ -13,13 +12,24 @@ export function Dialogue() {
   useEffect(() => {
     setOptionId(undefined)
   }, [currentQuest])
+  const heroNode = store.nodes?.find((n) => n.gameType === 'hero')
 
   const npcDialogue = optionId
     ? currentQuest?.options?.find((o) => o.uuid === optionId)?.npcText
     : currentQuest?.npcText
+
   const options = optionId
     ? currentQuest?.options?.filter((o) => o.parrentId === optionId)
     : currentQuest?.options?.filter((o) => currentQuest.uuid === o.parrentId)
+
+  const currentOption = currentQuest?.options?.find((o) => o.uuid === optionId)
+  const saidBy = currentOption?.saidBy
+  const saidByNode = store.nodes?.find((n) => n.uuid === saidBy)
+  const saidByImg = saidByNode?.img ?? currentNode?.img
+  const saidByName = saidByNode?.name ?? currentNode?.name
+  const nextDialogue = currentQuest?.options?.find((o) =>
+    optionId ? o.parrentId === optionId : o.parrentId === currentQuest?.uuid,
+  )
 
   return (
     <div
@@ -27,50 +37,76 @@ export function Dialogue() {
         hidden: !store.selectedQuest,
       })}
     >
-      <div className=" w-full grid grid-cols-[100px_1fr] relative rounded  gap-4 bg-black bg-opacity-80 p-4 text-white">
-        <picture className="h-24 border bg-black flex justify-center">
-          <img className="object-contain h-full" src={currentNode?.img + '?thumb=190x190'} alt="" />
-        </picture>
-        <div className="text-lg h-full w-full">
-          <div className="text-2xl mt-2 font-bold">{npcDialogue}</div>
-          <Separator className="my-4" />
-          {options?.map((option) => (
-            <button
-              key={option.uuid}
-              onClick={() => {
-                setOptionId(option.uuid)
-                if (currentQuest?.nodeId)
-                  switch (option?.action) {
-                    case 'showImage':
-                      store.updateNode(currentQuest?.nodeId, { showVideo: undefined, showImg: option.imgUrl })
-                      break
-                    case 'showVideo':
-                      store.updateNode(currentQuest?.nodeId, { showVideo: option.videoUrl, showImg: undefined })
-                      break
+      <div className=" w-full grid   relative rounded min-h-[200px] gap-4 bg-black bg-opacity-80 p-4  px-6 text-white">
+        {saidByImg && (
+          <picture className="h-28 w-28 absolute -top-28 overflow-hidden  border-none rounded-  border bg-black p-0.5 flex justify-center">
+            <img className="object-contain  rounded-  h-full" src={saidByImg + '?thumb=190x190'} alt="" />
+          </picture>
+        )}
+        <div className="text-lg h-full  w-full">
+          <div className="text-xl font-bold text-secondary mb-1">{saidByName}</div>
+          <div
+            className={cn('font-medium ', {
+              'text-gray-500': currentOption?.saidBy === heroNode?.uuid,
+            })}
+          >
+            {npcDialogue}
+          </div>
 
-                    case 'openWebsite':
-                      return window.open(option.url, '_blank')
+          <div className="mt-8">
+            {options
+              ?.filter((o) => o.saidBy !== heroNode?.uuid)
+              .map((option) => (
+                <button
+                  key={option.uuid}
+                  onClick={() => {
+                    setOptionId(option.uuid)
+                    if (currentQuest?.nodeId)
+                      switch (option?.action) {
+                        case 'showImage':
+                          store.updateNode(currentQuest?.nodeId, { showVideo: undefined, showImg: option.imgUrl })
+                          break
+                        case 'showVideo':
+                          store.updateNode(currentQuest?.nodeId, { showVideo: option.videoUrl, showImg: undefined })
+                          break
 
-                    case 'goToScene':
-                      return store.setCurrentScene(option.goToScene)
+                        case 'openWebsite':
+                          return window.open(option.url, '_blank')
 
-                    default:
-                      break
-                  }
-              }}
-              className="w-full p-1 font-semibold text-xl  bg-white bg-opacity-10 border-none  mb-2 "
-            >
-              {option.name}
-            </button>
-          ))}
+                        case 'goToScene':
+                          return store.setCurrentScene(option.goToScene)
+
+                        default:
+                          break
+                      }
+                  }}
+                  className="w-full p-1 text-secondary border font-medium  mb-2 "
+                >
+                  {option.name}
+                </button>
+              ))}
+          </div>
         </div>
+
         <X
+          role="button"
           onClick={() => {
             setOptionId(undefined)
             store.setSelectedQuest(undefined)
           }}
           className="absolute top-4 right-4 h-4 w-4"
         />
+        {options?.filter((e) => e.saidBy !== heroNode?.uuid).length === 0 && (
+          <button
+            onClick={() => {
+              setOptionId(nextDialogue?.uuid ?? undefined)
+              if (!nextDialogue) store.setSelectedQuest(undefined)
+            }}
+            className="absolute animate-pulse bottom-4 right-4 font-bold text-xl w-fit"
+          >
+            {nextDialogue ? 'Next' : 'Close'}
+          </button>
+        )}
       </div>
     </div>
   )
