@@ -11,7 +11,7 @@ export function Dialogue() {
 
   useEffect(() => {
     setOptionId(undefined)
-  }, [currentQuest])
+  }, [currentQuest?.uuid])
   const heroNode = store.nodes?.find((n) => n.gameType === 'hero')
 
   const npcDialogue = optionId
@@ -30,6 +30,10 @@ export function Dialogue() {
   const nextDialogue = currentQuest?.options?.find((o) =>
     optionId ? o.parrentId === optionId : o.parrentId === currentQuest?.uuid,
   )
+  function close() {
+    setOptionId(undefined)
+    store.setSelectedQuest(undefined)
+  }
 
   return (
     <div
@@ -43,19 +47,19 @@ export function Dialogue() {
             <img className="object-contain  rounded-  h-full" src={saidByImg + '?thumb=190x190'} alt="" />
           </picture>
         )}
-        <div className="text-lg h-full  w-full">
+        <div className="text-lg h-full  flex flex-col w-full">
           <div className="text-xl font-bold text-secondary mb-1">{saidByName}</div>
           <div
-            className={cn('font-medium ', {
+            className={cn('font-medium  h-full py-2 mb-4 ', {
               'text-gray-500': currentOption?.saidBy === heroNode?.uuid,
             })}
           >
             {npcDialogue}
           </div>
 
-          <div className="mt-8">
+          <div className="mt-auto">
             {options
-              ?.filter((o) => o.saidBy !== heroNode?.uuid)
+              ?.filter((o) => o.name !== '')
               .map((option) => (
                 <button
                   key={option.uuid}
@@ -88,19 +92,23 @@ export function Dialogue() {
           </div>
         </div>
 
-        <X
-          role="button"
-          onClick={() => {
-            setOptionId(undefined)
-            store.setSelectedQuest(undefined)
-          }}
-          className="absolute top-4 right-4 h-4 w-4"
-        />
-        {options?.filter((e) => e.saidBy !== heroNode?.uuid).length === 0 && (
+        <X role="button" onClick={close} className="absolute top-4 right-4 h-4 w-4" />
+        {options?.filter((e) => e.name !== '').length === 0 && (
           <button
             onClick={() => {
-              setOptionId(nextDialogue?.uuid ?? undefined)
-              if (!nextDialogue) store.setSelectedQuest(undefined)
+              if (nextDialogue?.requiredItem) {
+                const doIHaveReqItem = store.inventory.includes(nextDialogue?.requiredItem)
+
+                if (!doIHaveReqItem) close()
+
+                if (doIHaveReqItem) {
+                  setOptionId(nextDialogue?.uuid)
+                  store.updateQuest({ status: 'completed' })
+                }
+              } else {
+                setOptionId(nextDialogue?.uuid)
+                if (!nextDialogue) store.setSelectedQuest(undefined)
+              }
             }}
             className="absolute animate-pulse bottom-4 right-4 font-bold text-xl w-fit"
           >

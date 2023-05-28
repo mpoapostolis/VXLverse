@@ -37,7 +37,6 @@ export function Quest(props: {
 
   const ref = useRef<HTMLInputElement>(null)
   const heroNode = store.nodes?.find((n) => n.gameType === 'hero')
-  const uuidToName = (uuid: string) => store.nodes?.find((n) => n.uuid === uuid)?.name
 
   return (
     <form
@@ -90,7 +89,17 @@ export function Quest(props: {
         <>
           <div>
             <Label className=" w-full text-xs font-medium">Required item</Label>
-            <Select className="bg-background text-xs" options={[]} onChange={(val) => {}} />
+            <Select
+              className="bg-background text-xs"
+              options={
+                store.nodes?.filter((n) => n.type === 'GLTF')?.map((n) => ({ value: n.uuid!, label: n.name! })) ?? []
+              }
+              onChange={(val) => {
+                if (props.optionId) updateOption({ requiredItem: val ?? undefined })
+                else store.updateQuest({ requiredItem: val ?? undefined })
+              }}
+              value={requiredItem}
+            />
           </div>
 
           <Label className=" w-fulltext-xs font-medium">Action</Label>
@@ -161,7 +170,6 @@ export function Quest(props: {
               <Label className=" w-full  text-xs font-medium">Open Website</Label>
               <Input
                 onBlur={(e) => {
-                  console.log(e.target.value)
                   if (props.optionId) updateOption({ url: e.target.value })
                   else store.updateQuest({ url: e.target.value })
                 }}

@@ -7,7 +7,7 @@ import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { useGame } from '@/lib/games/queries'
 import { GRID_SIZE, init, useStore } from '@/store'
-import { Box, Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
+import { Circle, Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
 import { Canvas, useThree } from '@react-three/fiber'
 import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
 import { Suspense, useEffect } from 'react'
@@ -146,9 +146,9 @@ export function GameCanvas(props: { id?: string }) {
                 position={[store.goTo.x, 1, store.goTo.z]}
                 restitution={0}
               >
-                <Box args={[1, 0.2, 1]}>
+                <Circle rotation={[-Math.PI / 2, 0, 0]} args={[1, 32]}>
                   <meshBasicMaterial color="blue" attach="material" transparent opacity={0.5} />
-                </Box>
+                </Circle>
               </RigidBody>
             )}
 
