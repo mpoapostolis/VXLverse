@@ -75,6 +75,10 @@ function Paths(props: {
   )
 }
 
+const gridSize = 60
+const gridDotSize = 3
+const gridColor = '#a4a4a4'
+
 function D3Component() {
   const store = useStore()
   const quest = store.quests?.find((q) => q.uuid === store.selectedQuest)!
@@ -91,10 +95,21 @@ function D3Component() {
       .filter((event) => event.type !== 'dblclick')
       .on('zoom', (event) => {
         board.attr('transform', event.transform)
+        svg
+          .select('#dot-pattern')
+          .attr('x', event.transform.x)
+          .attr('y', event.transform.y)
+          .attr('width', gridSize * event.transform.k)
+          .attr('height', gridSize * event.transform.k)
+          .selectAll('rect')
+          .attr('x', (gridSize * event.transform.k) / 2 - gridDotSize / 2)
+          .attr('y', (gridSize * event.transform.k) / 2 - gridDotSize / 2)
+          .attr('opacity', Math.min(event.transform.k, 1)) // Lower opacity as the pattern gets more dense.
       })
 
     // @ts-ignore
     svg.call(zoomBehavior)
+
     select('svg')
   }, [])
 
@@ -167,6 +182,16 @@ function D3Component() {
         </div>
       )}
       <svg className="w-full h-full" ref={ref}>
+        <pattern id="dot-pattern" patternUnits="userSpaceOnUse" x={0} y={0} width={1000} height={1000}>
+          <rect
+            width={gridDotSize}
+            height={gridDotSize}
+            fill={gridColor}
+            x={gridSize / 2 - gridDotSize / 2}
+            y={gridSize / 2 - gridDotSize / 2}
+          />
+        </pattern>
+        <rect x={0} y={5} width="100%" height="100%" fill="url(#dot-pattern)" />
         <g>
           <foreignObject
             onClick={() => {
