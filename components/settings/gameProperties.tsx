@@ -3,13 +3,13 @@ import { SelectModal } from '@/components/selectModal'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
-import { useRewards } from '@/lib/rewards/queries'
+
 import { useStore } from '@/store'
 import { RigidBodyTypeString } from '@react-three/rapier'
 
 export function GameProperties() {
   const store = useStore()
-  const { data: rewards } = useRewards()
+
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const items = store.nodes
     .filter((node) => node.collectable && node.uuid !== selected?.uuid)

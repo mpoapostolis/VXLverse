@@ -9,6 +9,7 @@ export function Controls() {
       <div className="grid h-fit w-fit">
         <Tooltip title="Transform: W">
           <button
+            aria-label="translate"
             onClick={() => store.setMode('translate')}
             className={clsx('border-b p-2', {
               'bg-card fill-card-foreground': store.mode !== 'translate',
@@ -20,8 +21,9 @@ export function Controls() {
             </svg>
           </button>
         </Tooltip>
-        <Tooltip title="Scale: R">
+        <Tooltip title="Rotate: E">
           <button
+            aria-label="Rotate"
             onClick={() => store.setMode('rotate')}
             className={clsx('border-b   p-2', {
               'bg-card fill-card-foreground': store.mode !== 'rotate',
@@ -35,6 +37,7 @@ export function Controls() {
         </Tooltip>
         <Tooltip title="Scale: R">
           <button
+            aria-label="Scale"
             onClick={() => store.setMode('scale')}
             className={clsx(' p-2', {
               'bg-card fill-card-foreground': store.mode !== 'scale',
@@ -52,7 +55,11 @@ export function Controls() {
       {store.selectedNode && (
         <div className="grid">
           <Tooltip title="Delete: Delete key">
-            <button onClick={store.deleteNode} className="h-8 w-8 p-1.5  border-b bg-card fill-card-foreground">
+            <button
+              aria-label="Delete"
+              onClick={store.deleteNode}
+              className="h-8 w-8 p-1.5  border-b bg-card fill-card-foreground"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="fill-destructive">
                 <path d="M0 0h24v24H0z" fill="none"></path>
                 <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"></path>
@@ -60,7 +67,11 @@ export function Controls() {
             </button>
           </Tooltip>
           <Tooltip title="Duplicate: Shift + D">
-            <button onClick={store.duplicateNode} className="h-8 w-8 p-1.5  bg-card fill-card-foreground">
+            <button
+              aria-label="Duplicate"
+              onClick={store.duplicateNode}
+              className="h-8 w-8 p-1.5  bg-card fill-card-foreground"
+            >
               <picture>
                 <img src="/icons/copy.png" alt="duplicate" />
               </picture>

@@ -16,7 +16,7 @@ import {
 } from '@/components/ui/menubar'
 import { useModels } from '@/lib/models/queries'
 import { Model } from '@/lib/models/types'
-import { Node, User, useStore } from '@/store'
+import { Node, useStore } from '@/store'
 import { exportGame, geometries, getUuid, importGameZip, lights } from '@/store/utils'
 
 import { Indicator } from '@/components/indicator'
@@ -41,8 +41,6 @@ import {
 } from '@radix-ui/react-icons'
 import axios from 'axios'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import PocketBase from 'pocketbase'
 import { Account } from '../account'
 import { Button } from '../ui/button'
 
@@ -86,13 +84,7 @@ export function Menu() {
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
 
   const clerk = useClerk()
-  const login = async () => {
-    const pb = new PocketBase('https://admin.vxlverse.com')
-    const authData = await pb.collection('users').authWithOAuth2({
-      provider: 'google',
-    })
-    store.setUser(authData?.meta?.rawUser as User)
-  }
+
   const { toast } = useToast()
   function isInPWA() {
     if (typeof window === 'undefined') return false
@@ -102,7 +94,6 @@ export function Menu() {
 
     return isStandalone || isFullscreen || isMinimalUI
   }
-  const router = useRouter()
   return (
     <Menubar>
       <MenubarMenu>
@@ -354,23 +345,27 @@ export function Menu() {
         </MenubarContent>
       </MenubarMenu>
 
-      <div className="flex w-full items-center  justify-end pr-4 hover:bg-none h-full ">
-        <SignedIn>
-          <Account />
-        </SignedIn>
-        <SignedOut>
-          <Button
-            variant="ghost"
-            onClick={() => {
-              clerk.openSignIn({
-                afterSignInUrl: '/',
-              })
-            }}
-          >
-            Sign in
-          </Button>
-        </SignedOut>
-      </div>
+      <MenubarMenu>
+        <div role="none" className="flex w-full items-center  justify-end  hover:bg-none h-full ">
+          <SignedIn>
+            <Account />
+          </SignedIn>
+          <SignedOut>
+            <Button
+              role="menuitem"
+              aria-label="Sign in"
+              variant="ghost"
+              onClick={() => {
+                clerk.openSignIn({
+                  afterSignInUrl: '/',
+                })
+              }}
+            >
+              Sign in
+            </Button>
+          </SignedOut>
+        </div>
+      </MenubarMenu>
     </Menubar>
   )
 }

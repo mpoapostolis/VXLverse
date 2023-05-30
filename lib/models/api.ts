@@ -7,6 +7,11 @@ export async function getModels(_req: NextApiRequest, res: NextApiResponse) {
   const records = await pb.collection('models').getFullList<Model>(200 /* batch size */, {
     sort: '-created',
   })
+
+  res.setHeader('Access-Control-Allow-Origin', 'https://www.vxlverse.com')
+  res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS')
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+
   res.status(200).json(
     records.map((obj) => ({
       ...obj,

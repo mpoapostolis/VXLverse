@@ -77,7 +77,6 @@ export function Hero(props: Partial<Node>) {
         linearDamping={0}
         type={'dynamic'}
         onCollisionEnter={(t) => {
-          console.log('collision', t)
           rb?.setLinvel({ x: 0, y: 0, z: 0 }, true)
           store.updateNode(props.uuid!, { status: 'idle' })
           store.setGoTo(undefined)
