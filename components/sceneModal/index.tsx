@@ -32,7 +32,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
           </DialogTrigger>
         </ContextMenuTrigger>
       </ContextMenu>
-      <DialogContent className="lg:w-[80vw] w-screen ">
+      <DialogContent className="lg:w-96 w-screen ">
         <DialogHeader>
           <DialogTitle>
             {verb} {props.new ? 'new scene' : selectedScene?.name}
@@ -42,70 +42,43 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
             You can add a background color or an equirectangular image.
           </DialogDescription>
         </DialogHeader>
-        <Separator />
+        <Separator className="my-2" />
 
-        <div className="">
-          <div className=" mb-2 ">
-            <Label className=" w-full text-sm font-medium">Name</Label>
-            <input
-              onChange={(evt) => {
-                store.updateScene(selectedScene?.uuid, {
-                  name: evt.target.value,
+        <div className="grid  items-center gap-4 ">
+          <Label className=" w-full text-sm font-medium">Name</Label>
+          <input
+            onChange={(evt) => {
+              store.updateScene(selectedScene?.uuid, {
+                name: evt.target.value,
+              })
+            }}
+            value={selectedScene?.name}
+            className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
+          />
+
+          <Label className=" w-full text-sm font-medium">Scene intro</Label>
+          <textarea
+            onChange={(evt) => {
+              store.updateScene(selectedScene?.uuid, {
+                intro: evt.target.value,
+              })
+            }}
+            value={selectedScene?.intro}
+            rows={5}
+            className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
+          />
+          <Label className=" w-full text-sm font-medium">Color</Label>
+          <input
+            onChange={(evt) => {
+              selectedScene &&
+                store.updateScene(selectedScene.uuid, {
+                  color: evt.target.value,
                 })
-              }}
-              value={selectedScene?.name}
-              className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
-            />
-          </div>
-          {/* <div className=" mb-2 ">
-            <Label className=" w-full text-sm font-medium">Background</Label>
-            <select
-              onChange={(evt) => {
-                store.updateScene(selectedScene?.uuid, {
-                  type: evt.target.value as 'color' | 'equirect',
-                })
-              }}
-              value={selectedScene?.type}
-              className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
-            >
-              <option value="color">Color</option>
-              <option value="equirect">Equirect</option>
-            </select>
-          </div> */}
-
-          <div className="grid grid-cols-[80px_1fr] items-center gap-4 ">
-            {selectedScene?.type === 'color' && (
-              <>
-                <Label className=" w-full text-sm font-medium">Color</Label>
-
-                <input
-                  onChange={(evt) => {
-                    store.updateScene(selectedScene.uuid, {
-                      color: evt.target.value,
-                    })
-                  }}
-                  value={selectedScene?.color}
-                  type="color"
-                  className="ml-auto w-20 h-20  p-0 file:hidden   file:text-end"
-                />
-              </>
-            )}
-            {/* {selectedScene?.type === 'equirect' && (
-              <>
-                <Label className=" w-fit text-sm font-medium">Equirect</Label>
-                <Upload
-                  className="bg-base-300 ml-auto h-20 w-20 min-w-[40px] border border-dashed border-mauve8  "
-                  value={selectedScene?.equirect}
-                  onChange={(blob, equirect) =>
-                    store.updateScene(selectedScene?.uuid, {
-                      blob,
-                      equirect,
-                    })
-                  }
-                />
-              </>
-            )} */}
-          </div>
+            }}
+            value={selectedScene?.color}
+            type="color"
+            className="ml-auto  w-full h-20 p-0 file:hidden   file:text-end"
+          />
         </div>
       </DialogContent>
     </Dialog>

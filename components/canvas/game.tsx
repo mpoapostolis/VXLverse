@@ -118,7 +118,7 @@ export function GameCanvas(props: { id?: string }) {
           ) : (
             <color attach="background" args={[selectedScene?.color ?? '#999999']} />
           )}
-          <Physics timeStep="vary" debug>
+          <Physics timeStep="vary">
             {hero && <Hero {...hero} />}
 
             {store.nodes
@@ -132,6 +132,7 @@ export function GameCanvas(props: { id?: string }) {
                   <GameNode key={idx} {...node} />
                 ),
               )}
+
             <CuboidCollider name="WTF" position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.5, GRID_SIZE * 4]} />
 
             {store?.goTo && hero?.uuid && (

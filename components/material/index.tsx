@@ -1,7 +1,7 @@
 import { NodeMaterial } from '@/store'
-import { useTexture } from '@react-three/drei'
+import { MeshReflectorMaterial, useTexture } from '@react-three/drei'
 
-export function Material(props: { material?: NodeMaterial; color?: string }) {
+export function Material(props: { mirror?: boolean; material?: NodeMaterial; color?: string }) {
   let textureMap: NodeMaterial = {}
 
   if (props.material?.map) textureMap.map = props.material.map
@@ -17,7 +17,9 @@ export function Material(props: { material?: NodeMaterial; color?: string }) {
     normal?: string
     roughness?: string
   }>(textureMap)
-  return (
+  return props.material?.type === 'mirror' ? (
+    <MeshReflectorMaterial mirror={1} blur={0} depthToBlurRatioBias={0} distortion={0} />
+  ) : (
     <meshStandardMaterial
       key={textureMap.map}
       map={objMap.map}

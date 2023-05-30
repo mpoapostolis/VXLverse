@@ -244,6 +244,7 @@ export function Menu() {
                 ))}
               </MenubarSubContent>
             </MenubarSub>
+
             <MenubarSeparator />
             <MenubarSub>
               <MenubarSubTrigger>Find Node</MenubarSubTrigger>

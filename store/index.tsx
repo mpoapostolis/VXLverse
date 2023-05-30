@@ -140,6 +140,7 @@ export type MaterialType =
   | 'trees'
   | 'walls'
   | 'wood'
+  | 'mirror'
 
 export const materialTypes: MaterialType[] = [
   'fabric',
@@ -155,6 +156,7 @@ export const materialTypes: MaterialType[] = [
   'trees',
   'walls',
   'wood',
+  'mirror',
 ]
 
 export type NodeMaterial = {
@@ -201,6 +203,7 @@ export type Scene = {
   uuid?: string
   name?: string
   type?: SceneType
+  intro?: string
   color?: string
   equirect?: string
   blob?: Blob
