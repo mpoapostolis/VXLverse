@@ -29,7 +29,17 @@ export function GameNode(props: Partial<Node>) {
   }
   return (
     <Suspense fallback={null}>
-      <RigidBody rotation={rotation} scale={scale} position={position} type={props.physics}>
+      <RigidBody
+        friction={0}
+        density={0}
+        restitution={0}
+        linearDamping={0}
+        type={'fixed'}
+        rotation={rotation}
+        scale={scale}
+        colliders="cuboid"
+        position={position}
+      >
         <mesh
           onClick={(evt) => {
             evt.stopPropagation()

@@ -6,11 +6,11 @@ import { HelpModal } from '@/components/helpModal'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { useGame } from '@/lib/games/queries'
-import { GRID_SIZE, init, useStore } from '@/store'
+import { init, useStore } from '@/store'
 import { Circle, Environment, Loader, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas, useThree } from '@react-three/fiber'
-import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
+import { Physics, RigidBody } from '@react-three/rapier'
 import { Suspense, useEffect } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
 import { Hero } from '../gameNode/hero'
@@ -140,17 +140,18 @@ export function GameCanvas(props: { id?: string }) {
                 ),
               )}
 
-            <CuboidCollider name="WTF" position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.5, GRID_SIZE * 4]} />
+            {/* <CuboidCollider friction={0} position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.1, GRID_SIZE * 4]} /> */}
             {store?.goTo && hero?.uuid && (
               <RigidBody
                 type="dynamic"
+                solverGroups={0}
                 onCollisionEnter={(t) => {
                   if (t.target.rigidBodyObject?.name !== 'hero') return
                   store.updateNode(hero?.uuid!, { status: 'idle' })
                   store.setGoTo(undefined)
                 }}
                 name="goTo"
-                position={[store.goTo.x, 1, store.goTo.z]}
+                position={[store.goTo.x, 0.2, store.goTo.z]}
                 restitution={0}
               >
                 <Circle rotation={[-Math.PI / 2, 0, 0]} args={[1, 32]}>

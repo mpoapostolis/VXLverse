@@ -73,7 +73,8 @@ export function Node(
             castShadow
             receiveShadow
             ref={ref}
-            onClick={() => {
+            onClick={(evt) => {
+              evt.stopPropagation()
               props.uuid && store.selectNode(props.uuid)
             }}
           >

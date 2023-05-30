@@ -72,9 +72,12 @@ export function Hero(props: Partial<Node>) {
         scale={scale}
         name={props.gameType}
         position={position}
-        colliders="cuboid"
-        type={'kinematicVelocity'}
+        friction={0}
+        lockRotations={true}
+        linearDamping={0}
+        type={'dynamic'}
         onCollisionEnter={(t) => {
+          console.log('collision', t)
           rb?.setLinvel({ x: 0, y: 0, z: 0 }, true)
           store.updateNode(props.uuid!, { status: 'idle' })
           store.setGoTo(undefined)
