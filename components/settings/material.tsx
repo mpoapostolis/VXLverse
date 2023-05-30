@@ -19,7 +19,7 @@ export function Material() {
           }}
           value={selected?.color ?? '#ffffff'}
           type="color"
-          className="ml-auto h-12 w-12"
+          className="ml-auto "
         />
         <Label className=" w-full ">Material</Label>
         <Selectmaterial />

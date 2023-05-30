@@ -7,7 +7,8 @@ import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { useGame } from '@/lib/games/queries'
 import { GRID_SIZE, init, useStore } from '@/store'
-import { Circle, Environment, Loader, OrbitControls, Plane, Preload, useTexture } from '@react-three/drei'
+import { Circle, Environment, Loader, OrbitControls, Preload, useTexture } from '@react-three/drei'
+import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas, useThree } from '@react-three/fiber'
 import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
 import { Suspense, useEffect } from 'react'
@@ -112,12 +113,13 @@ export function GameCanvas(props: { id?: string }) {
       <Canvas className="w-full h-full" camera={{ position: [0, 15, -15] }}>
         <Suspense>
           <fog attach="fog" args={[selectedScene?.color ?? '#000', 0, 120]} />
-          <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE * 4, GRID_SIZE * 4]} />
           {selectedScene?.equirect ? (
             <Env equirect={selectedScene.equirect} />
           ) : (
             <color attach="background" args={[selectedScene?.color ?? '#999999']} />
           )}
+          {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
+
           <Physics timeStep="vary">
             {hero && <Hero {...hero} />}
 
@@ -134,7 +136,6 @@ export function GameCanvas(props: { id?: string }) {
               )}
 
             <CuboidCollider name="WTF" position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.5, GRID_SIZE * 4]} />
-
             {store?.goTo && hero?.uuid && (
               <RigidBody
                 type="dynamic"
@@ -153,7 +154,6 @@ export function GameCanvas(props: { id?: string }) {
               </RigidBody>
             )}
 
-            <Plane args={[GRID_SIZE * 4, GRID_SIZE * 4]} rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} />
             <Orbit id={props.id} />
           </Physics>
           <Preload all />

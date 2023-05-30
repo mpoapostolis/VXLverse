@@ -4,6 +4,7 @@ import { Controls } from '@/components/controls'
 import { Node } from '@/components/node'
 import { GRID_SIZE, init, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
+import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas } from '@react-three/fiber'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
@@ -52,6 +53,7 @@ export function EditorCanvas() {
           ) : (
             <color attach="background" args={[selectedScene?.color ?? '#000']} />
           )}
+          {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
 
           {store.nodes
             ?.filter((e) => {

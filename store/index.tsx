@@ -203,6 +203,7 @@ export type Scene = {
   uuid?: string
   name?: string
   type?: SceneType
+  skyBox?: string
   intro?: string
   color?: string
   equirect?: string

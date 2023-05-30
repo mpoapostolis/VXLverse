@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
+import { Select } from '../select'
 
 export function SceneModal(props: { onClick?: () => void; new?: boolean; children?: React.ReactNode }) {
   const store = useStore()
@@ -55,7 +56,6 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
             value={selectedScene?.name}
             className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
           />
-
           <Label className=" w-full text-sm font-medium">Scene intro</Label>
           <textarea
             onChange={(evt) => {
@@ -67,6 +67,32 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
             rows={5}
             className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
           />
+          <Label className=" w-full text-sm font-medium">Sky</Label>
+          <Select
+            options={[
+              'sunset',
+              'dawn',
+              'night',
+              'warehouse',
+              'forest',
+              'apartment',
+              'studio',
+              'city',
+              'park',
+              'lobby',
+            ].map((o) => ({
+              label: o,
+              value: o,
+            }))}
+            value={selectedScene?.skyBox}
+            onChange={(val) => {
+              selectedScene &&
+                store.updateScene(selectedScene.uuid, {
+                  skyBox: val ?? undefined,
+                })
+            }}
+          />
+
           <Label className=" w-full text-sm font-medium">Color</Label>
           <input
             onChange={(evt) => {

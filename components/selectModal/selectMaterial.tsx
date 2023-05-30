@@ -35,7 +35,7 @@ export function Selectmaterial() {
         })
       }}
     >
-      <button className="ml-auto w-12 h-12  bg-black">
+      <button className="ml-auto w-6 h-6  bg-black">
         <picture>
           <img
             className="w-full h-full object-scale-down"

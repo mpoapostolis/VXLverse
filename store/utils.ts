@@ -16,6 +16,15 @@ export const getUuid = () => {
 export const defaultNodes = [
   {
     uuid: getUuid(),
+    scale: [80, 80, 1],
+    scene: 'main',
+    position: [0, 0, 0],
+    name: 'Floor',
+    type: 'Plane',
+    rotation: [-90, 0, 0],
+  },
+  {
+    uuid: getUuid(),
     name: 'DirectionalLight',
     position: [-40, 20, 40],
     rotation: [0, 0, 0],
