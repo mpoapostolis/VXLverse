@@ -73,7 +73,7 @@ function Orbit(props: { id?: string }) {
   return (
     <OrbitControls
       enablePan={false}
-      maxDistance={30.1}
+      maxDistance={8.1}
       maxPolarAngle={Math.PI / 2}
       minDistance={4}
       position={[0, -5, 0]}
