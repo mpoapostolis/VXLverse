@@ -93,6 +93,7 @@ export function GameCanvas(props: { id?: string }) {
   return (
     <main className="relative h-screen overflow-hidden">
       <HelpModal />
+      <Loader />
 
       {props.id && (
         <video
@@ -164,7 +165,6 @@ export function GameCanvas(props: { id?: string }) {
         <img loading="lazy" className="w-16 h-16" src="/logo.webp" alt="" />
       </picture>
       <Dialogue />
-      <Loader />
     </main>
   )
 }

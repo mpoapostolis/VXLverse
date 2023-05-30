@@ -32,7 +32,8 @@ export function GameNode(props: Partial<Node>) {
     <Suspense fallback={null}>
       <RigidBody rotation={rotation} scale={scale} position={position} type={props.physics}>
         <mesh
-          onClick={() => {
+          onClick={(evt) => {
+            evt.stopPropagation()
             if (!props.uuid || !isVisible) return
 
             const doIHaveInteract = Object.entries(props.statusToAnimation ?? {}).find(

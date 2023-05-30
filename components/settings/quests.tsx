@@ -16,7 +16,7 @@ export function Quests() {
       <Button onClick={() => store.newQuest()} className="w-full">
         New Quest
       </Button>
-      <div className="grid gap-2 mt-4   place-items-center ">
+      <div className="grid gap-2 mt-4  place-items-center ">
         {quest?.map((q) => (
           <div
             className="grid   border-opacity-10 border-white place-items-center  gap-4  grid-cols-[1fr_35px] w-full"

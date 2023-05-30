@@ -18,6 +18,7 @@ export default function Editor() {
       <Animations />
       <GameProperties />
       <Quests />
+      <div className="pb-12" />
     </>
   )
 }
