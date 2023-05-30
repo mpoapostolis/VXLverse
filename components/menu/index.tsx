@@ -19,12 +19,12 @@ import { Model } from '@/lib/models/types'
 import { Node, User, useStore } from '@/store'
 import { exportGame, geometries, getUuid, importGameZip, lights } from '@/store/utils'
 
-import { Account } from '@/components/account'
 import { Indicator } from '@/components/indicator'
 import { SceneModal } from '@/components/sceneModal'
 import { SelectModel } from '@/components/selectModal/selectModel'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
+import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import {
   CheckCircledIcon,
@@ -43,6 +43,8 @@ import axios from 'axios'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import PocketBase from 'pocketbase'
+import { Account } from '../account'
+import { Button } from '../ui/button'
 
 export function Menu() {
   const store = useStore()
@@ -83,6 +85,7 @@ export function Menu() {
 
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
 
+  const clerk = useClerk()
   const login = async () => {
     const pb = new PocketBase('https://admin.vxlverse.com')
     const authData = await pb.collection('users').authWithOAuth2({
@@ -351,26 +354,23 @@ export function Menu() {
         </MenubarContent>
       </MenubarMenu>
 
-      <MenubarMenu>
-        <div className="flex w-full items-center  hover:bg-none h-full ">
-          {store.user ? (
-            <Account />
-          ) : (
-            <div className="ml-auto lg:mr-2" role="menuitem">
-              <button
-                onClick={login}
-                className=" h-full flex items-center font-semibold bg-card px-4 py-1 "
-                type="button"
-              >
-                <picture>
-                  <img className="h-full w-4  mr-2" src="/icons/google.svg" alt="" />
-                </picture>
-                <span className="hidden lg:block">Login with google</span>
-              </button>
-            </div>
-          )}
-        </div>
-      </MenubarMenu>
+      <div className="flex w-full items-center  justify-end pr-4 hover:bg-none h-full ">
+        <SignedIn>
+          <Account />
+        </SignedIn>
+        <SignedOut>
+          <Button
+            variant="ghost"
+            onClick={() => {
+              clerk.openSignIn({
+                afterSignInUrl: '/',
+              })
+            }}
+          >
+            Sign in
+          </Button>
+        </SignedOut>
+      </div>
     </Menubar>
   )
 }

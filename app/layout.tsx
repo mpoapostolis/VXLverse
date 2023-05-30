@@ -1,6 +1,7 @@
 import { Analytics } from '@/components/analytics'
 import { Toaster } from '@/components/ui/toaster'
 import '@/styles/globals.css'
+import { ClerkProvider } from '@clerk/nextjs'
 import { Metadata } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
@@ -55,18 +56,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <Head>
-        <Link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-        <meta name="msapplication-TileColor" content="#000000" />
-        <meta name="theme-color" content="#000000" />
-      </Head>
+    <ClerkProvider>
+      <html lang="en">
+        <Head>
+          <Link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+          <meta name="msapplication-TileColor" content="#000000" />
+          <meta name="theme-color" content="#000000" />
+        </Head>
 
-      <body className="overflow-hidden w-screen h-screen">
-        <Analytics />
-        {props.children}
-        <Toaster />
-      </body>
-    </html>
+        <body className="overflow-hidden w-screen h-screen">
+          <Analytics />
+          {props.children}
+          <Toaster />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
