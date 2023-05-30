@@ -91,9 +91,13 @@ export function GameCanvas(props: { id?: string }) {
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const hero = store.nodes?.find((node) => node.gameType === 'hero')
   return (
-    <main className="relative h-screen overflow-hidden">
+    <main className="relative h-screen z-50 overflow-hidden">
       <HelpModal />
-      <Loader />
+      <Loader
+        containerStyles={{
+          zIndex: 10,
+        }}
+      />
 
       {props.id && (
         <video

@@ -6,7 +6,6 @@ import { RigidBody } from '@react-three/rapier'
 import { XIcon } from 'lucide-react'
 import { Suspense, useRef } from 'react'
 import { Euler, Mesh, Vector3 } from 'three'
-import { Loader } from '../loader'
 import { Material } from '../material'
 
 export function GameNode(props: Partial<Node>) {
@@ -95,7 +94,7 @@ export function GameNode(props: Partial<Node>) {
           )}
           {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
 
-          <Suspense fallback={<Loader />}>
+          <Suspense>
             <Material material={props.material} color={props.color} />
           </Suspense>
         </mesh>
