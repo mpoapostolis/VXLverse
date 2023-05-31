@@ -14,16 +14,16 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from '@/components/ui/menubar'
-import { useModels } from '@/lib/models/queries'
-import { Model } from '@/lib/models/types'
 import { Node, useStore } from '@/store'
 import { exportGame, geometries, getUuid, importGameZip, lights } from '@/store/utils'
 
+import { Model } from '@/app/api/models/types'
 import { Indicator } from '@/components/indicator'
 import { SceneModal } from '@/components/sceneModal'
 import { SelectModel } from '@/components/selectModal/selectModel'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
+import { useModels } from '@/lib/models/queries'
 import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import {
@@ -59,7 +59,6 @@ export function Menu() {
     })
   }
   const { data: models } = useModels()
-
   function addGLTF(node?: Model) {
     if (!node) return
 
@@ -94,6 +93,7 @@ export function Menu() {
 
     return isStandalone || isFullscreen || isMinimalUI
   }
+
   return (
     <Menubar>
       <MenubarMenu>
@@ -198,7 +198,11 @@ export function Menu() {
         <MenubarTrigger>Nodes</MenubarTrigger>
         <MenubarContent>
           <ContextMenu>
-            <SelectModel onChange={(id) => addGLTF(models?.find((m) => m.id === id))}>
+            <SelectModel
+              onChange={(id) => {
+                addGLTF(models?.find((m) => m.id === id))
+              }}
+            >
               <div className="relative w-full   cursor-default hover:bg-secondary hover:text-secondary-foreground bg-opacity-10 select-none items-center rounded-sm px-2 py-1.5 text-xs outline-none ">
                 RPG Entity
               </div>

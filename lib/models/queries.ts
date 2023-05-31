@@ -1,6 +1,6 @@
 'use client'
 
-import { Model } from '@/lib/models/types'
+import { Model } from '@/app/api/models/types'
 import { fetcher } from '@/lib/utils'
 import { AxiosError } from 'axios'
 import useSWR from 'swr'
