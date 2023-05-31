@@ -2,6 +2,7 @@ import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { X } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useWindupString } from 'windups'
 import { Dialog, DialogContent } from '../ui/dialog'
 
 export function Dialogue() {
@@ -36,6 +37,9 @@ export function Dialogue() {
     store.setSelectedQuest(undefined)
   }
 
+  const [text, { skip }] = useWindupString(npcDialogue ?? '', {
+    pace: (char: string) => (char === ' ' ? 100 : 50),
+  })
   return (
     <Dialog open={Boolean(store.selectedQuest)}>
       <DialogContent hideClose className="bg-transparent border-none fixed bottom-0">
@@ -48,11 +52,11 @@ export function Dialogue() {
           <div className="text-lg h-full  flex flex-col w-full">
             <div className="text-xl font-bold text-secondary mb-1">{saidByName}</div>
             <div
-              className={cn('font-medium  h-full py-2 mb-4 ', {
+              className={cn('font-medium   h-full py-2 mb-4 ', {
                 'text-gray-500': currentOption?.saidBy === heroNode?.uuid,
               })}
             >
-              {npcDialogue}
+              {text}
             </div>
 
             <div className="mt-auto">

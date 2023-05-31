@@ -69,6 +69,7 @@
     "three": "^0.152.2",
     "three-stdlib": "^2.22.8",
     "typescript": "^5.0.4",
+    "windups": "^1.2.1",
     "zustand": "^4.3.8"
   },
   "devDependencies": {

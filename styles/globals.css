@@ -118,3 +118,20 @@
     font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
+
+.slowFadeOut {
+  animation: slowFadeOut 2s ease-in-out forwards;
+}
+
+@keyframes slowFadeOut {
+  0% {
+    scale: 1;
+    opacity: 1;
+    display: block;
+  }
+  100% {
+    pointer-events: none;
+    display: none;
+    opacity: 0;
+  }
+}

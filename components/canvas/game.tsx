@@ -7,13 +7,16 @@ import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { useGame } from '@/lib/games/queries'
 import { init, useStore } from '@/store'
-import { Circle, Environment, Loader, OrbitControls, Preload, useTexture } from '@react-three/drei'
+import { Circle, Environment, Loader, OrbitControls, Preload, useProgress, useTexture } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Physics, RigidBody } from '@react-three/rapier'
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useRef } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
+import { useWindupString } from 'windups'
 import { Hero } from '../gameNode/hero'
+
+const lorm = `Lorem ipsum dolor sit amet cons ectetur adipi sicing elit. Quisquam, voluptas.`
 
 function Env(props: { equirect: string }) {
   const texture = useTexture(props.equirect ?? '')
@@ -90,6 +93,15 @@ export function GameCanvas(props: { id?: string }) {
 
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const hero = store.nodes?.find((node) => node.gameType === 'hero')
+  const progress = useProgress()
+  const ref = useRef<HTMLDivElement>(null)
+  const [windText] = useWindupString(selectedScene?.intro ?? lorm, {
+    pace: (char: string) => (char === ' ' ? 100 : 50),
+    onFinished: () => {
+      ref.current?.classList.add('slowFadeOut')
+    },
+  })
+
   return (
     <main className="relative h-screen z-50 overflow-hidden">
       <HelpModal />
@@ -98,7 +110,15 @@ export function GameCanvas(props: { id?: string }) {
           zIndex: 10,
         }}
       />
-
+      {progress.progress === 100 && (
+        <div
+          ref={ref}
+          key={selectedScene?.intro}
+          className="h-screen w-screen  bg-black absolute z-50 grid   place-items-center text-3xl font-bold"
+        >
+          {windText}
+        </div>
+      )}
       {props.id && (
         <video
           autoPlay
