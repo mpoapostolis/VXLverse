@@ -356,9 +356,7 @@ export function Menu() {
               aria-label="Sign in"
               variant="ghost"
               onClick={() => {
-                clerk.openSignIn({
-                  afterSignInUrl: '/',
-                })
+                clerk.openSignIn()
               }}
             >
               Sign in
