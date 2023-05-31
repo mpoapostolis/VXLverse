@@ -144,44 +144,46 @@ export function Menu() {
             </MenubarShortcut>
           </MenubarItem>
           <MenubarSeparator />
-
-          <MenubarItem
-            onClick={async () => {
-              const id = await axios
-                .post('/api/publish', {
-                  nodes:
-                    store.nodes?.map((e) => ({
-                      ...e,
-                      actions: undefined,
-                    })) ?? [],
-                  quests: store.quests,
-                  scenes: store.scenes,
-                })
-                .then((d) => {
-                  toast({
-                    title: 'You have successfully published your game! ',
-                    description: (
-                      <Label className="text-base ">
-                        Click
-                        <Link
-                          className="mx-2 font-bold text-secondary"
-                          href={`https://vxlverse.com/game?id=${d.data.id}`}
-                          target="_blank"
-                        >
-                          here
-                        </Link>
-                        to play it!
-                      </Label>
-                    ),
+          <SignedIn>
+            <MenubarItem
+              onClick={async () => {
+                await axios
+                  .post('/api/publish', {
+                    userId: clerk?.client.id,
+                    nodes:
+                      store.nodes?.map((e) => ({
+                        ...e,
+                        actions: undefined,
+                      })) ?? [],
+                    quests: store.quests,
+                    scenes: store.scenes,
                   })
-                })
-            }}
-          >
-            Publish
-            <MenubarShortcut>
-              <Share1Icon />
-            </MenubarShortcut>
-          </MenubarItem>
+                  .then((d) => {
+                    toast({
+                      title: 'You have successfully published your game! ',
+                      description: (
+                        <Label className="text-base ">
+                          Click
+                          <Link
+                            className="mx-2 font-bold text-secondary"
+                            href={`https://vxlverse.com/game?id=${d.data.id}`}
+                            target="_blank"
+                          >
+                            here
+                          </Link>
+                          to play it!
+                        </Label>
+                      ),
+                    })
+                  })
+              }}
+            >
+              Publish
+              <MenubarShortcut>
+                <Share1Icon />
+              </MenubarShortcut>
+            </MenubarItem>
+          </SignedIn>
 
           <MenubarItem>
             Settings{' '}
