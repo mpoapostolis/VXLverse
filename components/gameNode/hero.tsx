@@ -2,16 +2,16 @@ import { Gltf } from '@/components/gltf'
 import { Node, useStore } from '@/store'
 import { useFrame } from '@react-three/fiber'
 import { RapierRigidBody, RigidBody, vec3 } from '@react-three/rapier'
-import { Suspense, useEffect, useRef } from 'react'
+import { Suspense, useEffect, useMemo, useRef } from 'react'
 import { Euler, Mesh, Quaternion, Vector3 } from 'three'
 
 export function Hero(props: Partial<Node>) {
   const store = useStore()
   const ref = useRef<Mesh>(null)
 
-  const rotation = new Euler(...(props.rotation?.map((r) => (r * Math.PI) / 180) ?? [0, 0, 0]))
-  const position = new Vector3(...(props.position ?? [0, 0, 0]))
-  const scale = new Vector3(...(props.scale ?? [0, 0, 0]))
+  const rotation = useMemo(() => new Euler(...(props.rotation?.map((r) => (r * Math.PI) / 180) ?? [0, 0, 0])), [])
+  const position = useMemo(() => new Vector3(...(props.position ?? [0, 0, 0])), [])
+  const scale = useMemo(() => new Vector3(...(props.scale ?? [0, 0, 0])), [])
 
   const rigidBody = useRef<RapierRigidBody>(null)
 
