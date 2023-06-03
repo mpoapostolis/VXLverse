@@ -44,13 +44,8 @@ export function Dialogue() {
     <Dialog open={Boolean(store.selectedQuest)}>
       <DialogContent hideClose className="bg-transparent border-none fixed bottom-0">
         <div className=" w-full grid   relative rounded min-h-[200px] gap-4 bg-black bg-opacity-80 p-4  px-6 text-white">
-          {saidByImg && (
-            <picture className="h-28 w-28 absolute -top-28 overflow-hidden  border-none rounded-  border bg-black p-0.5 flex justify-center">
-              <img className="object-contain  rounded-  h-full" src={saidByImg + '?thumb=190x190'} alt="" />
-            </picture>
-          )}
           <div className="text-lg h-full  flex flex-col w-full">
-            <div className="text-xl font-bold text-secondary mb-1">{saidByName}</div>
+            <div className="text-xl  font-bold text-secondary mb-1">{saidByName}</div>
             <div
               className={cn('font-medium   h-full py-2 mb-4 ', {
                 'text-gray-500': currentOption?.saidBy === heroNode?.uuid,
@@ -113,7 +108,7 @@ export function Dialogue() {
                   if (!nextDialogue) store.setSelectedQuest(undefined)
                 }
               }}
-              className="absolute animate-pulse border-none bottom-4  right-4 font-bold text-xl w-fit"
+              className="absolute animate-pulse border-none outline-none focus:outline-none bottom-4  right-4 font-bold text-xl w-fit"
             >
               {!isFinished ? 'skip' : nextDialogue ? 'Next' : 'Close'}
             </button>
