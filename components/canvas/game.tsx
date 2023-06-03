@@ -15,6 +15,7 @@ import { Suspense, useEffect, useRef } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
 import { useWindupString } from 'windups'
 import { Hero } from '../gameNode/hero'
+import { TypeWritter } from '../windText'
 
 const lorm = `Lorem ipsum dolor sit amet cons ectetur adipi sicing elit. Quisquam, voluptas.`
 
@@ -110,15 +111,7 @@ export function GameCanvas(props: { id?: string }) {
           zIndex: 10,
         }}
       />
-      {progress.progress === 100 && (
-        <div
-          ref={ref}
-          key={selectedScene?.intro}
-          className="h-screen w-screen  bg-black absolute z-50 grid   place-items-center text-3xl font-bold"
-        >
-          {windText}
-        </div>
-      )}
+      {progress.progress === 100 && <TypeWritter text={selectedScene?.intro} />}
       {props.id && (
         <video
           autoPlay

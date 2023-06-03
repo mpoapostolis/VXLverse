@@ -37,7 +37,7 @@ export function Dialogue() {
     store.setSelectedQuest(undefined)
   }
 
-  const [text, { skip }] = useWindupString(npcDialogue ?? '', {
+  const [text, { skip, isFinished }] = useWindupString(npcDialogue ?? '', {
     pace: (char: string) => (char === ' ' ? 100 : 50),
   })
   return (
@@ -98,6 +98,7 @@ export function Dialogue() {
           {options?.filter((e) => e.name !== '').length === 0 && (
             <button
               onClick={() => {
+                if (!isFinished) return skip()
                 if (nextDialogue?.requiredItem) {
                   const doIHaveReqItem = store.inventory.includes(nextDialogue?.requiredItem)
 
@@ -112,9 +113,9 @@ export function Dialogue() {
                   if (!nextDialogue) store.setSelectedQuest(undefined)
                 }
               }}
-              className="absolute animate-pulse bottom-4  right-4 font-bold text-xl w-fit"
+              className="absolute animate-pulse border-none bottom-4  right-4 font-bold text-xl w-fit"
             >
-              {nextDialogue ? 'Next' : 'Close'}
+              {!isFinished ? 'skip' : nextDialogue ? 'Next' : 'Close'}
             </button>
           )}
         </div>
