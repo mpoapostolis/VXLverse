@@ -247,6 +247,7 @@ export type Store = {
   selectedNode?: string
   addNode: (node: Partial<Node>) => void
   deleteNode: () => void
+  removeNode: (uuid: string) => void
   duplicateNode: () => void
   selectNode: (uuid?: string) => void
   updateNode: (uuid: string, node: Partial<Node>) => void
@@ -330,6 +331,10 @@ export const useStore = create<Store>((set) => ({
       nodes: state.nodes.filter((node) => node.uuid !== state.selectedNode),
     }))
   },
+  removeNode: (uuid) =>
+    set((state) => ({
+      nodes: state.nodes.filter((node) => node.uuid !== uuid),
+    })),
 
   deleteScene: () =>
     set((state) => {
