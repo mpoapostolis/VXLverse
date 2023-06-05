@@ -24,6 +24,7 @@ import { Upload } from '../upload'
 
 export function GameModal() {
   const store = useStore()
+
   return (
     <Dialog>
       <ContextMenu>
@@ -46,6 +47,10 @@ export function GameModal() {
             const formData = new FormData(e.currentTarget as HTMLFormElement)
             if (!preview) formData.delete('preview')
 
+            const _public = formData.get('public')
+            formData.delete('public')
+            formData.append('public', _public === 'on' ? 'True' : 'False')
+
             const storeOjb = {
               nodes:
                 store.nodes?.map((e) => ({
@@ -56,11 +61,16 @@ export function GameModal() {
               scenes: store.scenes,
             }
             formData.append('store', JSON.stringify(storeOjb))
-            const data = (await axios.post('/api/games', formData)).data
+            let data
+            if (store.gameInfo?.id) {
+              data = (await axios.put(`/api/games/${store.gameInfo?.id}`, formData)).data
+            } else {
+              data = (await axios.post('/api/games', formData)).data
+            }
             store.setGameInfo(data)
 
             toast({
-              title: 'You have successfully published your game! ',
+              title: `You have successfully ${store.gameInfo?.id ? 'update' : 'published'} your game!`,
               description: (
                 <Label className="text-base ">
                   Click

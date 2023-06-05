@@ -1,9 +1,9 @@
 import { authMiddleware } from '@clerk/nextjs'
 
 export default authMiddleware({
-  publicRoutes: ['/'],
+  publicRoutes: ['/', '/api/games'],
 })
 
 export const config = {
-  matcher: ['/', '/api/publish', '/api/games'],
+  matcher: ['/', '/api/publish', '/api/games/', '/api/games/:slug*'],
 }

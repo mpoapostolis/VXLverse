@@ -11,7 +11,7 @@ function Card(props: Game) {
     <div className="w-full h-96 bg-card border relative">
       <div className="h-52">
         <picture>
-          <img src="https://picsum.photos/id/237/536/354" className="w-full h-full object-cover" alt="" />
+          <img src={props.preview} className="w-full h-full object-cover" alt="" />
         </picture>
       </div>
       <Badge role="button" className=" flex justify-end items-center absolute top-0 right-0 rounded-none  z-50">
@@ -26,7 +26,7 @@ function Card(props: Game) {
         <Separator className="my-2" />
         <p className="text-xs">{props?.description ?? '-'}</p>
         <Badge variant="outline" className="text-xs w-fit mb-2 mt-auto">
-          Horror
+          {props.genre}
         </Badge>
       </div>
     </div>
@@ -34,7 +34,7 @@ function Card(props: Game) {
 }
 
 export default async function Page() {
-  const { data } = await axios.get<Game[]>('http://localhost:3000/api/games')
+  const { data } = await axios<Game[]>(`http://localhost:3000/api/games`)
   return (
     <div className="h-screen w-screen  overflow-auto">
       <nav className="px-4 py-2 mb-2 flex items-center  z-50 bg-background">
@@ -58,7 +58,7 @@ export default async function Page() {
         </div>
         <div className="p-4">
           <div className="grid xl:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 gap-4 ">
-            {data.map((game) => (
+            {data?.map((game) => (
               <Card {...game} key={game.id} />
             ))}
           </div>

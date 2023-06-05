@@ -7,7 +7,19 @@ export async function GET(req: NextRequest) {
   const data = await pb.collection('games').getFullList(200 /* batch size */, {
     sort: '-created',
   })
-  return NextResponse.json(data)
+  return NextResponse.json(
+    data.map((data) => ({
+      id: data?.id,
+      name: data?.name,
+      description: data?.description,
+      genre: data?.genre,
+      createdBy: data?.createdBy,
+      public: data?.public,
+      preview: data?.preview
+        ? `${process.env.PB_URL}api/files/${data?.collectionId}/${data?.id}/${data?.preview}`
+        : null,
+    })),
+  )
 }
 
 export async function POST(req: NextRequest) {
@@ -16,9 +28,6 @@ export async function POST(req: NextRequest) {
   const auth = await currentUser()
   const email = auth?.emailAddresses?.at(0)?.emailAddress
   if (email) body.append('createdBy', email)
-  const _public = body.get('public')
-  body.delete('public')
-  body.append('public', _public === 'on' ? 'True' : 'False')
 
   const data = await pb.collection('games').create(body)
   const _preview = data?.preview

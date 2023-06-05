@@ -64,6 +64,7 @@ export function Upload(props: {
         })}
       >
         <Button
+          type="button"
           size="sm"
           onClick={() => {
             if (!file) return

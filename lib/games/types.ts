@@ -8,6 +8,7 @@ export type Game = {
   createdBy?: string
   name?: string
   genre?: string
+  preview?: string
   description?: string
   public?: boolean
 }
