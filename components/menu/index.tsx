@@ -21,7 +21,6 @@ import { Model } from '@/app/api/models/types'
 import { Indicator } from '@/components/indicator'
 import { SceneModal } from '@/components/sceneModal'
 import { SelectModel } from '@/components/selectModal/selectModel'
-import { Label } from '@/components/ui/label'
 import { useToast } from '@/components/ui/use-toast'
 import { useModels } from '@/lib/models/queries'
 import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
@@ -34,11 +33,9 @@ import {
   PlayIcon,
   QuestionMarkCircledIcon,
   ReloadIcon,
-  Share1Icon,
   TrashIcon,
   UploadIcon,
 } from '@radix-ui/react-icons'
-import axios from 'axios'
 import Link from 'next/link'
 import { Account } from '../account'
 import { GameModal } from '../gameModal'
@@ -146,46 +143,6 @@ export function Menu() {
           <SignedIn>
             <>
               <MenubarSeparator />
-              <MenubarItem
-                disabled
-                onClick={async () => {
-                  await axios
-                    .post('/api/publish', {
-                      userId: clerk?.client.id,
-                      nodes:
-                        store.nodes?.map((e) => ({
-                          ...e,
-                          actions: undefined,
-                        })) ?? [],
-                      quests: store.quests,
-                      scenes: store.scenes,
-                    })
-                    .then((d) => {
-                      toast({
-                        title: 'You have successfully published your game! ',
-                        description: (
-                          <Label className="text-base ">
-                            Click
-                            <Link
-                              className="mx-2 font-bold text-secondary"
-                              href={`https://vxlverse.com/game?id=${d.data.id}`}
-                              target="_blank"
-                            >
-                              here
-                            </Link>
-                            to play it!
-                          </Label>
-                        ),
-                      })
-                    })
-                }}
-              >
-                Publish
-                <MenubarShortcut>
-                  <Share1Icon />
-                </MenubarShortcut>
-              </MenubarItem>
-
               <GameModal />
             </>
           </SignedIn>

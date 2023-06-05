@@ -41,20 +41,25 @@ export function Select<T = string | null>(props: {
   name?: string
   disabled?: string[]
   onChange: (value: T) => void
+  defaultValue?: string
+  controlled?: boolean
+  required?: boolean
 }) {
   return (
-    <div className={props.className}>
+    <div>
       {props.label && <Label className={clsx(' w-full text-sm font-medium mb-1')}>{props.label}</Label>}
 
       <RSelect
+        required={props.required}
         name={props.name}
-        value={props?.value ?? '-'}
+        defaultValue={props.defaultValue}
+        value={props.controlled ? props?.value ?? '-' : undefined}
         onValueChange={(e) => props.onChange((e === '-' ? undefined : e) as T)}
       >
         <SelectTrigger className={props.className}>
           <SelectValue placeholder={props.value} />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="h-60 overflow-auto">
           <SelectItem value="-">-</SelectItem>
           {props.options.map((option, idx) => (
             <SelectItem

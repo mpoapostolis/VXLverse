@@ -52,6 +52,16 @@ export type User = {
   verified_email: boolean
 }
 
+export type GameInfo = {
+  id?: string
+  name?: string
+  description?: string
+  createdBy?: string
+  genre?: string
+  public?: boolean
+  preview?: string
+}
+
 export type KeyBindings = {
   onClick?: string
   default?: string
@@ -221,6 +231,8 @@ type Dialogue = {
 export type Mode = 'translate' | 'rotate' | 'scale'
 export type Store = {
   reset: () => void
+  gameInfo?: GameInfo
+  setGameInfo: (game?: GameInfo) => void
 
   user?: User
   setUser: (user?: User) => void
@@ -266,9 +278,10 @@ export type Store = {
 
 export const useStore = create<Store>((set) => ({
   setUser: (user) => set({ user }),
-
   mode: 'translate',
   nodes: [],
+  gameInfo: {},
+  setGameInfo: (gameInfo) => set({ gameInfo }),
 
   setDialogue: (dialogue) => set({ dialogue }),
 
@@ -434,7 +447,14 @@ useStore?.subscribe(async (state) => {
 
   localstorage?.setItem(
     VXLverseVersion,
-    JSON.stringify({ user: state.user, nodes, quests: state.quests, inventory: state.inventory, scenes: state.scenes }),
+    JSON.stringify({
+      gameInfo: state.gameInfo,
+      user: state.user,
+      nodes,
+      quests: state.quests,
+      inventory: state.inventory,
+      scenes: state.scenes,
+    }),
   )
 })
 
@@ -451,6 +471,7 @@ export function init() {
       }
 
   useStore?.setState({
+    gameInfo: parsedStore?.gameInfo,
     user: parsedStore?.user,
     nodes: parsedStore?.nodes,
     scenes: parsedStore.scenes ?? defaultGameConf?.scenes,

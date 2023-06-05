@@ -10,11 +10,14 @@ export function Upload(props: {
   value?: string
   className?: string
   name?: string
+  required?: boolean
 }) {
   const [file, setFile] = useState<string | null>(props.value ?? null)
+
   return (
     <div
-      className={clsx('relative w-full h-full p-4  ', props.className, {
+      tabIndex={-1}
+      className={clsx('relative cursor-pointer w-full p-4 h-60', props.className, {
         'bg-black': file,
       })}
     >
@@ -24,6 +27,12 @@ export function Upload(props: {
         onChange={(e) => {
           const file = e.target.files?.[0]
           if (!file) return
+          const size = file.size / 1024 / 1024
+          // max 2mb
+          if (size > 2) {
+            alert('File size is too big')
+            return
+          }
           const reader = new FileReader()
           reader.onload = (e) => {
             const buffer = reader.result as ArrayBuffer
@@ -33,7 +42,6 @@ export function Upload(props: {
             props.onChange(blob)
           }
           reader.readAsArrayBuffer(file)
-          e.target.value = ''
         }}
         className="absolute left-0 top-0 h-full w-full opacity-0"
         type="file"
@@ -45,7 +53,7 @@ export function Upload(props: {
             <div className="text-xs ">
               .jpg, .png, .webp,
               <br />
-              max 1mb
+              max 2MB
             </div>
           </div>
         </div>

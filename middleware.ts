@@ -5,5 +5,5 @@ export default authMiddleware({
 })
 
 export const config = {
-  matcher: ['/', '/api/publish'],
+  matcher: ['/', '/api/publish', '/api/games'],
 }
