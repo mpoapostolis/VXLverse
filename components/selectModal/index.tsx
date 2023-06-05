@@ -5,7 +5,6 @@ import { Button, ButtonProps } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { MenubarShortcut } from '@/components/ui/menubar'
-import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/utils'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import { Label } from '@radix-ui/react-dropdown-menu'
@@ -65,7 +64,7 @@ export function SelectModal(props: {
         </DialogTrigger>
       </ContextMenu>
       <DialogContent className="lg:w-[80vw] z-50 w-screen ">
-        <DialogHeader>
+        <DialogHeader className="  mb-2 ">
           <Input
             value={searchTerm}
             onChange={(e) => {
@@ -74,19 +73,18 @@ export function SelectModal(props: {
               setSearchTerm(e.target.value)
             }}
             type="search"
-            className="  w-full  px-4 placeholder:text-muted  duration-100 py-4"
+            className="  w-full h-10 px-4 placeholder:text-muted  border-none bg-background  duration-100 py-4"
             placeholder="🔍 Search..."
           />
         </DialogHeader>
-        <Separator className="my-4" />
 
         <div
-          className={cn('grid   gap-4', {
+          className={cn('grid gap-2', {
             'lg:grid-cols-[200px_1fr]': props.filters,
           })}
         >
           <div
-            className={cn('lg:grid inline-flex gap-2 lg:h-[75vh] overflow-auto pr-4  border-r', {
+            className={cn('lg:grid p-4 bg-background inline-flex gap-2 lg:h-[75vh] overflow-auto border-r ', {
               'lg:hidden hidden': !props.filters,
             })}
           >
@@ -115,7 +113,7 @@ export function SelectModal(props: {
               </Button>
             ))}
           </div>
-          <div className="grid place-items-start  h-[75vh]  overflow-auto  bg-black bg-opacity-25  ">
+          <div className="grid place-items-start   h-[75vh]  overflow-auto  bg-background  p-2  ">
             {options?.length === 0 ? (
               <div className="text-center  h-full   w-full grid place-items-center text-muted text-sm">
                 <div>
@@ -127,8 +125,8 @@ export function SelectModal(props: {
                 </div>
               </div>
             ) : (
-              <div className="w-full">
-                <div className="grid p-3    h-full xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 overflow-auto">
+              <div className="w-full ">
+                <div className="grid p-3    h-full xl:grid-cols-4 w-full 2xl:grid-cols-5 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4  overflow-auto">
                   {options?.map((obj, i) => (
                     <Comp key={obj.value}>
                       <div

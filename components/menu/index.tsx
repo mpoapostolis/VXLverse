@@ -30,7 +30,6 @@ import {
   CheckCircledIcon,
   DownloadIcon,
   EraserIcon,
-  GearIcon,
   Pencil1Icon,
   PlayIcon,
   QuestionMarkCircledIcon,
@@ -42,6 +41,7 @@ import {
 import axios from 'axios'
 import Link from 'next/link'
 import { Account } from '../account'
+import { GameModal } from '../gameModal'
 import { Button } from '../ui/button'
 
 export function Menu() {
@@ -143,54 +143,52 @@ export function Menu() {
               <DownloadIcon />
             </MenubarShortcut>
           </MenubarItem>
-          <MenubarSeparator />
           <SignedIn>
-            <MenubarItem
-              onClick={async () => {
-                await axios
-                  .post('/api/publish', {
-                    userId: clerk?.client.id,
-                    nodes:
-                      store.nodes?.map((e) => ({
-                        ...e,
-                        actions: undefined,
-                      })) ?? [],
-                    quests: store.quests,
-                    scenes: store.scenes,
-                  })
-                  .then((d) => {
-                    toast({
-                      title: 'You have successfully published your game! ',
-                      description: (
-                        <Label className="text-base ">
-                          Click
-                          <Link
-                            className="mx-2 font-bold text-secondary"
-                            href={`https://vxlverse.com/game?id=${d.data.id}`}
-                            target="_blank"
-                          >
-                            here
-                          </Link>
-                          to play it!
-                        </Label>
-                      ),
+            <>
+              <MenubarSeparator />
+              <MenubarItem
+                disabled
+                onClick={async () => {
+                  await axios
+                    .post('/api/publish', {
+                      userId: clerk?.client.id,
+                      nodes:
+                        store.nodes?.map((e) => ({
+                          ...e,
+                          actions: undefined,
+                        })) ?? [],
+                      quests: store.quests,
+                      scenes: store.scenes,
                     })
-                  })
-              }}
-            >
-              Publish
-              <MenubarShortcut>
-                <Share1Icon />
-              </MenubarShortcut>
-            </MenubarItem>
-          </SignedIn>
+                    .then((d) => {
+                      toast({
+                        title: 'You have successfully published your game! ',
+                        description: (
+                          <Label className="text-base ">
+                            Click
+                            <Link
+                              className="mx-2 font-bold text-secondary"
+                              href={`https://vxlverse.com/game?id=${d.data.id}`}
+                              target="_blank"
+                            >
+                              here
+                            </Link>
+                            to play it!
+                          </Label>
+                        ),
+                      })
+                    })
+                }}
+              >
+                Publish
+                <MenubarShortcut>
+                  <Share1Icon />
+                </MenubarShortcut>
+              </MenubarItem>
 
-          <MenubarItem>
-            Settings{' '}
-            <MenubarShortcut>
-              <GearIcon />
-            </MenubarShortcut>
-          </MenubarItem>
+              <GameModal />
+            </>
+          </SignedIn>
         </MenubarContent>
       </MenubarMenu>
 

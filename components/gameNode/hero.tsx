@@ -9,8 +9,11 @@ export function Hero(props: Partial<Node>) {
   const store = useStore()
   const ref = useRef<Mesh>(null)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const rotation = useMemo(() => new Euler(...(props.rotation?.map((r) => (r * Math.PI) / 180) ?? [0, 0, 0])), [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const position = useMemo(() => new Vector3(...(props.position ?? [0, 0, 0])), [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const scale = useMemo(() => new Vector3(...(props.scale ?? [0, 0, 0])), [])
 
   const rigidBody = useRef<RapierRigidBody>(null)

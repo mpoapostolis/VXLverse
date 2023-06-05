@@ -38,6 +38,7 @@ export function Select<T = string | null>(props: {
   label?: string
   className?: string
   value?: string
+  name?: string
   disabled?: string[]
   onChange: (value: T) => void
 }) {
@@ -45,7 +46,11 @@ export function Select<T = string | null>(props: {
     <div className={props.className}>
       {props.label && <Label className={clsx(' w-full text-sm font-medium mb-1')}>{props.label}</Label>}
 
-      <RSelect value={props?.value ?? '-'} onValueChange={(e) => props.onChange((e === '-' ? undefined : e) as T)}>
+      <RSelect
+        name={props.name}
+        value={props?.value ?? '-'}
+        onValueChange={(e) => props.onChange((e === '-' ? undefined : e) as T)}
+      >
         <SelectTrigger className={props.className}>
           <SelectValue placeholder={props.value} />
         </SelectTrigger>

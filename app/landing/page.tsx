@@ -10,7 +10,9 @@ function Card(props: Game) {
   return (
     <div className="w-full h-96 bg-card border relative">
       <div className="h-52">
-        <img src="https://picsum.photos/id/237/536/354" className="w-full h-full object-cover" alt="" />
+        <picture>
+          <img src="https://picsum.photos/id/237/536/354" className="w-full h-full object-cover" alt="" />
+        </picture>
       </div>
       <Badge role="button" className=" flex justify-end items-center absolute top-0 right-0 rounded-none  z-50">
         <HeartIcon className="w-4 h-4" />
@@ -19,7 +21,7 @@ function Card(props: Game) {
         </span>
       </Badge>
       <div className="p-2 h-44 flex flex-col">
-        <h3 className="text-lg font-semibold">{props?.title ?? '-'}</h3>
+        <h3 className="text-lg font-semibold">{props?.name ?? '-'}</h3>
         <div className="flex items-center text-xs">{props?.createdBy ?? '-'}</div>
         <Separator className="my-2" />
         <p className="text-xs">{props?.description ?? '-'}</p>

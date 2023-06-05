@@ -51,7 +51,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
         </DialogHeader>
         <Separator className="my-2" />
 
-        <div className="grid  items-center gap-4 ">
+        <div className="grid  items-center gap-2 ">
           <Label className=" w-full text-sm font-medium">Name</Label>
           <input
             onChange={(evt) => {
@@ -60,7 +60,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
               })
             }}
             value={selectedScene?.name}
-            className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
+            className="rounded-none w-full  bg-background  p-2 text-xs leading-none outline-none"
           />
           <Label className=" w-full text-sm font-medium">Scene intro</Label>
           <textarea
@@ -71,11 +71,11 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
             }}
             value={selectedScene?.intro}
             rows={5}
-            className="rounded-none w-full  bg-input border-blackA7 border p-2 text-xs leading-none outline-none"
+            className="rounded-none w-full  bg-background  p-2 text-xs leading-none outline-none"
           />
           <Label className=" w-full text-sm font-medium">Sky</Label>
           <Select
-            className="border"
+            className="border-none h-8 bg-background"
             options={[
               'sunset',
               'dawn',
@@ -120,7 +120,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
               ({store.nodes.filter((node) => node.scene === selectedScene?.uuid).length})
             </span>
           </Label>
-          <div className="flex gap-4 flex-wrap">
+          <div className="flex gap-4 flex-wrap bg-background p-4">
             {store.nodes
               ?.filter((node) => node.scene === selectedScene?.uuid)
               ?.map((node) => (
@@ -129,7 +129,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                     evt.stopPropagation()
                     store.removeNode(`${node.uuid}`)
                   }}
-                  className="bg-secondary text-secondary-foreground"
+                  className="bg-secondary  text-xs text-secondary-foreground"
                   role="button"
                   key={node.uuid}
                 >
@@ -138,12 +138,12 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                 </Badge>
               ))}
           </div>
-
+          <br />
           {store.scenes.length > 1 && (
             <>
               <Label className=" w-full text-sm font-medium">Import nodes from other scenes</Label>
               <Select
-                className="border"
+                className="bg-background"
                 options={store.scenes
                   ?.filter((scene) => scene.uuid !== store.currentScene)
                   .map((scene) => ({
@@ -157,7 +157,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
               />
 
               {scene && (
-                <ScrollArea className="border h-48 w-full rounded-md bg-input p-4 ">
+                <ScrollArea className="mt-2 h-48 w-full rounded-md bg-background p-4 ">
                   <div className="gap-4 flex w-full flex-wrap">
                     {store.nodes
                       ?.filter((node) => node.scene === scene && node.gameType !== 'hero')
@@ -171,7 +171,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                               scene: store.currentScene,
                             })
                           }}
-                          className="bg-secondary text-secondary-foreground"
+                          className="bg-secondary text-xs text-secondary-foreground"
                           role="button"
                           key={node.uuid}
                         >
