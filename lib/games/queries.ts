@@ -13,3 +13,12 @@ export function useGame(id?: string) {
     isError: error,
   }
 }
+
+export function useGames() {
+  const { data, error } = useSWR<Game[], AxiosError>(`/api/games`, fetcher)
+  return {
+    data: data ?? ([] as Game[]),
+    isLoading: !data && !error,
+    isError: error,
+  }
+}
