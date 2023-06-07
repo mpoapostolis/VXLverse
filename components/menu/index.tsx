@@ -23,7 +23,7 @@ import { SceneModal } from '@/components/sceneModal'
 import { SelectModel } from '@/components/selectModal/selectModel'
 import { useToast } from '@/components/ui/use-toast'
 import { useModels } from '@/lib/models/queries'
-import { SignedIn, SignedOut, useClerk } from '@clerk/nextjs'
+import { SignedIn, useClerk } from '@clerk/nextjs'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import {
   CheckCircledIcon,
@@ -39,7 +39,6 @@ import {
 import Link from 'next/link'
 import { Account } from '../account'
 import { GameModal } from '../gameModal'
-import { Button } from '../ui/button'
 
 export function Menu() {
   const store = useStore()
@@ -307,22 +306,8 @@ export function Menu() {
       </MenubarMenu>
 
       <MenubarMenu>
-        <div role="none" className="flex w-full items-center  justify-end  hover:bg-none h-full ">
-          <SignedIn>
-            <Account />
-          </SignedIn>
-          <SignedOut>
-            <Button
-              role="menuitem"
-              aria-label="Sign in"
-              variant="ghost"
-              onClick={() => {
-                clerk.openSignIn()
-              }}
-            >
-              Sign in
-            </Button>
-          </SignedOut>
+        <div role="none" className="flex w-full pr-4 items-center  justify-end  hover:bg-none h-full ">
+          <Account />
         </div>
       </MenubarMenu>
     </Menubar>

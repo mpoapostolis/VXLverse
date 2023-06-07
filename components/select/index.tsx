@@ -59,7 +59,7 @@ export function Select<T = string | null>(props: {
         <SelectTrigger className={props.className}>
           <SelectValue placeholder={props.value} />
         </SelectTrigger>
-        <SelectContent className="h-60 overflow-auto">
+        <SelectContent className="h-fit max-h-[240px] overflow-auto">
           <SelectItem value="-">-</SelectItem>
           {props.options.map((option, idx) => (
             <SelectItem
