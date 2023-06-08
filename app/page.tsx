@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 
-export default async function Page() {
+export default function Page() {
   return (
     <div className="h-screen w-screen  overflow-auto relative">
       <nav className="px-4  w-full flex border-b sticky top-0 mb-2 h-10  items-center gap-4 z-50 bg-background">
@@ -26,12 +26,12 @@ export default async function Page() {
             <input
               placeholder="🔎 Search..."
               type="search"
-              className="  h-8 bg-input pl-4 outline-none w-full  border text-foreground"
+              className="rounded-l-full  h-8 bg-input pl-4 outline-none w-full  border text-foreground"
             />
             <Button
               aria-label="search"
               variant="ghost"
-              className=" grid place-items-center  p-0 px-4 h-8 bg-input border border-l-0 "
+              className=" grid rounded-r-full place-items-center  p-0 px-4 h-8 bg-input border border-l-0 "
             >
               <SearchIcon className="w-4 h-4" />
             </Button>

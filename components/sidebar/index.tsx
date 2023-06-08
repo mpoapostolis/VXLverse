@@ -10,11 +10,13 @@ import {
   TrendingUpIcon,
 } from 'lucide-react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
 
 export const storyThemes = [
+  'All',
   'Horror',
   'Comedy',
   'Fantasy',
@@ -49,6 +51,9 @@ export const storyThemes = [
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
+  const params = useSearchParams()
+  const sort = params.get('sort')
+  const genre = params.get('genre')
   return (
     <div
       className={cn('pb-4 transition duration-150 lg:h-full overflow-hidden  ', {
@@ -70,11 +75,16 @@ export function Sidebar() {
             href={{
               pathname: '/',
               query: {
+                genre,
                 sort: null,
               },
             }}
           >
-            <Button variant="ghost" className="w-full  text-left truncate justify-start">
+            <Button
+              className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
+                'text-secondary font-bold': !sort,
+              })}
+            >
               <Gamepad2Icon className="mr-3  w-4 h-4" />
               All
             </Button>
@@ -83,11 +93,16 @@ export function Sidebar() {
             href={{
               pathname: '/',
               query: {
+                genre,
                 sort: 'new',
               },
             }}
           >
-            <Button variant="ghost" className="w-full  text-left truncate justify-start">
+            <Button
+              className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
+                'text-secondary font-bold': sort === 'new',
+              })}
+            >
               <AlertOctagonIcon className="mr-3  w-4 h-4" />
               New Releases
             </Button>
@@ -97,11 +112,16 @@ export function Sidebar() {
             href={{
               pathname: '/',
               query: {
+                genre,
                 sort: 'rate',
               },
             }}
           >
-            <Button variant="ghost" className="w-full  text-left truncate justify-start">
+            <Button
+              className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
+                'text-secondary font-bold': sort === 'rate',
+              })}
+            >
               <TrendingUpIcon className="mr-3  w-4 h-4" /> Top Rated
             </Button>
           </Link>
@@ -109,11 +129,16 @@ export function Sidebar() {
             href={{
               pathname: '/',
               query: {
+                genre,
                 sort: 'plays',
               },
             }}
           >
-            <Button variant="ghost" className="w-full  text-left truncate justify-start">
+            <Button
+              className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
+                'text-secondary font-bold': sort === 'plays',
+              })}
+            >
               <SmileIcon className="mr-3  w-4 h-4" />
               Most Played
             </Button>
@@ -122,11 +147,16 @@ export function Sidebar() {
             href={{
               pathname: '/',
               query: {
+                genre,
                 sort: 'favorites',
               },
             }}
           >
-            <Button variant="ghost" className="w-full  text-left truncate justify-start">
+            <Button
+              className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
+                'text-secondary font-bold': sort === 'favorites',
+              })}
+            >
               <HeartIcon className="mr-3  w-4 h-4" />
               Most Liked
             </Button>
@@ -141,12 +171,20 @@ export function Sidebar() {
               href={{
                 pathname: '/',
                 query: {
-                  genre: format,
+                  sort,
+                  genre: format === 'All' ? null : format,
                 },
               }}
               key={format}
             >
-              <Button variant="ghost" className="w-full  text-left truncate justify-start">
+              <Button
+                className={cn(
+                  'w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start',
+                  {
+                    'text-secondary font-bold': format === 'All' ? !genre : genre === format,
+                  },
+                )}
+              >
                 <GamepadIcon className="mr-3  w-4 h-4 " /> {format}
               </Button>
             </Link>
