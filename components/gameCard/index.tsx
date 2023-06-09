@@ -1,20 +1,34 @@
 import { Game } from '@/lib/games/types'
+import { cn } from '@/lib/utils'
 import { HeartIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip'
 
-export function GameCard(props: Game) {
+export function GameCard(
+  props: Game & {
+    loading?: boolean
+  },
+) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className="w-full  h-fit  shadow-lg    relative">
+          <div
+            className={cn('w-full   h-fit  shadow-lg    relative', {
+              blur: props.loading,
+            })}
+          >
             <div className="h-52  bg-black p-2 relative ">
               <Button className=" text-xs  bg-transparent w-fit  absolute top-0 right-0 "></Button>
               <picture>
-                <img loading="lazy" src={props.preview} className="w-full object-scale-down  h-full " alt="" />
+                <img
+                  loading="lazy"
+                  src={props.preview ?? '/logo.webp'}
+                  className="w-full object-scale-down  h-full "
+                  alt=""
+                />
               </picture>
             </div>
             <div className="p-2 pb-4 h-fit bg-card flex flex-col">

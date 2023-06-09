@@ -87,6 +87,22 @@ function Orbit(props: { id?: string }) {
   )
 }
 
+function T() {
+  const t = useThree()
+  useEffect(() => {
+    return () => {}
+  })
+
+  // when unmounting alert unmounting
+  useEffect(() => {
+    return () => {
+      alert(t.clock.elapsedTime)
+    }
+  }, [])
+
+  return null
+}
+
 export function GameCanvas(props: { id?: string }) {
   const store = useStore()
 
@@ -137,7 +153,7 @@ export function GameCanvas(props: { id?: string }) {
             <color attach="background" args={[selectedScene?.color ?? '#999999']} />
           )}
           {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
-
+          <T />
           <Physics timeStep="vary">
             {hero && <Hero {...hero} />}
 

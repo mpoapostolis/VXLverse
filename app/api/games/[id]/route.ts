@@ -13,7 +13,6 @@ export async function PUT(req: NextRequest) {
   if (email) body.append('createdBy', email)
 
   const data = await pb.collection('games').update(id, body)
-
   return NextResponse.json({
     id: data?.id,
     name: data?.name,

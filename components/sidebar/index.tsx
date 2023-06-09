@@ -1,14 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
-import {
-  AlertOctagonIcon,
-  FilterIcon,
-  Gamepad2Icon,
-  GamepadIcon,
-  HeartIcon,
-  SmileIcon,
-  TrendingUpIcon,
-} from 'lucide-react'
+import { AlertOctagonIcon, FilterIcon, GamepadIcon, HeartIcon, SmileIcon, TrendingUpIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -76,31 +68,13 @@ export function Sidebar() {
               pathname: '/',
               query: {
                 genre,
-                sort: null,
-              },
-            }}
-          >
-            <Button
-              className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
-                'text-secondary font-bold': !sort,
-              })}
-            >
-              <Gamepad2Icon className="mr-3  w-4 h-4" />
-              All
-            </Button>
-          </Link>
-          <Link
-            href={{
-              pathname: '/',
-              query: {
-                genre,
                 sort: 'new',
               },
             }}
           >
             <Button
               className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
-                'text-secondary font-bold': sort === 'new',
+                'text-secondary font-bold': sort === 'new' || !sort,
               })}
             >
               <AlertOctagonIcon className="mr-3  w-4 h-4" />

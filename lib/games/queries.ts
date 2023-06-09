@@ -2,6 +2,7 @@
 
 import { fetcher } from '@/lib/utils'
 import { AxiosError } from 'axios'
+import { useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
 import { Game } from './types'
 
@@ -15,7 +16,11 @@ export function useGame(id?: string) {
 }
 
 export function useGames() {
-  const { data, error } = useSWR<Game[], AxiosError>(`/api/games`, fetcher)
+  const params = useSearchParams()
+  const sort = params.get('sort')
+  const genre = params.get('genre')
+  const { data, error } = useSWR<Game[], AxiosError>(`/api/games?sort${sort}&genre=${genre}`, fetcher)
+
   return {
     data: data ?? ([] as Game[]),
     isLoading: !data && !error,
