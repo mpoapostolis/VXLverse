@@ -17,9 +17,15 @@ export function useGame(id?: string) {
 
 export function useGames() {
   const params = useSearchParams()
-  const sort = params.get('sort')
+  const offset = Number(params.get('offset') ?? 0)
   const genre = params.get('genre')
-  const { data, error } = useSWR<Game[], AxiosError>(`/api/games?sort${sort}&genre=${genre}`, fetcher)
+  const search = params.get('search')
+  const sort = params.get('sort')
+
+  const { data, error } = useSWR<Game[], AxiosError>(
+    `/api/games?sort${sort}&genre=${genre}&search=${search}&offset=${offset}`,
+    fetcher,
+  )
 
   return {
     data: data ?? ([] as Game[]),

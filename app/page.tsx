@@ -36,9 +36,7 @@ export default function Page() {
               <SearchIcon className="w-4 h-4" />
             </Button>
           </div>
-          <div className="mt-4 grid sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 gap-4 ">
-            <Games />
-          </div>
+          <Games />
         </div>
       </div>
     </div>
