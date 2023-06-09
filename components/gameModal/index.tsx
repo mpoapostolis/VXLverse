@@ -24,14 +24,13 @@ import { Upload } from '../upload'
 
 export function GameModal() {
   const store = useStore()
-
   return (
     <Dialog>
       <ContextMenu>
         <ContextMenuTrigger asChild>
           <DialogTrigger asChild>
             <div className="relative flex cursor-default hover:bg-secondary hover:text-secondary-foreground bg-opacity-10 select-none items-center rounded-sm px-2 py-1.5 text-xs focus:outline-secondary outline-1 outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
-              Publish
+              {store.gameInfo?.id ? 'Edit' : 'Publish'}
               <MenubarShortcut>
                 <Share1Icon />
               </MenubarShortcut>

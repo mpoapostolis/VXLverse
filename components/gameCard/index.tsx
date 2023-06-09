@@ -1,6 +1,6 @@
 import { Game } from '@/lib/games/types'
 import { cn } from '@/lib/utils'
-import { HeartIcon } from 'lucide-react'
+import { EditIcon, HeartIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
@@ -8,19 +8,26 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 
 export function GameCard(
   props: Game & {
-    loading?: boolean
+    owner?: boolean
   },
 ) {
   return (
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div
-            className={cn('w-full   h-fit  shadow-lg    relative', {
-              blur: props.loading,
-            })}
-          >
-            <div className="h-52  bg-black p-2 relative ">
+          <div className={cn('w-full   h-fit  shadow-lg    relative')}>
+            <div className="h-52  bg-black p-2">
+              <Link
+                className={cn('absolute right-0 z-30 top-0 w-fit', {
+                  hidden: !props.owner,
+                })}
+                href={`/editor?id=${props.id}`}
+              >
+                <Button size="sm" variant="secondary" className="w-full">
+                  <EditIcon className="w-4 h-4 mr-1" />
+                  Edit
+                </Button>
+              </Link>
               <Button className=" text-xs  bg-transparent w-fit  absolute top-0 right-0 "></Button>
               <picture>
                 <img

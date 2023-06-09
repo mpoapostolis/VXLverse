@@ -2,10 +2,12 @@
 
 import { Controls } from '@/components/controls'
 import { Node } from '@/components/node'
-import { GRID_SIZE, init, useStore } from '@/store'
+import { useInitGame } from '@/hooks/useInitGame'
+import { GRID_SIZE, useStore } from '@/store'
 import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas } from '@react-three/fiber'
+import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
 
@@ -35,9 +37,13 @@ export function EditorCanvas() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  useEffect(init, [])
-
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
+  const router = useRouter()
+  useEffect(() => {
+    router.replace('/editor')
+  }, [])
+  useInitGame()
+
   return (
     <>
       <div className="relative  canvas-editor ">

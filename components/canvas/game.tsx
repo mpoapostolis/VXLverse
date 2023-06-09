@@ -5,19 +5,16 @@ import { GameNode } from '@/components/gameNode'
 import { HelpModal } from '@/components/helpModal'
 import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
-import { useGame } from '@/lib/games/queries'
-import { init, useStore } from '@/store'
+import { useInitGame } from '@/hooks/useInitGame'
+import { useStore } from '@/store'
 import { Circle, Environment, Loader, OrbitControls, Preload, useProgress, useTexture } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Physics, RigidBody } from '@react-three/rapier'
-import { Suspense, useEffect, useRef } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
-import { useWindupString } from 'windups'
 import { Hero } from '../gameNode/hero'
 import { TypeWritter } from '../windText'
-
-const lorm = `Lorem ipsum dolor sit amet cons ectetur adipi sicing elit. Quisquam, voluptas.`
 
 function Env(props: { equirect: string }) {
   const texture = useTexture(props.equirect ?? '')
@@ -27,7 +24,7 @@ function Env(props: { equirect: string }) {
   return <Environment background map={texture} />
 }
 
-function Orbit(props: { id?: string }) {
+function Orbit() {
   const t = useThree()
   const store = useStore()
   const hero = store.nodes.find((node) => node.gameType === 'hero')
@@ -41,14 +38,6 @@ function Orbit(props: { id?: string }) {
       store.setGoTo(intersects?.at(0)?.point!)
     }
   }
-  const { data: game } = useGame(props.id)
-
-  useEffect(() => {
-    if (!game) return
-    store.clearInventory()
-    store.setGame(game)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game])
 
   useEffect(() => {
     document.addEventListener('pointerdown', (e) => {
@@ -87,38 +76,13 @@ function Orbit(props: { id?: string }) {
   )
 }
 
-function T() {
-  const t = useThree()
-  useEffect(() => {
-    return () => {}
-  })
-
-  // when unmounting alert unmounting
-  useEffect(() => {
-    return () => {
-      alert(t.clock.elapsedTime)
-    }
-  }, [])
-
-  return null
-}
-
 export function GameCanvas(props: { id?: string }) {
   const store = useStore()
-
-  useEffect(init, [])
-
+  const [videoEnded, setVideoEnded] = useState(!props.id)
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const hero = store.nodes?.find((node) => node.gameType === 'hero')
   const progress = useProgress()
-  const ref = useRef<HTMLDivElement>(null)
-  const [windText] = useWindupString(selectedScene?.intro ?? lorm, {
-    pace: (char: string) => (char === ' ' ? 100 : 50),
-    onFinished: () => {
-      ref.current?.classList.add('slowFadeOut')
-    },
-  })
-
+  useInitGame()
   return (
     <main className="relative h-screen z-50 overflow-hidden">
       <HelpModal />
@@ -127,13 +91,14 @@ export function GameCanvas(props: { id?: string }) {
           zIndex: 10,
         }}
       />
-      {progress.progress === 100 && <TypeWritter text={selectedScene?.intro} />}
+      {progress.progress === 100 && videoEnded && <TypeWritter text={selectedScene?.intro} />}
       {props.id && (
         <video
           autoPlay
           muted
           onEnded={(e) => {
             e.currentTarget.className = 'hidden'
+            setVideoEnded(true)
           }}
           className="absolute top-0 left-0 w-full h-full object-cover z-50 pointer-events-none"
         >
@@ -153,7 +118,6 @@ export function GameCanvas(props: { id?: string }) {
             <color attach="background" args={[selectedScene?.color ?? '#999999']} />
           )}
           {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
-          <T />
           <Physics timeStep="vary">
             {hero && <Hero {...hero} />}
 
@@ -189,7 +153,7 @@ export function GameCanvas(props: { id?: string }) {
               </RigidBody>
             )}
 
-            <Orbit id={props.id} />
+            <Orbit />
           </Physics>
           <Preload all />
         </Suspense>

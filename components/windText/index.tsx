@@ -4,7 +4,7 @@ import { useWindupString } from 'windups'
 export function WindText(props: { text: string; onFinished?: () => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const [windText] = useWindupString(props.text, {
-    pace: (char: string) => (char === ' ' ? 100 : 50),
+    pace: (char: string) => (char === ' ' ? 120 : 70),
     onFinished: () => {
       props.onFinished?.()
       ref.current?.classList.add('slowFadeOut')

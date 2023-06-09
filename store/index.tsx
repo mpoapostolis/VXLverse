@@ -401,6 +401,14 @@ export const useStore = create<Store>((set) => ({
 
   setGame: (game) =>
     set({
+      gameInfo: {
+        id: game.id,
+        name: game.name,
+        description: game.description,
+        genre: game.genre,
+        preview: game.preview,
+        public: game.public,
+      },
       nodes: game.nodes,
       scenes: game.scenes,
       quests: game.quests,

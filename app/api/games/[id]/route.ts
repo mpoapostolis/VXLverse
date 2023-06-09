@@ -2,6 +2,25 @@ import { getPocketBase } from '@/lib/pocketBase'
 import { currentUser } from '@clerk/nextjs'
 import { NextRequest, NextResponse } from 'next/server'
 
+export async function GET(req: NextRequest) {
+  const url = new URL(req.url)
+  const id = url.pathname.split('/')[3]
+  const pb = await getPocketBase()
+  const data = await pb.collection('games').getOne(id)
+  return NextResponse.json({
+    id: data.id,
+    nodes: data.store.nodes,
+    scenes: data.store.scenes,
+    quests: data.store.quests,
+    createdBy: data.createdBy,
+    name: data.name,
+    genre: data.genre,
+    preview: data.preview,
+    description: data.description,
+    public: data.public,
+  })
+}
+
 export async function PUT(req: NextRequest) {
   const url = new URL(req.url)
   const id = url.pathname.split('/')[3]

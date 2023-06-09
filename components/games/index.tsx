@@ -2,6 +2,7 @@
 
 import { useGames } from '@/lib/games/queries'
 import { cn } from '@/lib/utils'
+import { useClerk } from '@clerk/nextjs'
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
@@ -9,13 +10,14 @@ import { useSearchParams } from 'next/navigation'
 import { GameCard } from '../gameCard'
 
 export function Games() {
+  const clerk = useClerk()
   const { data: games, isLoading, total } = useGames()
   const params = useSearchParams()
   const offset = Number(params.get('offset') ?? 0)
   const genre = params.get('genre')
   const search = params.get('search')
   const sort = params.get('sort')
-
+  const emailAddress = clerk.user?.emailAddresses[0].emailAddress
   const length = Math.ceil(total / 10)
   const start = Math.max(offset - 2, 0)
   const end = Math.min(offset + 2, length)
@@ -24,7 +26,7 @@ export function Games() {
     <div className="relative">
       <div className="mt-4 grid sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 gap-4 ">
         {games?.map((game) => (
-          <GameCard loading={isLoading} {...game} key={game.id} />
+          <GameCard owner={emailAddress === game.createdBy} {...game} key={game.id} />
         ))}
 
         {isLoading && (
@@ -41,7 +43,6 @@ export function Games() {
         })}
       >
         <div className="flex gap-2 w-full justify-center border-t p-4">
-          {/* generate the buttons depends on length */}
           <Link
             className={cn({
               hidden: offset === 0,
