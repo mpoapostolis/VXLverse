@@ -22,13 +22,17 @@ export function useGames() {
   const search = params.get('search')
   const sort = params.get('sort')
 
-  const { data, error } = useSWR<Game[], AxiosError>(
-    `/api/games?sort${sort}&genre=${genre}&search=${search}&offset=${offset}`,
-    fetcher,
-  )
+  const { data, error } = useSWR<
+    {
+      total: number
+      items: Game[]
+    },
+    AxiosError
+  >(`/api/games?sort${sort}&genre=${genre}&search=${search}&offset=${offset}`, fetcher)
 
   return {
-    data: data ?? ([] as Game[]),
+    total: data?.total ?? 0,
+    data: data?.items ?? ([] as Game[]),
     isLoading: !data && !error,
     isError: error,
   }

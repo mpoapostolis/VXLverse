@@ -4,11 +4,12 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
   const pb = await getPocketBase()
-  const data = await pb.collection('games').getFullList(200 /* batch size */, {
-    sort: '-created',
-  })
-  return NextResponse.json(
-    data.map((data) => ({
+  const url = new URL(req.url)
+  const page = Number(url.searchParams.get('offset') ?? 0)
+  const data = await pb.collection('games').getList(page + 1, 10, {})
+  return NextResponse.json({
+    total: data.totalItems,
+    items: data.items.map((data) => ({
       id: data?.id,
       name: data?.name,
       description: data?.description,
@@ -19,7 +20,7 @@ export async function GET(req: NextRequest) {
         ? `${process.env.PB_URL}api/files/${data?.collectionId}/${data?.id}/${data?.preview}`
         : null,
     })),
-  )
+  })
 }
 
 export async function POST(req: NextRequest) {

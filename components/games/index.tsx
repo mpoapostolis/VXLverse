@@ -9,14 +9,14 @@ import { useSearchParams } from 'next/navigation'
 import { GameCard } from '../gameCard'
 
 export function Games() {
-  const { data: games, isLoading } = useGames()
+  const { data: games, isLoading, total } = useGames()
   const params = useSearchParams()
   const offset = Number(params.get('offset') ?? 0)
   const genre = params.get('genre')
   const search = params.get('search')
   const sort = params.get('sort')
 
-  const length = 1000
+  const length = Math.ceil(total / 10)
   const start = Math.max(offset - 2, 0)
   const end = Math.min(offset + 2, length)
   const pages = Array.from({ length: end - start }, (_, i) => start + i)
@@ -35,10 +35,19 @@ export function Games() {
         )}
       </div>
 
-      <div className="absolute -bottom-20  left-0 w-full  justify-center">
+      <div
+        className={cn('absolute -bottom-20  left-0 w-full  justify-center', {
+          hidden: length === 1 || isLoading,
+        })}
+      >
         <div className="flex gap-2 w-full justify-center border-t p-4">
           {/* generate the buttons depends on length */}
-          <Link href={`/?offset=${0}`}>
+          <Link
+            className={cn({
+              hidden: offset === 0,
+            })}
+            href={`/?offset=${0}`}
+          >
             <button className="bg-transparent border border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center">
               <DoubleArrowLeftIcon className="w-4 h-4" />
             </button>
@@ -69,7 +78,12 @@ export function Games() {
             </Link>
           ))}
 
-          <Link href={`/?offset=${length}`}>
+          <Link
+            className={cn({
+              hidden: offset === length - 1,
+            })}
+            href={`/?offset=${length - 1}`}
+          >
             <button className="bg-transparent border border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center">
               <DoubleArrowRightIcon className="w-4 h-4" />
             </button>
