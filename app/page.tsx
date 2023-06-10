@@ -1,11 +1,9 @@
-'use client'
 import { Account } from '@/components/account'
+import { Games } from '@/components/games'
 import { Sidebar } from '@/components/sidebar'
 import { Button } from '@/components/ui/button'
 import { SearchIcon } from 'lucide-react'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
-const Games = dynamic(() => import('@/components/games').then((mod) => mod.Games), { ssr: false })
 
 export default async function Page() {
   return (
