@@ -27,9 +27,9 @@ export function Account() {
     <>
       <SignedIn>
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
+          <DropdownMenuTrigger role="menuitem" asChild>
             <Button role="menuitem" className="relative  h-8 w-8 rounded-full">
-              <Avatar className="h-8 w-8">
+              <Avatar role="img" className="h-8 w-8">
                 <AvatarImage src={clerk?.user?.imageUrl} alt={user?.email} />
                 <AvatarFallback>{user?.email}</AvatarFallback>
               </Avatar>

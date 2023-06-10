@@ -9,6 +9,10 @@ module.exports =
         reactStrictMode: true,
       }
     : withPWA({
+        swcMinify: true,
+        compress: true,
+        optimizeFonts: true,
+
         // Next.js config
         productionBrowserSourceMaps: true,
         reactStrictMode: true,

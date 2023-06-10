@@ -14,7 +14,7 @@ export function reportWebVitals(metric: NextWebVitalsMetric) {
 export function Analytics() {
   return (
     <>
-      <GoogleAnalytics trackPageViews />
+      <GoogleAnalytics strategy="lazyOnload" trackPageViews />
       <VAnalyrics />
     </>
   )

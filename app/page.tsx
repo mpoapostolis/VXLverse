@@ -1,11 +1,13 @@
+'use client'
 import { Account } from '@/components/account'
-import { Games } from '@/components/games'
 import { Sidebar } from '@/components/sidebar'
 import { Button } from '@/components/ui/button'
 import { SearchIcon } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
+const Games = dynamic(() => import('@/components/games').then((mod) => mod.Games), { ssr: false })
 
-export default function Page() {
+export default async function Page() {
   return (
     <div className="h-screen w-screen  overflow-auto relative">
       <nav
@@ -14,7 +16,14 @@ export default function Page() {
         className="px-4  w-full flex border-b sticky top-0 mb-2 h-10  items-center gap-4 z-50 bg-background"
       >
         <picture>
-          <img role="menuitem" aria-label="logo" src="/logo.webp" className="w-6 h-6" alt="VXLverse Logo" />
+          <img
+            loading="lazy"
+            role="menuitem"
+            aria-label="logo"
+            src="/logo.webp"
+            className="w-6 h-6"
+            alt="VXLverse Logo"
+          />
         </picture>
 
         <Button role="menuitem" variant="link" className="ml-auto  text-foreground  hover:text-secondary">

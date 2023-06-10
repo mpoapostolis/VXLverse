@@ -1,3 +1,4 @@
+'use client'
 import { EditorCanvas } from '@/components/canvas/editor'
 import Editor from '@/components/editor'
 import { Menu } from '@/components/menu'

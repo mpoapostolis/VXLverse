@@ -1,6 +1,7 @@
 import { Game } from '@/lib/games/types'
 import { cn } from '@/lib/utils'
 import { EditIcon } from 'lucide-react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
@@ -29,14 +30,17 @@ export function GameCard(
                   Edit
                 </Button>
               </Link>
-              <picture>
-                <img
-                  loading="lazy"
-                  src={props.preview ?? '/logo.webp'}
-                  className="w-full object-scale-down  h-full "
-                  alt=""
-                />
-              </picture>
+              <Image
+                priority={false}
+                loading="eager"
+                width={256}
+                height={256}
+                src={props.preview ? `${props.preview}?thumb=190x190` : `/logo.webp`} // Placeholder image
+                data-src={props.preview ?? '/logo.webp'} // High-quality image
+                loader={({ src }) => src ?? '/logo.webp'}
+                className="w-full object-scale-down  h-full "
+                alt="game preview"
+              />
             </div>
             <div className="p-2 pb-4 h-fit bg-card flex flex-col">
               <div className="flex gap-4 items-center justify-end">
@@ -67,7 +71,7 @@ export function GameCard(
           </div>
         </TooltipTrigger>
         <TooltipContent className="w-72 text-base text-foreground ">
-          <h3 className="text-lg capitalize text-secondary font-bold flex text-justifys">{props?.name ?? '-'}</h3>
+          <h1 className="text-lg capitalize text-secondary font-bold flex text-justifys">{props?.name ?? '-'}</h1>
           <Separator className="my-2" />
           <p className="flex text-justify">{props?.description ?? '-'}</p>
           <br />
