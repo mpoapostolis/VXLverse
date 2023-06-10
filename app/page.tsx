@@ -8,12 +8,16 @@ import Link from 'next/link'
 export default function Page() {
   return (
     <div className="h-screen w-screen  overflow-auto relative">
-      <nav className="px-4  w-full flex border-b sticky top-0 mb-2 h-10  items-center gap-4 z-50 bg-background">
+      <nav
+        role="menubar"
+        data-orientation="horizontal"
+        className="px-4  w-full flex border-b sticky top-0 mb-2 h-10  items-center gap-4 z-50 bg-background"
+      >
         <picture>
-          <img src="/logo.webp" className="w-6 h-6" alt="VXLverse Logo" />
+          <img role="menuitem" aria-label="logo" src="/logo.webp" className="w-6 h-6" alt="VXLverse Logo" />
         </picture>
 
-        <Button variant="link" className="ml-auto  text-foreground  hover:text-secondary">
+        <Button role="menuitem" variant="link" className="ml-auto  text-foreground  hover:text-secondary">
           <Link href="/editor">Editor</Link>
         </Button>
 

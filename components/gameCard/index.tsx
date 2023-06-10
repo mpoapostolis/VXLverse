@@ -1,6 +1,6 @@
 import { Game } from '@/lib/games/types'
 import { cn } from '@/lib/utils'
-import { EditIcon, HeartIcon } from 'lucide-react'
+import { EditIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
@@ -18,17 +18,17 @@ export function GameCard(
           <div className={cn('w-full   h-fit  shadow-lg    relative')}>
             <div className="h-52  bg-black p-2">
               <Link
+                aria-label="edit game"
                 className={cn('absolute right-0 z-30 top-0 w-fit', {
                   hidden: !props.owner,
                 })}
                 href={`/editor?id=${props.id}`}
               >
-                <Button size="sm" variant="secondary" className="w-full">
+                <Button aria-label="edit game" role="button" size="sm" variant="secondary" className="w-full">
                   <EditIcon className="w-4 h-4 mr-1" />
                   Edit
                 </Button>
               </Link>
-              <Button className=" text-xs  bg-transparent w-fit  absolute top-0 right-0 "></Button>
               <picture>
                 <img
                   loading="lazy"
@@ -40,13 +40,17 @@ export function GameCard(
             </div>
             <div className="p-2 pb-4 h-fit bg-card flex flex-col">
               <div className="flex gap-4 items-center justify-end">
-                <h3 className="text-lg capitalize text-secondary font-bold flex">{props?.name ?? '-'}</h3>
+                <h1 className="text-lg capitalize text-secondary truncate w-full font-bold">{props?.name ?? '-'}</h1>
+              </div>
+              <div className="flex items-center">
+                <span className="text-xs font-thin">{props?.createdBy?.split('@')[0] ?? '-'}</span>
+                {/*
+                  No likes yet :( please implement this feature if you want to see this icon :)
                 <Button aria-label="favorite" className="w-fit ml-auto " size="sm" variant="ghost">
                   <HeartIcon className="w-4 h-4" />
                   <span className="text-xs font-thin ml-2">0 Likes</span>
-                </Button>
+                </Button> */}
               </div>
-              <span className="text-xs font-thin">{props?.createdBy?.split('@')[0] ?? '-'}</span>
               <p className="text-xs text-foreground  my-3 line-clamp-1">{props?.description ?? '-'}</p>
               <div className="flex mt-3">
                 <Button className="w-fit rounded-full border " variant="default">

@@ -327,6 +327,7 @@ export const useStore = create<Store>((set) => ({
 
   reset: () =>
     set({
+      gameInfo: {},
       ...defaultGameConf,
       nodes: defaultGameConf?.nodes,
     }),

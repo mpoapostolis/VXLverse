@@ -56,6 +56,7 @@ export function Games() {
 
           {pages.map((i) => (
             <Link
+              aria-label="first page"
               href={{
                 query: {
                   offset: i,
@@ -67,6 +68,7 @@ export function Games() {
               key={i}
             >
               <button
+                aria-label="last page"
                 className={cn(
                   'border bg-transparent border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center',
                   {
@@ -80,12 +82,16 @@ export function Games() {
           ))}
 
           <Link
+            aria-label="last page"
             className={cn({
               hidden: offset === length - 1,
             })}
             href={`/?offset=${length - 1}`}
           >
-            <button className="bg-transparent border border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center">
+            <button
+              aria-label="last page"
+              className="bg-transparent border border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center"
+            >
               <DoubleArrowRightIcon className="w-4 h-4" />
             </button>
           </Link>
