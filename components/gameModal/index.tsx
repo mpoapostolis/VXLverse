@@ -14,6 +14,7 @@ import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
 import { Share1Icon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import Link from 'next/link'
+import PocketBase from 'pocketbase'
 import { Select } from '../select'
 import { storyThemes } from '../sidebar'
 import { Button } from '../ui/button'
@@ -62,7 +63,12 @@ export function GameModal() {
             formData.append('store', JSON.stringify(storeOjb))
             let data
             if (store.gameInfo?.id) {
-              data = (await axios.put(`/api/games/${store.gameInfo?.id}`, formData)).data
+              const pb = await new PocketBase('https://admin.vxlverse.com/')
+              pb.collection('games').update(store.gameInfo?.id, {
+                owner: pb.authStore.model?.id,
+              })
+
+              // data = (await axios.put(`/api/games/${store.gameInfo?.id}`, formData)).data
             } else {
               data = (await axios.post('/api/games', formData)).data
             }

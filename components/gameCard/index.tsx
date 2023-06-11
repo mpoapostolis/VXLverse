@@ -1,7 +1,6 @@
 import { Game } from '@/lib/games/types'
 import { cn } from '@/lib/utils'
 import { EditIcon } from 'lucide-react'
-import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '../ui/button'
 import { Separator } from '../ui/separator'
@@ -9,7 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 
 export function GameCard(
   props: Game & {
-    owner?: boolean
+    ownership?: boolean
   },
 ) {
   return (
@@ -21,7 +20,7 @@ export function GameCard(
               <Link
                 aria-label="edit game"
                 className={cn('absolute right-0 z-30 top-0 w-fit', {
-                  hidden: !props.owner,
+                  hidden: !props.ownership,
                 })}
                 href={`/editor?id=${props.id}`}
               >
@@ -30,24 +29,22 @@ export function GameCard(
                   Edit
                 </Button>
               </Link>
-              <Image
-                priority={false}
-                loading="eager"
-                width={256}
-                height={256}
-                src={props.preview ? `${props.preview}?thumb=190x190` : `/logo.webp`} // Placeholder image
-                data-src={props.preview ?? '/logo.webp'} // High-quality image
-                loader={({ src }) => src ?? '/logo.webp'}
-                className="w-full object-scale-down  h-full "
-                alt="game preview"
-              />
+              <picture>
+                <img
+                  loading="eager"
+                  src={props.preview ? `${props.preview}?thumb=190x190` : `/logo.webp`} // Placeholder image
+                  data-src={props.preview ?? '/logo.webp'} // High-quality image
+                  className="w-full object-scale-down  h-full "
+                  alt="game preview"
+                />
+              </picture>
             </div>
             <div className="p-2 pb-4 h-fit bg-card flex flex-col">
               <div className="flex gap-4 items-center justify-end">
                 <h1 className="text-lg capitalize text-secondary truncate w-full font-bold">{props?.name ?? '-'}</h1>
               </div>
               <div className="flex items-center">
-                <span className="text-xs font-thin">{props?.createdBy?.split('@')[0] ?? '-'}</span>
+                <span className="text-xs font-thin">{props?.owner?.name ?? '-'}</span>
                 {/*
                   No likes yet :( please implement this feature if you want to see this icon :)
                 <Button aria-label="favorite" className="w-fit ml-auto " size="sm" variant="ghost">
@@ -79,7 +76,7 @@ export function GameCard(
             <span className="font-thin">Genre:</span>
             <span className="font-semibold">{props?.genre ?? '-'}</span>
             <span className="font-thin">Created By:</span>
-            <span className="font-semibold">{props?.createdBy?.split('@')[0] ?? '-'}</span>
+            <span className="font-semibold">{props?.owner?.name ?? '-'}</span>
           </div>
         </TooltipContent>
       </Tooltip>

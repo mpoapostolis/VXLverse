@@ -16,7 +16,6 @@
   },
   "contributors": [],
   "dependencies": {
-    "@clerk/nextjs": "^4.19.0",
     "@ducanh2912/next-pwa": "^8.5.1",
     "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-accordion": "^1.1.2",

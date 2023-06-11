@@ -21,9 +21,7 @@ import { Model } from '@/app/api/models/types'
 import { Indicator } from '@/components/indicator'
 import { SceneModal } from '@/components/sceneModal'
 import { SelectModel } from '@/components/selectModal/selectModel'
-import { useToast } from '@/components/ui/use-toast'
 import { useModels } from '@/lib/models/queries'
-import { SignedIn, useClerk } from '@clerk/nextjs'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import {
   CheckCircledIcon,
@@ -78,9 +76,6 @@ export function Menu() {
 
   const sceneName = store.scenes.find((s) => s.uuid === store.currentScene)?.name
 
-  const clerk = useClerk()
-
-  const { toast } = useToast()
   function isInPWA() {
     if (typeof window === 'undefined') return false
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches
@@ -139,12 +134,11 @@ export function Menu() {
               <DownloadIcon />
             </MenubarShortcut>
           </MenubarItem>
-          <SignedIn>
-            <>
-              <MenubarSeparator />
-              <GameModal />
-            </>
-          </SignedIn>
+          {/* AUTH HERE */}
+          <>
+            <MenubarSeparator />
+            <GameModal />
+          </>
         </MenubarContent>
       </MenubarMenu>
 

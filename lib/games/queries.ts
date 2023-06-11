@@ -1,9 +1,11 @@
 'use client'
 
-import { fetcher } from '@/lib/utils'
 import { AxiosError } from 'axios'
 import { useSearchParams } from 'next/navigation'
+import { BaseModel } from 'pocketbase'
 import useSWR from 'swr'
+import { PB_URL, getClientPocketBase } from '../pocketBase'
+import { fetcher } from '../utils'
 import { Game } from './types'
 
 export function useGame(id?: string) {
@@ -21,19 +23,35 @@ export function useGames() {
   const genre = params.get('genre')
   const search = params.get('search')
   const sort = params.get('sort')
+  const pb = getClientPocketBase()
 
-  const { data, error } = useSWR<
-    {
-      total: number
-      items: Game[]
-    },
-    AxiosError
-  >(`/api/games?sort${sort}&genre=${genre}&search=${search}&offset=${offset}`, fetcher)
+  const fetcher = async (_: string) => {
+    const data = await pb.collection('games').getList(offset + 1, 10, {
+      expand: 'owner',
+    })
+    return {
+      total: data.totalItems,
+      data: data.items.map((data) => ({
+        id: data?.id,
+        name: data?.name,
+        description: data?.description,
+        genre: data?.genre,
+        owner: {
+          id: (data?.expand?.owner as BaseModel)?.id,
+          name: (data?.expand?.owner as BaseModel)?.name,
+          email: (data?.expand?.owner as BaseModel)?.email,
+        },
+        public: data?.public,
+        preview: data?.preview ? `${PB_URL}api/files/${data?.collectionId}/${data?.id}/${data?.preview}` : null,
+      })),
+    }
+  }
+  const { data, error } = useSWR(`/api/games?sort${sort}&genre=${genre}&search=${search}&offset=${offset}`, fetcher)
 
   return {
-    total: data?.total ?? 0,
-    data: data?.items ?? ([] as Game[]),
-    isLoading: !data && !error,
-    isError: error,
+    total: 33,
+    data: data?.data,
+    isLoading: false,
+    isError: false,
   }
 }

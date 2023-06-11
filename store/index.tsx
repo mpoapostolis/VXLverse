@@ -453,7 +453,6 @@ useStore?.subscribe(async (state) => {
       ...e,
       actions: undefined,
     })) ?? []
-
   localstorage?.setItem(
     VXLverseVersion,
     JSON.stringify({
@@ -478,7 +477,6 @@ export function init() {
         quests: defaultGameConf.quests,
         scenes: defaultGameConf.scenes,
       }
-
   useStore?.setState({
     gameInfo: parsedStore?.gameInfo,
     user: parsedStore?.user,

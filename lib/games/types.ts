@@ -5,7 +5,11 @@ export type Game = {
   nodes?: Node[]
   scenes?: Scene[]
   quests?: QuestType[]
-  createdBy?: string
+  owner?: {
+    id?: string
+    name?: string
+    email?: string
+  }
   name?: string
   genre?: string
   preview?: string
