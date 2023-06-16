@@ -70,8 +70,6 @@ export type KeyBindings = {
 export type OptionQuestType = {
   uuid: string
   name: string
-  x?: number
-  y?: number
   npcText?: string
   parrentId?: string
   saidBy?: string
@@ -424,7 +422,12 @@ export const useStore = create<Store>((set) => ({
         name: 'New Quest',
         status: 'incomplete',
         nodeId: state.selectedNode,
-        options: [],
+        options: [
+          {
+            uuid: getUuid(),
+            name: 'New Option',
+          },
+        ],
       } as QuestType
       return {
         quests: [newQuest, ...quests],
