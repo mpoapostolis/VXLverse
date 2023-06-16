@@ -1,5 +1,6 @@
-import { NodeMaterial } from '@/store'
+import { NodeMaterial, useStore } from '@/store'
 import { MeshReflectorMaterial, useTexture } from '@react-three/drei'
+import { useEffect } from 'react'
 
 export function Material(props: { mirror?: boolean; material?: NodeMaterial; color?: string }) {
   let textureMap: NodeMaterial = {}
@@ -9,6 +10,7 @@ export function Material(props: { mirror?: boolean; material?: NodeMaterial; col
   if (props.material?.metalness) textureMap.metalness = props.material.metalness
   if (props.material?.normal) textureMap.normal = props.material.normal
   if (props.material?.roughness) textureMap.roughness = props.material.roughness
+  const repeat = Math.max(props.material?.repeat ?? 1, 1)
 
   const objMap = useTexture<{
     map?: string
@@ -17,15 +19,49 @@ export function Material(props: { mirror?: boolean; material?: NodeMaterial; col
     normal?: string
     roughness?: string
   }>(textureMap)
+  const store = useStore()
+  const selected = store.selectedNode
+
+  const map = objMap?.map?.clone()
+
+  if (map?.wrapS) map.wrapS = 1002
+  if (map?.wrapT) map.wrapT = 1002
+  if (map?.repeat) map.repeat.set(repeat, repeat)
+
+  const metalness = objMap?.metalness?.clone()
+  if (metalness?.wrapS) metalness.wrapS = 1002
+  if (metalness?.wrapT) metalness.wrapT = 1002
+  if (metalness?.repeat) metalness.repeat.set(repeat, repeat)
+
+  const normal = objMap?.displacement?.clone()
+  if (normal?.wrapS) normal.wrapS = 1002
+  if (normal?.wrapT) normal.wrapT = 1002
+  if (normal?.repeat) normal.repeat.set(repeat, repeat)
+
+  const roughness = objMap?.roughness?.clone()
+  if (roughness?.wrapS) roughness.wrapS = 1002
+  if (roughness?.wrapT) roughness.wrapT = 1002
+  if (roughness?.repeat) roughness.repeat.set(repeat, repeat)
+
+  useEffect(
+    () => () => {
+      map?.dispose()
+      metalness?.dispose()
+      normal?.dispose()
+      roughness?.dispose()
+    },
+    [map, metalness, normal, roughness],
+  )
+
   return props.material?.type === 'mirror' ? (
     <MeshReflectorMaterial mirror={1} blur={0} depthToBlurRatioBias={0} distortion={0} />
   ) : (
     <meshStandardMaterial
-      key={textureMap.map}
-      map={objMap.map}
-      metalnessMap={objMap?.metalness ?? undefined}
-      normalMap={objMap?.normal ?? undefined}
-      roughnessMap={objMap?.roughness ?? undefined}
+      key={selected}
+      map={map}
+      metalnessMap={metalness ?? undefined}
+      normalMap={normal ?? undefined}
+      roughnessMap={roughness ?? undefined}
       color={props.color}
     />
   )

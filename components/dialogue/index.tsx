@@ -49,7 +49,7 @@ export function Dialogue() {
             <div className="text-xl  font-bold text-secondary mb-1">{saidByName}</div>
             <div
               className={cn('font-medium   h-full py-2 mb-4 ', {
-                'text-gray-500': currentOption?.saidBy === heroNode?.uuid,
+                'text-gray-500': currentOption?.action === 'think',
               })}
             >
               {text}

@@ -51,9 +51,8 @@ export function Controls() {
         </Tooltip>
       </div>
 
-      <br />
       {store.selectedNode && (
-        <div className="grid">
+        <div className="grid mt-4">
           <Tooltip title="Delete: Delete key">
             <button
               aria-label="Delete"

@@ -2,6 +2,7 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { useStore } from '@/store'
 import { Selectmaterial } from '../selectModal/selectMaterial'
+import { Input } from '../ui/input'
 
 export function Material() {
   const store = useStore()
@@ -23,6 +24,23 @@ export function Material() {
         />
         <Label className=" w-full ">Material</Label>
         <Selectmaterial />
+        <>
+          <Label className=" w-full ">Repeat</Label>
+          <Input
+            type="number"
+            min={1}
+            value={selected?.material?.repeat ?? 1}
+            onChange={(evt) => {
+              if (!selected?.uuid) return
+              store.updateNode(selected.uuid, {
+                material: {
+                  ...selected.material,
+                  repeat: Number(evt.target.value),
+                },
+              })
+            }}
+          />
+        </>
       </div>
     </>
   ) : null

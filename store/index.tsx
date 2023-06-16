@@ -175,6 +175,7 @@ export type NodeMaterial = {
   roughness?: string
   preview?: string
   type?: MaterialType
+  repeat?: number
 }
 
 export type Node = {
