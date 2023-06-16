@@ -5,6 +5,7 @@ import { ReactNode, useState } from 'react'
 
 import { cn } from '@/lib/utils'
 import { OptionQuestType, useStore } from '@/store'
+import { ArrowDownIcon } from 'lucide-react'
 import { Quest } from '../quest'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog'
@@ -64,33 +65,39 @@ export function QuestModal(props: { children?: ReactNode }) {
               const l = q?.tree?.length ?? 0
               const show = selected?.uuid === q.parrentId || selected?.uuid === q.uuid || idx === 0
               return (
-                <div className=" flex relative w-fit" key={q.uuid}>
+                <div className="w-full relative flex gap-4 lg:w-fit" key={q.uuid}>
                   <div
-                    className={cn('relative overflow-hidden transition-all duration-0 w-fit', {
-                      'border-b': !show,
-                    })}
-                    onClick={() => {
-                      setSelected(q)
-                    }}
+                    className="relative overflow-hidden w-full lg:w-fit"
                     style={{
                       opacity: show ? 1 : 0.5,
                       marginLeft: `${l * 130}px`,
-                      height: show ? '100%' : '70px',
+                    }}
+                    onClick={() => {
+                      setSelected(q)
                     }}
                   >
-                    <Quest root={idx === 0} selected={selected?.uuid === q.uuid} {...q} />
+                    {show ? (
+                      <Quest root={idx === 0} selected={selected?.uuid === q.uuid} {...q} />
+                    ) : (
+                      <Button className="text-xs w-96  flex font-bold bg-card p-2 h-6 border ">
+                        <div className="ml-auto">{q.name}</div>
+                        <ArrowDownIcon className="ml-auto w-4 h-4" />
+                      </Button>
+                    )}
                   </div>
+
                   <div
-                    className={cn('ml-4 flex justify-end gap-2', {
-                      hidden: selected?.uuid !== q.uuid,
+                    className={cn('flex flex-col h-full gap-2 top-0 -right-24  z-50 text-xs w-24', {
+                      'opacity-50': !show,
                     })}
                   >
                     <Button
+                      size="sm"
                       type="button"
                       className={cn(
-                        'w-fit  text-xs z-50 border bg-transparent border-dashed border-red-400 text-red-400 ',
+                        'w-20   text-xs z-50 border bg-transparent border-dashed border-red-400 text-red-400 ',
                         {
-                          hidden: idx === 0,
+                          hidden: idx === 0 || selected?.uuid !== q.uuid,
                         },
                       )}
                       onClick={deleteOption}
@@ -98,10 +105,13 @@ export function QuestModal(props: { children?: ReactNode }) {
                       Delete
                     </Button>
                     <Button
+                      size="sm"
                       type="button"
                       disabled={Boolean(q.action === 'think' && options.find((q) => q.parrentId === selected?.uuid))}
                       onClick={() => addOption(idx)}
-                      className={cn('border text-xs z-50 w-fit', {})}
+                      className={cn('border  text-xs z-50 w-20', {
+                        hidden: selected?.uuid !== q.uuid,
+                      })}
                     >
                       + New
                     </Button>

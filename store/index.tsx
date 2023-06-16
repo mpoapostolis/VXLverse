@@ -425,6 +425,7 @@ export const useStore = create<Store>((set) => ({
         options: [
           {
             uuid: getUuid(),
+            action: 'say',
             name: 'New Option',
           },
         ],

@@ -12,17 +12,17 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { getClientPocketBase } from '@/lib/pocketBase'
+import { usePb } from '@/hooks/usePb'
 import { GamepadIcon, LogOut, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Admin, Record } from 'pocketbase'
 
-export function Account(props?: { user?: Record | Admin | null }) {
+export function Account() {
   const router = useRouter()
-  const pb = getClientPocketBase()
-  const user = props?.user ?? pb.authStore?.model
+  const pb = usePb()
+  const user = pb?.authStore.model ?? null
   const userName = user?.name
   const email = user?.email
+
   return user ? (
     <DropdownMenu>
       <DropdownMenuTrigger role="menuitem" asChild>
@@ -59,7 +59,7 @@ export function Account(props?: { user?: Record | Admin | null }) {
         <DropdownMenuSeparator />
         <DropdownMenuItem
           onClick={() => {
-            pb.authStore.clear()
+            pb?.authStore.clear()
             router.refresh()
           }}
         >
@@ -78,13 +78,13 @@ export function Account(props?: { user?: Record | Admin | null }) {
       variant="ghost"
       onClick={async () => {
         await pb
-          .collection('users')
+          ?.collection('users')
           .authWithOAuth2({
             provider: 'google',
           })
           .then(async (res) => {
             if (res.meta?.isNew)
-              await pb.collection('users').update(res?.record?.id, {
+              await pb?.collection('users').update(res?.record?.id, {
                 name: res?.meta?.name,
                 email: res?.meta?.email,
                 avatar_url: res?.meta?.avatarUrl,

@@ -72,7 +72,7 @@ export default async function Page(router: {
           <Link href="/editor">Editor</Link>
         </Button>
 
-        <Account user={pb.authStore.model} />
+        <Account />
       </nav>
       <div className="grid  lg:grid-cols-[15vw_1fr] grid-cols-1 gap-4">
         <Sidebar />

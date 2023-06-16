@@ -22,6 +22,7 @@ export function getServerPocketBase() {
 
 export function getClientPocketBase() {
   const pb = new PocketBase(PB_URL)
+
   pb.authStore.onChange(() => {
     document.cookie = pb.authStore.exportToCookie({ httpOnly: false })
   })

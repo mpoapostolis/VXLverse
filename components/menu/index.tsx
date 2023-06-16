@@ -35,6 +35,7 @@ import {
   UploadIcon,
 } from '@radix-ui/react-icons'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { Account } from '../account'
 import { GameModal } from '../gameModal'
 
@@ -300,9 +301,11 @@ export function Menu() {
       </MenubarMenu>
 
       <MenubarMenu>
-        <div role="none" className="flex w-full pr-4 items-center  justify-end  hover:bg-none h-full ">
-          <Account />
-        </div>
+        <Suspense fallback="....">
+          <div role="none" className="flex w-full pr-4 items-center  justify-end  hover:bg-none h-full ">
+            <Account />
+          </div>
+        </Suspense>
       </MenubarMenu>
     </Menubar>
   )

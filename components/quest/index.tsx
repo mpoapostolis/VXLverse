@@ -9,6 +9,7 @@ import { Separator } from '../ui/separator'
 export function Quest(
   props: OptionQuestType & {
     selected?: boolean
+    className?: string
     root?: boolean
   },
 ) {
@@ -28,17 +29,24 @@ export function Quest(
   const haveChild = children?.length > 0
   const disabledOpts = haveChild ? ['showImage', 'showVideo', 'giveReward', 'goToScene', 'openWebsite'] : []
   const disabledOpts1 = children?.length > 1 ? ['think'] : []
+  const parrent = quest?.options?.find((o) => o.uuid === props?.parrentId)
+  const isParentThink = parrent?.action === 'think'
   return (
     <form
-      className={cn('p-4 w-96 flex bg-card shadow-lg min-w-[200px]  z-50 gap-2 border', {
+      className={cn('p-4 w-96  flex bg-card shadow-lg min-w-[200px]  z-50 gap-2 border', props.className, {
         'border border-secondary': props.selected,
       })}
     >
       <div className="grid gap-2 h-fit  w-full">
-        {!props.root && (
+        {!props.root && !isParentThink && (
           <>
-            <Label className=" w-fulltext-xs font-medium">Opton name:</Label>
-            <Input placeholder="option name" className="bg-background" onChange={console.log} value={props.name} />
+            <Label className=" w-fulltext-xs font-medium">Choice name</Label>
+            <Input
+              placeholder="Choice name"
+              className="bg-background"
+              onChange={console.log}
+              defaultValue={props.name}
+            />
           </>
         )}
         <div className="grid gap-2 grid-cols-2">
