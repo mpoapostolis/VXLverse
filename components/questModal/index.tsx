@@ -23,8 +23,8 @@ export function QuestModal(props: { children?: ReactNode }) {
     const uuid = getUuid()
     const newOption = {
       uuid: uuid,
-      name: 'New Option ' + Math.random(),
-      npcText: 'New Option ' + i,
+      name: '',
+      npcText: '',
       reward: '',
       requiredItem: '',
       action: 'say',
@@ -79,10 +79,13 @@ export function QuestModal(props: { children?: ReactNode }) {
                     {show ? (
                       <Quest root={idx === 0} selected={selected?.uuid === q.uuid} {...q} />
                     ) : (
-                      <Button className="text-xs w-96  flex font-bold bg-card p-2 h-6 border ">
-                        <div className="ml-auto">{q.name}</div>
-                        <ArrowDownIcon className="ml-auto w-4 h-4" />
-                      </Button>
+                      <button className="text-xs w-96 flex font-bold bg-card border  h-10 items-center px-2">
+                        <div className="ml-auto w-full truncate text-left">
+                          {q.name}
+                          <div className="text-xs text-muted truncate w-full">{q.npcText}</div>
+                        </div>
+                        <ArrowDownIcon className="ml-auto h-4 w-4" />
+                      </button>
                     )}
                   </div>
 
@@ -94,8 +97,23 @@ export function QuestModal(props: { children?: ReactNode }) {
                     <Button
                       size="sm"
                       type="button"
+                      disabled={Boolean(
+                        !['ask', 'say', 'think'].includes(`${q.action}`) ||
+                          (['say', 'think'].includes(`${q.action}`) &&
+                            options.find((q) => q.parrentId === selected?.uuid)),
+                      )}
+                      onClick={() => addOption(idx)}
+                      className={cn('border  text-xs z-50 w-24', {
+                        hidden: selected?.uuid !== q.uuid,
+                      })}
+                    >
+                      + {q.action === 'ask' ? 'Choice' : 'Next'}
+                    </Button>
+                    <Button
+                      size="sm"
+                      type="button"
                       className={cn(
-                        'w-20   text-xs z-50 border bg-transparent border-dashed border-red-400 text-red-400 ',
+                        'w-24   text-xs z-50 border bg-transparent border-dashed border-red-400 text-red-400 ',
                         {
                           hidden: idx === 0 || selected?.uuid !== q.uuid,
                         },
@@ -103,17 +121,6 @@ export function QuestModal(props: { children?: ReactNode }) {
                       onClick={deleteOption}
                     >
                       Delete
-                    </Button>
-                    <Button
-                      size="sm"
-                      type="button"
-                      disabled={Boolean(q.action === 'think' && options.find((q) => q.parrentId === selected?.uuid))}
-                      onClick={() => addOption(idx)}
-                      className={cn('border  text-xs z-50 w-20', {
-                        hidden: selected?.uuid !== q.uuid,
-                      })}
-                    >
-                      + New
                     </Button>
                   </div>
                 </div>

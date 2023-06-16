@@ -426,7 +426,8 @@ export const useStore = create<Store>((set) => ({
           {
             uuid: getUuid(),
             action: 'say',
-            name: 'New Option',
+            saidBy: state.selectedNode,
+            name: 'Quest ' + quests.length,
           },
         ],
       } as QuestType

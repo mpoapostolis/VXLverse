@@ -28,9 +28,9 @@ export function Quest(
   const children = quest?.options?.filter((o) => o.parrentId === props.uuid) ?? []
   const haveChild = children?.length > 0
   const disabledOpts = haveChild ? ['showImage', 'showVideo', 'giveReward', 'goToScene', 'openWebsite'] : []
-  const disabledOpts1 = children?.length > 1 ? ['think'] : []
+  const disabledOpts1 = children?.length > 1 ? ['think', 'say'] : []
   const parrent = quest?.options?.find((o) => o.uuid === props?.parrentId)
-  const isParentThink = parrent?.action === 'think'
+  const isParentThinkOrSay = ['say', 'think'].includes(`${parrent?.action}`)
   return (
     <form
       className={cn('p-4 w-96  flex bg-card shadow-lg min-w-[200px]  z-50 gap-2 border', props.className, {
@@ -38,14 +38,14 @@ export function Quest(
       })}
     >
       <div className="grid gap-2 h-fit  w-full">
-        {!props.root && !isParentThink && (
+        {!props.root && !isParentThinkOrSay && (
           <>
             <Label className=" w-fulltext-xs font-medium">Choice name</Label>
             <Input
               placeholder="Choice name"
               className="bg-background"
-              onChange={console.log}
-              defaultValue={props.name}
+              onChange={(e) => updateOption({ name: e.target.value })}
+              value={props.name}
             />
           </>
         )}
@@ -65,8 +65,9 @@ export function Quest(
             className="bg-background text-xs"
             disabled={[...disabledOpts, ...disabledOpts1]}
             options={[
-              { value: 'say', label: 'Say' },
-              { value: 'think', label: 'Think' },
+              { value: 'ask', label: 'Ask question' },
+              { value: 'say', label: 'say' },
+              { value: 'think', label: 'inner thought' },
               { value: 'showImage', label: 'Show image' },
               { value: 'showVideo', label: 'Show video' },
               { value: 'giveReward', label: 'Give reward' },
@@ -82,7 +83,7 @@ export function Quest(
           />
         </div>
 
-        {['say', 'think'].includes(`${props?.action}`) && (
+        {['say', 'think', 'ask'].includes(`${props?.action}`) && (
           <textarea
             defaultValue={props?.npcText ?? ''}
             onBlur={(e) => {
@@ -149,8 +150,12 @@ export function Quest(
               controlled
               className="bg-background text-xs"
               options={store.nodes?.map((n) => ({ value: n.uuid, label: `${n.name}` })) ?? []}
-              value={props?.action}
-              onChange={(action) => {}}
+              value={props?.requiredItem}
+              onChange={(requiredItem) => {
+                updateOption({
+                  requiredItem: requiredItem ?? undefined,
+                })
+              }}
             />
           </>
         )}

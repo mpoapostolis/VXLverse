@@ -12,22 +12,22 @@ export function Dialogue() {
   const [optionId, setOptionId] = useState<string | undefined>(undefined)
 
   useEffect(() => {
-    setOptionId(undefined)
-  }, [currentQuest?.uuid])
+    const id = currentQuest?.options?.at(0)?.uuid
+    if (id) setOptionId(id)
+  }, [currentQuest])
+
   const heroNode = store.nodes?.find((n) => n.gameType === 'hero')
 
-  const npcDialogue = optionId
-    ? currentQuest?.options?.find((o) => o.uuid === optionId)?.npcText
-    : currentQuest?.npcText
+  const npcDialogue =
+    optionId == 'false'
+      ? 'Sorry you dont have requiredItem'
+      : currentQuest?.options?.find((o) => o.uuid === optionId)?.npcText
 
-  const options = optionId
-    ? currentQuest?.options?.filter((o) => o.parrentId === optionId)
-    : currentQuest?.options?.filter((o) => currentQuest.uuid === o.parrentId)
+  const options = currentQuest?.options?.filter((o) => o.parrentId === optionId)
 
   const currentOption = currentQuest?.options?.find((o) => o.uuid === optionId)
   const saidBy = currentOption?.saidBy
   const saidByNode = store.nodes?.find((n) => n.uuid === saidBy)
-  const saidByImg = saidByNode?.img ?? currentNode?.img
   const saidByName = saidByNode?.name ?? currentNode?.name
   const nextDialogue = currentQuest?.options?.find((o) =>
     optionId ? o.parrentId === optionId : o.parrentId === currentQuest?.uuid,
@@ -40,9 +40,10 @@ export function Dialogue() {
   const [text, { skip, isFinished }] = useWindupString(npcDialogue ?? '', {
     pace: (char: string) => (char === ' ' ? 100 : 50),
   })
+
   return (
     <Dialog open={Boolean(store.selectedQuest)}>
-      <DialogContent hideClose className="bg-transparent border-none fixed bottom-0">
+      <DialogContent hideClose className="bg-transparent outline-none border-none fixed bottom-0">
         <div className=" w-full grid   relative rounded min-h-[200px] gap-4 bg-black bg-opacity-80 p-4  px-6 text-white">
           <div className="text-lg h-full  flex flex-col w-full">
             <div className="text-xl  font-bold text-secondary mb-1">{saidByName}</div>
@@ -56,11 +57,25 @@ export function Dialogue() {
 
             <div className="mt-auto">
               {options
-                ?.filter((o) => o.name !== '')
+                ?.filter((o) => o.name !== '' || o.name)
                 .map((option) => (
                   <button
                     key={option.uuid}
                     onClick={() => {
+                      if (option?.requiredItem) {
+                        const doIHaveReqItem = store.inventory.includes(option?.requiredItem)
+                        if (!doIHaveReqItem) {
+                          return setOptionId('false')
+                          // close()
+                        }
+
+                        if (doIHaveReqItem) {
+                          setOptionId(option?.uuid)
+                          // store.updateQuest({ status: 'completed' })
+                        }
+                        return
+                      }
+
                       setOptionId(option.uuid)
                       if (currentQuest?.nodeId)
                         switch (option?.action) {
@@ -94,19 +109,9 @@ export function Dialogue() {
             <button
               onClick={() => {
                 if (!isFinished) return skip()
-                if (nextDialogue?.requiredItem) {
-                  const doIHaveReqItem = store.inventory.includes(nextDialogue?.requiredItem)
 
-                  if (!doIHaveReqItem) close()
-
-                  if (doIHaveReqItem) {
-                    setOptionId(nextDialogue?.uuid)
-                    store.updateQuest({ status: 'completed' })
-                  }
-                } else {
-                  setOptionId(nextDialogue?.uuid)
-                  if (!nextDialogue) store.setSelectedQuest(undefined)
-                }
+                setOptionId(nextDialogue?.uuid)
+                if (!nextDialogue) store.setSelectedQuest(undefined)
               }}
               className="absolute animate-pulse border-none outline-none focus:outline-none bottom-4  right-4 font-bold text-xl w-fit"
             >
