@@ -85,7 +85,7 @@ export function Node(
             </Suspense>
             {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
             <Suspense fallback={<Loader />}>
-              <Material material={props.material} color={props.color} />
+              <Material key={props.material?.map} material={props.material} color={props.color} />
             </Suspense>
           </mesh>
         )}

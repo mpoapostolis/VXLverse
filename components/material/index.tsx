@@ -10,6 +10,7 @@ export function Material(props: { mirror?: boolean; material?: NodeMaterial; col
   if (props.material?.metalness) textureMap.metalness = props.material.metalness
   if (props.material?.normal) textureMap.normal = props.material.normal
   if (props.material?.roughness) textureMap.roughness = props.material.roughness
+  if (props.material?.roughness) textureMap.roughness = props.material.roughness
   const repeat = Math.max(props.material?.repeat ?? 1, 1)
 
   const objMap = useTexture<{
@@ -33,6 +34,11 @@ export function Material(props: { mirror?: boolean; material?: NodeMaterial; col
   if (metalness?.wrapT) metalness.wrapT = 1002
   if (metalness?.repeat) metalness.repeat.set(repeat, repeat)
 
+  const displacement = objMap?.displacement?.clone()
+  if (displacement?.wrapS) displacement.wrapS = 1002
+  if (displacement?.wrapT) displacement.wrapT = 1002
+  if (displacement?.repeat) displacement.repeat.set(repeat, repeat)
+
   const normal = objMap?.displacement?.clone()
   if (normal?.wrapS) normal.wrapS = 1002
   if (normal?.wrapT) normal.wrapT = 1002
@@ -52,16 +58,17 @@ export function Material(props: { mirror?: boolean; material?: NodeMaterial; col
     },
     [map, metalness, normal, roughness],
   )
-
+  const { showMetalness, showNormal, showRoughness } = props.material ?? {}
+  const key = `${selected}${showMetalness}${showNormal}${showRoughness}`
   return props.material?.type === 'mirror' ? (
     <MeshReflectorMaterial mirror={1} blur={0} depthToBlurRatioBias={0} distortion={0} />
   ) : (
     <meshStandardMaterial
-      key={selected}
+      key={key}
       map={map}
-      metalnessMap={metalness ?? undefined}
-      normalMap={normal ?? undefined}
-      roughnessMap={roughness ?? undefined}
+      metalnessMap={props.material?.showMetalness ? metalness ?? undefined : undefined}
+      normalMap={props.material?.showNormal ? normal ?? undefined : undefined}
+      roughnessMap={props.material?.showRoughness ? roughness ?? undefined : undefined}
       color={props.color}
     />
   )

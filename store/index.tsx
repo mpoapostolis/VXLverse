@@ -175,6 +175,12 @@ export type NodeMaterial = {
   roughness?: string
   preview?: string
   type?: MaterialType
+
+  showDisplacement?: boolean
+  showMetalness?: boolean
+  showNormal?: boolean
+  showRoughness?: boolean
+
   repeat?: number
 }
 
