@@ -424,9 +424,11 @@ export const useStore = create<Store>((set) => ({
     set((state) => {
       const uuid = getUuid()
       const quests = state.quests ?? []
+      const node = state.nodes.find((n) => n.uuid === state.selectedNode)
+      const questofNode = quests.filter((q) => q.nodeId === state.selectedNode)
       const newQuest = {
         uuid,
-        name: 'New Quest',
+        name: `${node?.name} quest ${questofNode.length + 1}`,
         status: 'incomplete',
         nodeId: state.selectedNode,
         options: [
