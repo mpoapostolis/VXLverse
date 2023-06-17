@@ -28,8 +28,10 @@ export default async function Page(router: {
   const data = await pb.collection('games').getList<Game & BaseModel>(offset + 1, 10, {
     sort: `-${router?.searchParams?.sort ?? 'created'}`,
     filter: `${filters}`,
+    expand: 'owner',
   })
 
+  console.log(data?.items?.at(0)?.expand?.owner?.name)
   const totalPages = data?.totalPages
   const totalItems = data?.totalItems
   const start = Math.max(offset - 2, 0)
@@ -43,7 +45,7 @@ export default async function Page(router: {
     owner: data.owner,
     public: data?.public,
     ...data?.store,
-
+    cratedBy: data?.expand?.owner?.name,
     preview: data?.preview
       ? pb.getFileUrl(
           {

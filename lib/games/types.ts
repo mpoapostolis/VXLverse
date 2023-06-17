@@ -15,4 +15,9 @@ export type Game = {
   preview?: string
   description?: string
   public?: boolean
+  expand?: {
+    owner?: {
+      name?: string
+    }
+  }
 }
