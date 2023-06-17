@@ -1,6 +1,5 @@
 import { Account } from '@/components/account'
 import { GameCard } from '@/components/gameCard'
-import { Sidebar } from '@/components/sidebar'
 import { Button } from '@/components/ui/button'
 import { Game } from '@/lib/games/types'
 import { getServerPocketBase } from '@/lib/pocketBase'
@@ -22,7 +21,7 @@ export default async function Page(router: {
   const offset = Number(router.searchParams.offset) || 0
   const pb = getServerPocketBase()
   const data = await pb.collection('games').getList<Game & BaseModel>(offset + 1, 10, {
-    expand: 'owber',
+    expand: 'owner',
   })
   const totalPages = data?.totalPages
   const start = Math.max(offset - 2, 0)
@@ -33,10 +32,12 @@ export default async function Page(router: {
     name: data?.name,
     description: data?.description,
     genre: data?.genre,
-    owner: data.owner,
+    owner: {
+      id: (data?.expand?.owner as BaseModel)?.id,
+      name: (data?.expand?.owner as BaseModel)?.name,
+      email: (data?.expand?.owner as BaseModel)?.email,
+    },
     public: data?.public,
-    ...data?.store,
-
     preview: data?.preview
       ? pb.getFileUrl(
           {
@@ -48,7 +49,6 @@ export default async function Page(router: {
         )
       : null,
   }))
-
   return (
     <div className="h-screen w-screen  overflow-auto relative">
       <nav
@@ -67,14 +67,20 @@ export default async function Page(router: {
           />
         </picture>
 
-        <Button role="menuitem" variant="secondary" className="ml-auto rounded-full" size="sm">
-          <Link href="/editor">Create your own story</Link>
+        <Button role="menuitem" variant="link" className="ml-auto  text-foreground  hover:text-secondary">
+          <Link href="/editor">Editor</Link>
         </Button>
 
         <Account />
       </nav>
       <div className="grid  lg:grid-cols-[15vw_1fr] grid-cols-1 gap-4">
-        <Sidebar />
+        <div>
+          <ul>
+            <li> Games </li>
+            <li> Models </li>
+            <li> Materials </li>
+          </ul>
+        </div>
         <div className="p-4  h-full w-full">
           <div className="flex items-center w-full">
             {items.length === 0 && (
@@ -103,7 +109,7 @@ export default async function Page(router: {
             <div className="mt-4 grid sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 gap-4 ">
               {items?.map((game) => (
                 <GameCard
-                  ownership={Boolean(pb.authStore?.model?.id && pb.authStore?.model?.id === game.owner)}
+                  ownership={Boolean(pb.authStore?.model?.id && pb.authStore?.model?.id === game.owner.id)}
                   {...(game as Game)}
                   key={game.id}
                 />

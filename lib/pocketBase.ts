@@ -25,6 +25,7 @@ export function getClientPocketBase() {
 
   pb.authStore.onChange(() => {
     document.cookie = pb.authStore.exportToCookie({ httpOnly: false })
+    console.log(cookies)
   })
   return pb
 }

@@ -9,12 +9,12 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { usePb } from '@/hooks/usePb'
 import { useStore } from '@/store'
 import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
 import { Share1Icon } from '@radix-ui/react-icons'
 import axios from 'axios'
 import Link from 'next/link'
-import PocketBase from 'pocketbase'
 import { Select } from '../select'
 import { storyThemes } from '../sidebar'
 import { Button } from '../ui/button'
@@ -25,6 +25,8 @@ import { Upload } from '../upload'
 
 export function GameModal() {
   const store = useStore()
+  const pb = usePb()
+
   return (
     <Dialog>
       <ContextMenu>
@@ -43,6 +45,7 @@ export function GameModal() {
         <form
           onSubmit={async (e) => {
             e.preventDefault()
+            if (!pb?.authStore.model?.id) return
             const preview = e.currentTarget.preview.files[0]
             const formData = new FormData(e.currentTarget as HTMLFormElement)
             if (!preview) formData.delete('preview')
@@ -62,26 +65,23 @@ export function GameModal() {
             }
             formData.append('store', JSON.stringify(storeOjb))
             let data
-            if (store.gameInfo?.id) {
-              const pb = await new PocketBase('https://admin.vxlverse.com/')
-              pb.collection('games').update(store.gameInfo?.id, {
-                owner: pb.authStore.model?.id,
-              })
 
-              // data = (await axios.put(`/api/games/${store.gameInfo?.id}`, formData)).data
+            if (store.gameInfo?.id) {
+              pb?.collection('games').update(store.gameInfo?.id, formData)
             } else {
+              formData.append('owner', pb?.authStore.model?.id)
               data = (await axios.post('/api/games', formData)).data
             }
             store.setGameInfo(data)
 
             toast({
-              title: `You have successfully ${store.gameInfo?.id ? 'update' : 'published'} your game!`,
+              title: `You have successfully ${store?.gameInfo?.id ? 'update' : 'published'} your game!`,
               description: (
                 <Label className="text-base ">
                   Click
                   <Link
                     className="mx-2 font-bold text-secondary"
-                    href={`https://vxlverse.com/game?id=${data.id}`}
+                    href={`https://vxlverse.com/game?id=${data?.id}`}
                     target="_blank"
                   >
                     here
@@ -104,7 +104,6 @@ export function GameModal() {
               defaultValue={store.gameInfo?.name}
               required
               name="name"
-              onChange={(evt) => {}}
               className="rounded-none w-full  bg-background  p-2 text-xs leading-none focus:outline-secondary outline-1 outline-none"
             />
             <Label className=" w-full text-sm font-medium">Description</Label>
@@ -112,7 +111,6 @@ export function GameModal() {
               required
               defaultValue={store.gameInfo?.description}
               name="description"
-              onChange={(evt) => {}}
               rows={5}
               className="rounded-none w-full  bg-background  p-2 text-xs leading-none focus:outline-secondary outline-1 outline-none"
             />

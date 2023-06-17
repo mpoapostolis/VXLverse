@@ -1,5 +1,8 @@
+'use client'
+
 import { Game } from '@/lib/games/types'
 import { cn } from '@/lib/utils'
+import { useStore } from '@/store'
 import { EditIcon } from 'lucide-react'
 import Link from 'next/link'
 import { Button } from '../ui/button'
@@ -11,6 +14,8 @@ export function GameCard(
     ownership?: boolean
   },
 ) {
+  const store = useStore()
+
   return (
     <TooltipProvider>
       <Tooltip>
@@ -22,7 +27,8 @@ export function GameCard(
                 className={cn('absolute right-0 z-30 top-0 w-fit', {
                   hidden: !props.ownership,
                 })}
-                href={`/editor?id=${props.id}`}
+                onClick={() => store.setGame(props)}
+                href={`/editor`}
               >
                 <Button aria-label="edit game" role="button" size="sm" variant="secondary" className="w-full">
                   <EditIcon className="w-4 h-4 mr-1" />
@@ -54,12 +60,12 @@ export function GameCard(
               </div>
               <p className="text-xs text-foreground  my-3 line-clamp-1">{props?.description ?? '-'}</p>
               <div className="flex mt-3">
-                <Button className="w-fit rounded-full border " variant="default">
+                <Button size="sm" className="w-fit rounded-full border " variant="default">
                   <Link href={`/?genre=${props.id}`}>{props.genre}</Link>
                 </Button>
 
                 <Link className="flex w-full" href={`/game?id=${props.id}`}>
-                  <Button className="w-fit rounded-full  ml-auto" variant="secondary">
+                  <Button size="sm" className="w-fit rounded-full  ml-auto" variant="secondary">
                     Play
                   </Button>
                 </Link>
