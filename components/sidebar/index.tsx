@@ -1,6 +1,6 @@
 'use client'
 import { cn } from '@/lib/utils'
-import { AlertOctagonIcon, FilterIcon, GamepadIcon, HeartIcon, SmileIcon, TrendingUpIcon } from 'lucide-react'
+import { AlertOctagonIcon, FilterIcon, GamepadIcon, HeartIcon, SmileIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useState } from 'react'
@@ -46,6 +46,7 @@ export function Sidebar() {
   const params = useSearchParams()
   const sort = params.get('sort')
   const genre = params.get('genre')
+  const search = params.get('search')
   return (
     <div
       className={cn('pb-4 transition duration-150 lg:h-full overflow-hidden  ', {
@@ -67,14 +68,15 @@ export function Sidebar() {
             href={{
               pathname: '/',
               query: {
-                genre,
-                sort: 'new',
+                ...(params.get('search') && { search }),
+                ...(params.get('genre') && { genre }),
+                sort: 'created',
               },
             }}
           >
             <Button
               className={cn('w-full border-secondary bg-transparent hover:bg-card  text-left truncate justify-start', {
-                'text-secondary font-bold': sort === 'new' || !sort,
+                'text-secondary font-bold': sort === 'created' || !sort,
               })}
             >
               <AlertOctagonIcon className="mr-3  w-4 h-4" />
@@ -82,11 +84,12 @@ export function Sidebar() {
             </Button>
           </Link>
 
-          <Link
+          {/* <Link
             href={{
               pathname: '/',
               query: {
-                genre,
+                ...(params.get('search') && { search }),
+                ...(params.get('genre') && { genre }),
                 sort: 'rate',
               },
             }}
@@ -98,12 +101,13 @@ export function Sidebar() {
             >
               <TrendingUpIcon className="mr-3  w-4 h-4" /> Top Rated
             </Button>
-          </Link>
+          </Link> */}
           <Link
             href={{
               pathname: '/',
               query: {
-                genre,
+                ...(params.get('search') && { search }),
+                ...(params.get('genre') && { genre }),
                 sort: 'plays',
               },
             }}
@@ -121,7 +125,8 @@ export function Sidebar() {
             href={{
               pathname: '/',
               query: {
-                genre,
+                ...(params.get('search') && { search }),
+                ...(params.get('genre') && { genre }),
                 sort: 'favorites',
               },
             }}
@@ -145,8 +150,9 @@ export function Sidebar() {
               href={{
                 pathname: '/',
                 query: {
-                  sort,
-                  genre: format === 'All' ? null : format,
+                  ...(params.get('search') && { search }),
+                  ...(params.get('sort') && { sort }),
+                  ...(format !== 'All' && { genre: format }),
                 },
               }}
               key={format}

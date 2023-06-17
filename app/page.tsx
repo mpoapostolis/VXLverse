@@ -1,12 +1,12 @@
 import { Account } from '@/components/account'
 import { GameCard } from '@/components/gameCard'
+import { Search } from '@/components/search'
 import { Sidebar } from '@/components/sidebar'
 import { Button } from '@/components/ui/button'
 import { Game } from '@/lib/games/types'
 import { getServerPocketBase } from '@/lib/pocketBase'
 import { cn } from '@/lib/utils'
 import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons'
-import { Loader2, SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { BaseModel } from 'pocketbase'
 
@@ -14,17 +14,24 @@ export default async function Page(router: {
   params: {}
   searchParams: {
     offset?: string
-    search?: string
+    searchTerm?: string
     sort?: string
     genre?: string
   }
 }) {
   const offset = Number(router.searchParams.offset) || 0
   const pb = getServerPocketBase()
+
+  const genreFilter = router.searchParams.genre ? `genre="${router.searchParams.genre}"` : null
+  const searchFilter = router.searchParams.searchTerm ? `name~"${router.searchParams.searchTerm}"` : null
+  const filters = [genreFilter, searchFilter].filter(Boolean).join(' && ')
   const data = await pb.collection('games').getList<Game & BaseModel>(offset + 1, 10, {
-    expand: 'owber',
+    sort: `-${router?.searchParams?.sort ?? 'created'}`,
+    filter: `${filters}`,
   })
+
   const totalPages = data?.totalPages
+  const totalItems = data?.totalItems
   const start = Math.max(offset - 2, 0)
   const end = Math.min(offset + 2, totalPages)
   const pages = Array.from({ length: end - start }, (_, i) => start + i)
@@ -48,7 +55,6 @@ export default async function Page(router: {
         )
       : null,
   }))
-
   return (
     <div className="h-screen w-screen  overflow-auto relative">
       <nav
@@ -77,27 +83,8 @@ export default async function Page(router: {
         <Sidebar />
         <div className="p-4  h-full w-full">
           <div className="flex items-center w-full">
-            {items.length === 0 && (
-              <div className="animate-pulse flex">
-                <Loader2 className="animate-spin mr-1" />
-                Loading...
-              </div>
-            )}
-
-            <div className="flex ml-auto w-full items-center lg:w-96  justify-center">
-              <input
-                placeholder="🔎 Search..."
-                type="search"
-                className="rounded-l-full  h-8 bg-input pl-4 outline-none w-full  border text-foreground"
-              />
-              <Button
-                aria-label="search"
-                variant="ghost"
-                className=" grid rounded-r-full place-items-center  p-0 px-4 h-8 bg-input border border-l-0 "
-              >
-                <SearchIcon className="w-4 h-4" />
-              </Button>
-            </div>
+            <div className="flex text-xs font-bold">{totalItems} results found</div>
+            <Search />
           </div>
           <div className="relative">
             <div className="mt-4 grid sm:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 2xl:grid-cols-5 gap-4 ">
@@ -112,7 +99,7 @@ export default async function Page(router: {
 
             <div
               className={cn('absolute -bottom-20  left-0 w-full  justify-center', {
-                hidden: totalPages === 1,
+                hidden: totalPages <= 1,
               })}
             >
               <div className="flex gap-2 w-full justify-center border-t p-4">
@@ -133,7 +120,6 @@ export default async function Page(router: {
                     href={{
                       query: {
                         offset: i,
-                        search: router.searchParams.search,
                         sort: router.searchParams.sort,
                         genre: router.searchParams.genre,
                       },
@@ -157,7 +143,7 @@ export default async function Page(router: {
                 <Link
                   aria-label="last page"
                   className={cn({
-                    hidden: offset === totalPages - 1,
+                    hidden: totalPages === 0 && offset === totalPages - 1,
                   })}
                   href={`/?offset=${totalPages - 1}`}
                 >

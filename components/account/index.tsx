@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { usePb } from '@/hooks/usePb'
-import { GamepadIcon, LogOut, User } from 'lucide-react'
+import { GamepadIcon, ImageIcon, LogOut, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 
 export function Account() {
@@ -43,14 +43,21 @@ export function Account() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <span>Profile</span>
+            <span className="text-xs font-medium">Profile</span>
             <DropdownMenuShortcut>
               <User className="h-4 w-4" />
             </DropdownMenuShortcut>
           </DropdownMenuItem>
 
           <DropdownMenuItem>
-            <span>Games</span>
+            <span className="text-xs font-medium">Library</span>
+            <DropdownMenuShortcut>
+              <ImageIcon className="h-4 w-4" />
+            </DropdownMenuShortcut>
+          </DropdownMenuItem>
+
+          <DropdownMenuItem onClick={() => router.push('/')}>
+            <span className="text-xs font-medium">Games</span>
             <DropdownMenuShortcut>
               <GamepadIcon className="h-4 w-4" />
             </DropdownMenuShortcut>
@@ -63,7 +70,7 @@ export function Account() {
             router.refresh()
           }}
         >
-          <span>Log out</span>
+          <span className="text-xs font-medium">Log out</span>
           <DropdownMenuShortcut>
             <LogOut className="h-4 w-4" />
           </DropdownMenuShortcut>
