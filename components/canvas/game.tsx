@@ -9,7 +9,7 @@ import { useInitGame } from '@/hooks/useInitGame'
 import { useStore } from '@/store'
 import { Circle, Environment, Loader, OrbitControls, Preload, useProgress, useTexture } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
-import { Canvas, useThree } from '@react-three/fiber'
+import { Canvas } from '@react-three/fiber'
 import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
@@ -22,58 +22,6 @@ function Env(props: { equirect: string }) {
   texture.mapping = EquirectangularReflectionMapping
   texture.colorSpace = SRGBColorSpace
   return <Environment background map={texture} />
-}
-
-function Orbit() {
-  const t = useThree()
-  const store = useStore()
-  const hero = store.nodes.find((node) => node.gameType === 'hero')
-
-  function goTo() {
-    const raycaster = t.raycaster
-    raycaster.setFromCamera(t.pointer, t.camera)
-    const intersects = raycaster.intersectObjects(t.scene.children)
-    if (intersects?.at(0)?.point) {
-      store.updateNode(hero?.uuid ?? '', { status: 'walk' })
-      store.setGoTo(intersects?.at(0)?.point!)
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('pointerdown', (e) => {
-      if (e.button !== 2) return
-      goTo()
-    })
-
-    document.addEventListener('click', (e) => {
-      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-      if (isMobile) return goTo()
-    })
-
-    return () => {
-      document.removeEventListener('pointerdown', (e) => {
-        if (e.button !== 2) return
-        goTo()
-      })
-      document.removeEventListener('click', () => {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-        if (isMobile) return goTo()
-      })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hero?.uuid])
-
-  return (
-    <OrbitControls
-      enablePan={false}
-      maxDistance={8.1}
-      maxPolarAngle={Math.PI / 2}
-      minDistance={4}
-      position={[0, -5, 0]}
-      makeDefault
-      enableDamping={false}
-    />
-  )
 }
 
 export function GameCanvas(props: { id?: string }) {
@@ -131,7 +79,6 @@ export function GameCanvas(props: { id?: string }) {
           {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
           <Physics timeStep="vary">
             {hero && <Hero {...hero} />}
-
             {store.nodes
               ?.filter((node) => node.scene === store.currentScene && node.gameType !== 'hero')
               .map((node, idx) =>
@@ -143,7 +90,6 @@ export function GameCanvas(props: { id?: string }) {
                   <GameNode key={idx} {...node} />
                 ),
               )}
-
             <CuboidCollider friction={0} position={[0, 0, 0]} args={[300 * 4, 0.1, 300 * 4]} />
             {store?.goTo && hero?.uuid && (
               <RigidBody
@@ -163,8 +109,15 @@ export function GameCanvas(props: { id?: string }) {
                 </Circle>
               </RigidBody>
             )}
-
-            <Orbit />
+            <OrbitControls
+              enablePan={false}
+              maxDistance={8.1}
+              maxPolarAngle={Math.PI / 2}
+              minDistance={4}
+              position={[0, -5, 0]}
+              makeDefault
+              enableDamping={false}
+            />
           </Physics>
           <Preload all />
         </Suspense>

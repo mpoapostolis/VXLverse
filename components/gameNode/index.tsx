@@ -27,6 +27,14 @@ export function GameNode(props: Partial<Node>) {
       showImg: undefined,
     })
   }
+  const heroNode = store.nodes.find((node) => node.gameType === 'hero')
+  const walkTo = (pos?: Vector3) => {
+    if (!heroNode?.uuid) return
+    store.setGoTo(pos)
+    store.updateNode(heroNode.uuid, { status: 'walk' })
+  }
+  const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+
   return (
     <Suspense fallback={null}>
       <RigidBody
@@ -42,10 +50,14 @@ export function GameNode(props: Partial<Node>) {
         position={position}
       >
         <mesh
+          onContextMenu={(evt) => {
+            walkTo(evt.point)
+          }}
           onClick={(evt) => {
             evt.stopPropagation()
             if (!props.uuid || !isVisible) return
-
+            if (isMobile) walkTo(evt.point)
+            if (evt.distance > 20) return
             const doIHaveInteract = Object.entries(props.statusToAnimation ?? {}).find(
               ([, status]) => status === 'interact',
             )
