@@ -39,16 +39,28 @@ export function EditorCanvas() {
 
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const router = useRouter()
+
   useEffect(() => {
     router.replace('/editor')
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
   useInitGame()
   const cameraMoving = useRef<boolean>(false)
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+  const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+  const ref = useRef<HTMLAudioElement>(null)
+
+  useEffect(() => {
+    if (!selectedScene?.backgroundMusic) return
+    ref.current?.setAttribute('src', selectedScene?.backgroundMusic)
+    ref.current?.play()
+  }, [selectedScene])
+
   return (
     <>
       <div className="relative  canvas-editor ">
         <Controls />
+
         <Canvas camera={{ position: [10, 10, 10] }}>
           <OrbitControls
             onChange={() => {
@@ -88,7 +100,18 @@ export function EditorCanvas() {
           </group>
           <Preload all />
         </Canvas>
-        <picture className="absolute block pointer-events-none select-none  bottom-4 left-4 z-50">
+        <picture className="absolute pointer-events-none  bottom-4 flex w-full left-4 z-50">
+          {selectedScene?.backgroundMusic && (
+            <div className="flex w-full absolute justify-center">
+              <audio
+                ref={ref}
+                autoPlay
+                loop
+                controls
+                className=" z-50 w-48 md:w-96 select-auto  pointer-events-auto "
+              />
+            </div>
+          )}
           <img className="w-16 h-16" src="/logo.webp" alt="" />
         </picture>
       </div>

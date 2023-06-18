@@ -11,7 +11,7 @@ import { Circle, Environment, Loader, OrbitControls, Preload, useProgress, useTe
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas, useThree } from '@react-three/fiber'
 import { Physics, RigidBody } from '@react-three/rapier'
-import { Suspense, useEffect, useState } from 'react'
+import { Suspense, useEffect, useRef, useState } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
 import { Hero } from '../gameNode/hero'
 import { TypeWritter } from '../windText'
@@ -79,12 +79,23 @@ function Orbit() {
 export function GameCanvas(props: { id?: string }) {
   const store = useStore()
   const [videoEnded, setVideoEnded] = useState(!props.id)
+  const [interacted, setInteracted] = useState(false)
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const hero = store.nodes?.find((node) => node.gameType === 'hero')
   const progress = useProgress()
   useInitGame()
+
+  const ref = useRef<HTMLAudioElement>(null)
+
+  useEffect(() => {
+    if (!selectedScene?.backgroundMusic || !interacted) return
+    if (progress.progress !== 100) return
+    ref.current?.setAttribute('src', selectedScene?.backgroundMusic)
+    ref.current?.play()
+  }, [selectedScene, progress, interacted])
+
   return (
-    <main className="relative h-screen z-50 overflow-hidden">
+    <main onClick={() => setInteracted(true)} className="relative h-screen z-50 overflow-hidden">
       <HelpModal />
       <Loader
         containerStyles={{
@@ -158,7 +169,7 @@ export function GameCanvas(props: { id?: string }) {
           <Preload all />
         </Suspense>
       </Canvas>
-
+      <audio ref={ref} autoPlay loop controls className=" z-50 w-48 md:w-96 select-auto  pointer-events-auto " />
       <picture className="fixed top-4 left-4 z-50">
         <img loading="lazy" className="w-16 h-16" src="/logo.webp" alt="" />
       </picture>

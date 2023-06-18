@@ -8,21 +8,38 @@ import {
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { getClientPocketBase } from '@/lib/pocketBase'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { getUuid } from '@/store/utils'
 import { ContextMenu, ContextMenuTrigger } from '@radix-ui/react-context-menu'
 import { Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
+import useSWR from 'swr'
 import { Select } from '../select'
 import { Badge } from '../ui/badge'
 import { ScrollArea } from '../ui/scroll-area'
+
+type Sound = {
+  name: string
+  mp3: string
+}
 
 export function SceneModal(props: { onClick?: () => void; new?: boolean; children?: React.ReactNode }) {
   const store = useStore()
   const verb = props.new ? 'Create' : 'Edit'
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const [scene, setScene] = useState<string | undefined>()
+  const pb = getClientPocketBase()
+
+  const { data: sounds } = useSWR<Sound[]>('/api/sounds', () =>
+    pb
+      .collection('sounds')
+      .getList()
+      .then((e) => e.items.map((item) => ({ name: item.name, mp3: pb.getFileUrl(item, item.mp3) }))),
+  )
+
+  console.log('sounds', sounds)
   return (
     <Dialog>
       <ContextMenu>
@@ -99,6 +116,25 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                 })
             }}
           />
+          <Label className=" w-full text-sm font-medium">Background music</Label>
+          <Select
+            controlled
+            className="bg-background"
+            options={
+              sounds?.map((sound) => ({
+                label: `${sound.name}`,
+                value: `${sound.mp3}`,
+              })) ?? []
+            }
+            value={selectedScene?.backgroundMusic}
+            onChange={(val) => {
+              selectedScene &&
+                store.updateScene(selectedScene.uuid, {
+                  backgroundMusic: val ?? undefined,
+                })
+            }}
+          />
+
           <Label className=" mr-auto w-full text-sm font-medium">Color</Label>
           <input
             onChange={(evt) => {
@@ -138,6 +174,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
                 </Badge>
               ))}
           </div>
+
           <br />
           {store.scenes.length > 1 && (
             <>

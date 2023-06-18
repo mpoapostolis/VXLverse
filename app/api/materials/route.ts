@@ -4,11 +4,11 @@ import { Material } from './types'
 
 export async function GET() {
   const pb = await getPocketBase()
-  const records = await pb.collection('materials').getFullList<Material>(200 /* batch size */, {
+  const records = await pb.collection('materials').getList<Material>(0, 50 /* batch size */, {
     sort: '-created',
   })
   return NextResponse.json(
-    records.map((obj) => ({
+    records.items.map((obj) => ({
       ...obj,
       map: obj?.map && `${process.env.PB_URL}api/files/${obj?.collectionId}/${obj?.id}/${obj?.map}`,
       displacement:

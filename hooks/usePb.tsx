@@ -1,13 +1,12 @@
 import { getClientPocketBase } from '@/lib/pocketBase'
-import PocketBase from 'pocketbase'
 import { useEffect, useState } from 'react'
 
 export function usePb() {
-  const [pb, setPb] = useState<PocketBase | null>(null)
+  const [initialized, setInitialized] = useState(false)
+  const pb = getClientPocketBase()
   useEffect(() => {
-    const pb = getClientPocketBase()
-    setPb(pb)
+    if (!initialized) setInitialized(true)
   }, [])
-
-  return pb
+  // This hack is for useless hydration
+  return initialized ? pb : null
 }

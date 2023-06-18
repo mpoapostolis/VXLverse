@@ -222,6 +222,7 @@ export type Scene = {
   intro?: string
   color?: string
   equirect?: string
+  backgroundMusic?: string
   blob?: Blob
 }
 
