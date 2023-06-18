@@ -31,7 +31,6 @@ export default async function Page(router: {
     expand: 'owner',
   })
 
-  console.log(data?.items?.at(0)?.expand?.owner?.name)
   const totalPages = data?.totalPages
   const totalItems = data?.totalItems
   const start = Math.max(offset - 2, 0)

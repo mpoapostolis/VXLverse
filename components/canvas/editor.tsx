@@ -8,7 +8,7 @@ import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTex
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas } from '@react-three/fiber'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
 
 function Env(props: { equirect: string }) {
@@ -43,12 +43,21 @@ export function EditorCanvas() {
     router.replace('/editor')
   }, [])
   useInitGame()
-
+  const cameraMoving = useRef<boolean>(false)
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   return (
     <>
       <div className="relative  canvas-editor ">
         <Controls />
         <Canvas camera={{ position: [10, 10, 10] }}>
+          <OrbitControls
+            onChange={() => {
+              cameraMoving.current = true
+            }}
+            maxDistance={1000}
+            makeDefault
+            enableDamping={false}
+          />
           <gridHelper position={[-0.5, 0, -0.5]} args={[GRID_SIZE, GRID_SIZE]} />
           <GizmoHelper alignment="top-right" margin={[80, 80]}>
             <GizmoViewport axisColors={['#FF7F9A', '#C2EE00', '#73C5FF']} />
@@ -60,18 +69,26 @@ export function EditorCanvas() {
             <color attach="background" args={[selectedScene?.color ?? '#000']} />
           )}
           {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
-
-          {store.nodes
-            ?.filter((e) => {
-              return e.scene === store.currentScene || e.gameType === 'hero'
-            })
-            .map((node, idx) => (
-              <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
-            ))}
-          <OrbitControls maxDistance={1000} makeDefault enableDamping={false} />
+          <group
+            onClick={(e) => {
+              if (isMobile) return
+              if (cameraMoving.current) {
+                e.stopPropagation()
+                return (cameraMoving.current = false)
+              }
+            }}
+          >
+            {store.nodes
+              ?.filter((e) => {
+                return e.scene === store.currentScene || e.gameType === 'hero'
+              })
+              .map((node, idx) => (
+                <Node selected={store.selectedNode === node.uuid} key={idx} {...node} />
+              ))}
+          </group>
           <Preload all />
         </Canvas>
-        <picture className="absolute block  bottom-4 left-4 z-50">
+        <picture className="absolute block pointer-events-none select-none  bottom-4 left-4 z-50">
           <img className="w-16 h-16" src="/logo.webp" alt="" />
         </picture>
       </div>
