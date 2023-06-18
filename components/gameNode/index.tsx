@@ -104,9 +104,7 @@ export function GameNode(props: Partial<Node>) {
           )}
           {props.type && props.type !== 'GLTF' && <MeshGeometry type={props.type} />}
 
-          <Suspense>
-            <Material key={props.material?.map} material={props.material} color={props.color} />
-          </Suspense>
+          <Material key={props.material?.map} material={props.material} color={props.color} />
         </mesh>
       </RigidBody>
     </Suspense>
