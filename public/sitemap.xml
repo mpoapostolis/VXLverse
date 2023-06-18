@@ -1,0 +1,21 @@
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<!--   created with sitemap generator https://octopus.do   -->
+<url>
+<loc>https://www.vxlverse.com</loc>
+<lastmod>2023-06-18</lastmod>
+<changefreq>always</changefreq>
+<priority>0.5</priority>
+</url>
+<url>
+<loc>https://www.vxlverse.com/editor</loc>
+<lastmod>2023-06-18</lastmod>
+<changefreq>always</changefreq>
+<priority>0.5</priority>
+</url>
+<url>
+<loc>https://www.vxlverse.com/game</loc>
+<lastmod>2023-06-18</lastmod>
+<changefreq>always</changefreq>
+<priority>0.5</priority>
+</url>
+</urlset>
