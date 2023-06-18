@@ -90,6 +90,8 @@ export function Dialogue() {
                             return window.open(option.url, '_blank')
 
                           case 'goToScene':
+                            store.setSelectedQuest(undefined)
+                            store.setDialogue(undefined)
                             return store.setCurrentScene(option.goToScene)
 
                           default:

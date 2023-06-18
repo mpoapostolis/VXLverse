@@ -10,7 +10,7 @@ import { useStore } from '@/store'
 import { Circle, Environment, Loader, OrbitControls, Preload, useProgress, useTexture } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas, useThree } from '@react-three/fiber'
-import { Physics, RigidBody } from '@react-three/rapier'
+import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
 import { Suspense, useEffect, useRef, useState } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
 import { Hero } from '../gameNode/hero'
@@ -144,7 +144,7 @@ export function GameCanvas(props: { id?: string }) {
                 ),
               )}
 
-            {/* <CuboidCollider friction={0} position={[0, 0, 0]} args={[GRID_SIZE * 4, 0.1, GRID_SIZE * 4]} /> */}
+            <CuboidCollider friction={0} position={[0, 0, 0]} args={[300 * 4, 0.1, 300 * 4]} />
             {store?.goTo && hero?.uuid && (
               <RigidBody
                 type="dynamic"

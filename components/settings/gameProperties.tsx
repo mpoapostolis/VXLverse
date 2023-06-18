@@ -1,11 +1,9 @@
-import { Select } from '@/components/select'
 import { SelectModal } from '@/components/selectModal'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 
 import { useStore } from '@/store'
-import { RigidBodyTypeString } from '@react-three/rapier'
 
 export function GameProperties() {
   const store = useStore()
@@ -52,19 +50,6 @@ export function GameProperties() {
             })
           }}
           options={options}
-        />
-
-        <Label className=" w-full ">Rigid Body</Label>
-        <Select<RigidBodyTypeString>
-          onChange={(val) => {
-            if (!selected?.uuid) return
-            store.updateNode(selected.uuid, { physics: val })
-          }}
-          value={selected?.physics ?? 'fixed'}
-          options={[
-            { label: 'Fixed', value: 'fixed' },
-            { label: 'Dynamic', value: 'dynamic' },
-          ]}
         />
 
         <Label className=" w-full">Collectable</Label>

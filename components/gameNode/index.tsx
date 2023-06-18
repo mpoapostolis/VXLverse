@@ -30,14 +30,15 @@ export function GameNode(props: Partial<Node>) {
   return (
     <Suspense fallback={null}>
       <RigidBody
+        key={store.currentScene}
         friction={0}
         density={0}
         restitution={0}
         linearDamping={0}
-        type={'fixed'}
+        type="fixed"
+        colliders="cuboid"
         rotation={rotation}
         scale={scale}
-        colliders="cuboid"
         position={position}
       >
         <mesh

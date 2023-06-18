@@ -71,8 +71,8 @@ export function GameModal() {
             } else {
               formData.append('owner', pb?.authStore.model?.id)
               data = (await axios.post('/api/games', formData)).data
+              store.setGameInfo(data)
             }
-            store.setGameInfo(data)
 
             toast({
               title: `You have successfully ${store?.gameInfo?.id ? 'update' : 'published'} your game!`,
