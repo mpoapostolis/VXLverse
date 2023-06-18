@@ -25,21 +25,6 @@ export function Material(props: { mirror?: boolean; material?: NodeMaterial; col
     roughness?: string
   }>(textureMap)
 
-  // useEffect(() => {
-  //   Object.values(objMap).forEach((texture) => {
-  //     if (texture) {
-  //       let clonedTexture = texture.clone()
-  //       clonedTexture.wrapS = 1002
-  //       clonedTexture.wrapT = 1002
-  //       if (repeat !== 0) {
-  //         clonedTexture.repeat.set(repeat, repeat)
-  //       } else {
-  //         clonedTexture.repeat.set(1, 1) // Set the repeat values to 1 if they are 0
-  //       }
-  //     }
-  //   })
-  // }, [objMap, repeat])
-
   const store = useStore()
   const selected = store.selectedNode
 
