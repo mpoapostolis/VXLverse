@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
 import clsx from 'clsx'
 import { TrashIcon } from 'lucide-react'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Button } from '../ui/button'
 
 export function Upload(props: {
@@ -13,7 +13,7 @@ export function Upload(props: {
   required?: boolean
 }) {
   const [file, setFile] = useState<string | null>(props.value ?? null)
-
+  const ref = useRef<HTMLInputElement>(null)
   return (
     <div
       tabIndex={-1}
@@ -24,6 +24,7 @@ export function Upload(props: {
       <input
         name={props.name}
         accept={props.accept}
+        ref={ref}
         onChange={(e) => {
           const file = e.target.files?.[0]
           if (!file) return
@@ -70,6 +71,7 @@ export function Upload(props: {
             if (!file) return
             setFile(null)
             props.onChange(undefined)
+            ref.current?.value && (ref.current.value = '')
           }}
           className=" text-xs"
           variant="destructive"
