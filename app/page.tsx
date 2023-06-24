@@ -5,8 +5,6 @@ import { Sidebar } from '@/components/sidebar'
 import { Button } from '@/components/ui/button'
 import { Game } from '@/lib/games/types'
 import { getServerPocketBase } from '@/lib/pocketBase'
-import { cn } from '@/lib/utils'
-import { DoubleArrowLeftIcon, DoubleArrowRightIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { BaseModel } from 'pocketbase'
 
@@ -96,66 +94,6 @@ export default async function Page(router: {
                   key={game.id}
                 />
               ))}
-            </div>
-
-            <div
-              className={cn('absolute -bottom-20  left-0 w-full  justify-center', {
-                hidden: totalPages <= 1,
-              })}
-            >
-              <div className="flex gap-2 w-full justify-center border-t p-4">
-                <Link
-                  className={cn({
-                    hidden: offset === 0,
-                  })}
-                  href={`/?offset=${0}`}
-                >
-                  <button className="bg-transparent border border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center">
-                    <DoubleArrowLeftIcon className="w-4 h-4" />
-                  </button>
-                </Link>
-
-                {pages.map((i) => (
-                  <Link
-                    aria-label="first page"
-                    href={{
-                      query: {
-                        offset: i,
-                        sort: router.searchParams.sort,
-                        genre: router.searchParams.genre,
-                      },
-                    }}
-                    key={i}
-                  >
-                    <button
-                      aria-label="last page"
-                      className={cn(
-                        'border bg-transparent border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center',
-                        {
-                          'bg-secondary text-secondary-foreground': i === offset,
-                        },
-                      )}
-                    >
-                      {i + 1}
-                    </button>
-                  </Link>
-                ))}
-
-                <Link
-                  aria-label="last page"
-                  className={cn({
-                    hidden: totalPages === 0 && offset === totalPages - 1,
-                  })}
-                  href={`/?offset=${totalPages - 1}`}
-                >
-                  <button
-                    aria-label="last page"
-                    className="bg-transparent border border-secondary text-secondary text-xs rounded-full w-8 h-8 flex items-center justify-center"
-                  >
-                    <DoubleArrowRightIcon className="w-4 h-4" />
-                  </button>
-                </Link>
-              </div>
             </div>
           </div>
         </div>

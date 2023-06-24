@@ -33,7 +33,7 @@ export function UploadModel() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button>New Model</Button>
+        <Button variant="secondary">New Model</Button>
       </DialogTrigger>
       <DialogContent className="lg:w-[50vw] w-screen overflow-auto max-h-screen ">
         <DialogHeader>
@@ -57,14 +57,6 @@ export function UploadModel() {
             formData.append('owner', owner)
 
             pb.collection('models').create(formData)
-
-            // formData.append('name', name)
-            // formData.append('type', type)
-            // formData.append('file', file)
-            // formData.append('thumbnail', thumbnail)
-            // formData.append('owner', owner)
-
-            // pb.collection('models').create(formData)
           }}
           className="grid gap-4"
         >
