@@ -1,4 +1,5 @@
 import { Account } from '@/components/account'
+import { DeleteAsset } from '@/components/deleteAsset'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { UploadModel } from '@/components/uploadModel'
@@ -32,10 +33,10 @@ export default async function Page(router: {
   const collection = typeToCollection[type]
   const data = await pb.collection(collection).getList(offset + 1, 10, {
     sort: '-created',
+    filter: `owner.id="${pb.authStore.model?.id}"`,
   })
 
   const totalPages = data?.totalPages
-  const totalItems = data?.totalItems
   const start = Math.max(offset - 2, 0)
   const end = Math.min(offset + 2, totalPages)
   const pages = Array.from({ length: end - start }, (_, i) => start + i)
@@ -113,9 +114,7 @@ export default async function Page(router: {
               <div className="p-4  h-fit w-full">
                 <div className="w-full  bg flex">
                   <h1 className="pl-2 capitalize text-secondary truncate w-full font-bold ">{item?.name ?? '-'}</h1>
-                  <Button className="ml-auto" size="sm" variant="destructive">
-                    Delete
-                  </Button>
+                  <DeleteAsset collection={collection} id={item.id} />
                 </div>
 
                 {type === 'mp3' && (

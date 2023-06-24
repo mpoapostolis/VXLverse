@@ -1,6 +1,6 @@
 import { Analytics } from '@/components/analytics'
 import { Toaster } from '@/components/ui/toaster'
-import '@/styles/globals.css'
+import '@/styles/global.css'
 import { Metadata } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'

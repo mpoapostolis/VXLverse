@@ -1,6 +1,7 @@
 'use client'
 
 import { getClientPocketBase } from '@/lib/pocketBase'
+import { useRouter } from 'next/navigation'
 import { Select } from '../select'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
@@ -30,6 +31,7 @@ const type = [
   'scenes',
 ]
 export function UploadModel() {
+  const router = useRouter()
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -56,7 +58,9 @@ export function UploadModel() {
             formData.append('img', thumbnail)
             formData.append('owner', owner)
 
-            pb.collection('models').create(formData)
+            pb.collection('models')
+              .create(formData)
+              .then(() => router.refresh())
           }}
           className="grid gap-4"
         >
