@@ -49,7 +49,7 @@ export function Account() {
             </DropdownMenuShortcut>
           </DropdownMenuItem>
 
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => router.push('/library')}>
             <span className="text-xs font-medium">Library</span>
             <DropdownMenuShortcut>
               <ImageIcon className="h-4 w-4" />

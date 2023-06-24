@@ -6,10 +6,10 @@ import Link from 'next/link'
 export default async function Page(router: {
   params: {}
   searchParams: {
-    selected?: string
+    type?: string
   }
 }) {
-  const selected = router.searchParams.selected || 'Model'
+  const type = router.searchParams.type || 'Model'
   return (
     <div className="h-screen w-screen  overflow-auto relative">
       <nav
@@ -37,19 +37,19 @@ export default async function Page(router: {
       <br />
       <div className="container mx-auto w-full">
         <div className="flex gap-4">
-          <Link href={`/library?selected=Model`}>
-            <Button variant={selected === 'Model' ? 'secondary' : 'default'}>Model</Button>
+          <Link href={`/library?type=Model`}>
+            <Button variant={type === 'Model' ? 'secondary' : 'default'}>Model</Button>
           </Link>
-          <Link href={`/library?selected=Background`}>
-            <Button variant={selected === 'Background' ? 'secondary' : 'default'}>Background</Button>
+          <Link href={`/library?type=Background`}>
+            <Button variant={type === 'Background' ? 'secondary' : 'default'}>Background</Button>
           </Link>
-          <Link href={`/library?selected=mp3`}>
-            <Button variant={selected === 'mp3' ? 'secondary' : 'default'}>mp3</Button>
+          <Link href={`/library?type=mp3`}>
+            <Button variant={type === 'mp3' ? 'secondary' : 'default'}>mp3</Button>
           </Link>
-          <Link href={`/library?selected=Material`}>
-            <Button variant={selected === 'Material' ? 'secondary' : 'default'}>Material</Button>
+          <Link href={`/library?type=Material`}>
+            <Button variant={type === 'Material' ? 'secondary' : 'default'}>Material</Button>
           </Link>
-          <Button className="ml-auto">New</Button>
+          <div className="ml-auto" />
           <UploadModel />
         </div>
         <br />
