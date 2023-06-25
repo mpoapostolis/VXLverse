@@ -22,7 +22,7 @@ export function Account() {
   const user = pb?.authStore.model ?? null
   const userName = user?.name
   const email = user?.email
-  const usage = user?.['usage']
+  const usage = user?.['usage'] as number
   return user ? (
     <DropdownMenu>
       <DropdownMenuTrigger role="menuitem" asChild>
@@ -64,8 +64,10 @@ export function Account() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="grid space-y-2">
-          <p className="text-xs m-0 p-0 leading-none text-muted-foreground">Usage {usage} Mb / 1Gb</p>
+        <DropdownMenuItem className="grid space-y-2 hover:bg-transparent">
+          <p className="text-xs m-0 p-0 leading-none text-muted-foreground w-full  flex">
+            Usage {usage?.toFixed(1)} Mb <span className="ml-auto">{usage && Math.ceil((usage / 1000) * 100)}%</span>
+          </p>
           <progress className="w-full h-1 m-0 p-0 bg-secondary rounded-full" value={(usage / 1000) * 100} max="100" />
         </DropdownMenuItem>
         <DropdownMenuSeparator />

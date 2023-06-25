@@ -64,7 +64,7 @@ export function UploadModel() {
             const file = evt.currentTarget.file.files[0]
             const owner = pb.authStore.model?.id as string
             const formData = new FormData()
-            const sizeInMb = Math.ceil(file.size / 1024 / 1024)
+            const sizeInMb = file.size / 1024 / 1024
             formData.append('name', name)
             formData.append('type', type)
             formData.append('file', file)

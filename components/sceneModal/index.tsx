@@ -39,7 +39,6 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
       .then((e) => e.items.map((item) => ({ name: item.name, mp3: pb.getFileUrl(item, item.mp3) }))),
   )
 
-  console.log('sounds', sounds)
   return (
     <Dialog>
       <ContextMenu>

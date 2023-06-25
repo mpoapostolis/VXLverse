@@ -14,7 +14,6 @@ export function DeleteAsset(props: { id: string; collection: string }) {
       onConfirm={async () => {
         const pb = getClientPocketBase()
         const item = await pb.collection(props.collection).getOne(props.id)
-        console.log(item.size)
         await pb.collection(props.collection).delete(props.id)
         const owner = pb.authStore.model?.id as string
         await pb.collection('users').update(owner, {

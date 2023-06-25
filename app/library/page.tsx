@@ -66,7 +66,7 @@ export default async function Page(router: {
         <Account />
       </nav>
       <br />
-      <div className="container mx-auto w-full flex-wrap">
+      <div className="px-4   mx-auto w-full flex-wrap">
         <div className="flex gap-4 flex-wrap">
           <Link className="w-full md:w-fit" href={`/library?type=Model`}>
             <Button className="truncate w-full" variant={type === 'Model' ? 'secondary' : 'default'}>
