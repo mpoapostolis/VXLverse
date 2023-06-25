@@ -1,7 +1,9 @@
 'use client'
 
 import { getClientPocketBase } from '@/lib/pocketBase'
+import { Loader2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { Select } from '../select'
 import { Button } from '../ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '../ui/dialog'
@@ -32,10 +34,20 @@ const type = [
 ]
 export function UploadModel() {
   const router = useRouter()
+  const [open, setOpen] = useState(false)
+  const [loading, setLoading] = useState(false)
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(t) => {
+        setOpen(t)
+        router.refresh()
+      }}
+    >
       <DialogTrigger asChild>
-        <Button variant="secondary">New Model</Button>
+        <Button onClick={() => setOpen(true)} variant="secondary">
+          New Model
+        </Button>
       </DialogTrigger>
       <DialogContent className="lg:w-[50vw] w-screen overflow-auto max-h-screen ">
         <DialogHeader>
@@ -43,7 +55,7 @@ export function UploadModel() {
         </DialogHeader>
         <Separator className="my-4" />
         <form
-          onSubmit={(evt) => {
+          onSubmit={async (evt) => {
             evt.preventDefault()
             const pb = getClientPocketBase()
             const name = evt.currentTarget.modelName.value as string
@@ -52,15 +64,32 @@ export function UploadModel() {
             const file = evt.currentTarget.file.files[0]
             const owner = pb.authStore.model?.id as string
             const formData = new FormData()
+            const sizeInMb = Math.ceil(file.size / 1024 / 1024)
             formData.append('name', name)
             formData.append('type', type)
             formData.append('file', file)
             formData.append('img', thumbnail)
             formData.append('owner', owner)
+            formData.append('size', sizeInMb.toString())
 
-            pb.collection('models')
-              .create(formData)
-              .then(() => router.refresh())
+            try {
+              setLoading(true)
+              await pb.collection('models').create(formData)
+              await pb
+                .collection('users')
+                .update(owner, {
+                  'usage+': sizeInMb,
+                })
+                .then(() => {
+                  router.refresh()
+                  setOpen(false)
+                })
+                .then(() => {
+                  setLoading(false)
+                })
+            } catch (err) {
+              setLoading(false)
+            }
           }}
           className="grid gap-4"
         >
@@ -84,6 +113,7 @@ export function UploadModel() {
           <Separator className="my-4" />
           <Button variant="secondary" className="" type="submit">
             Save
+            {loading && <Loader2 className="animate-spin ml-1 h-4 w-4" />}
           </Button>
         </form>
       </DialogContent>
