@@ -30,10 +30,10 @@ export function Upload(props: {
           if (!file) return
           const size = file.size / 1024 / 1024
           // max 2mb
-          if (size > 2) {
-            alert('File size is too big')
-            return
-          }
+          // if (size > 2) {
+          //   alert('File size is too big')
+          //   return
+          // }
           const reader = new FileReader()
           reader.onload = (e) => {
             const buffer = reader.result as ArrayBuffer

@@ -71,6 +71,7 @@ export function UploadModel() {
             formData.append('img', thumbnail)
             formData.append('owner', owner)
             formData.append('size', sizeInMb.toString())
+            formData.append('scale', '1')
 
             try {
               setLoading(true)

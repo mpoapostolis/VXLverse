@@ -25,18 +25,35 @@ type Sound = {
   mp3: string
 }
 
+type Image = {
+  name: string
+  url: string
+}
+
 export function SceneModal(props: { onClick?: () => void; new?: boolean; children?: React.ReactNode }) {
   const store = useStore()
   const verb = props.new ? 'Create' : 'Edit'
   const selectedScene = store.scenes?.find((scene) => scene.uuid === store.currentScene)
   const [scene, setScene] = useState<string | undefined>()
   const pb = getClientPocketBase()
+  const [bg, setBg] = useState<string>('Sky')
 
-  const { data: sounds } = useSWR<Sound[]>('/api/sounds', () =>
+  const { data: sounds } = useSWR<Sound[]>('sounds', () =>
     pb
       .collection('sounds')
-      .getList()
-      .then((e) => e.items.map((item) => ({ name: item.name, mp3: pb.getFileUrl(item, item.mp3) }))),
+      .getFullList({
+        filter: `owner="${pb?.authStore?.model?.id}"`,
+      })
+      .then((e) => e.map((item) => ({ name: item.name, mp3: pb.getFileUrl(item, item.mp3) }))),
+  )
+
+  const { data: images } = useSWR<Image[]>('images', () =>
+    pb
+      .collection('images')
+      .getFullList({
+        filter: `owner="${pb?.authStore?.model?.id}"`,
+      })
+      .then((e) => e.map((item) => ({ name: item.name, url: pb.getFileUrl(item, item.file) }))),
   )
 
   return (
@@ -67,7 +84,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
         </DialogHeader>
         <Separator className="my-2" />
 
-        <div className="grid  items-center gap-2 ">
+        <div className="grid  items-center gap-2">
           <Label className=" w-full text-sm font-medium">Name</Label>
           <input
             onChange={(evt) => {
@@ -89,32 +106,7 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
             rows={5}
             className="rounded-none w-full  bg-background  p-2 text-xs leading-none outline-none"
           />
-          <Label className=" w-full text-sm font-medium">Sky</Label>
-          <Select
-            className="border-none h-8 bg-background"
-            options={[
-              'sunset',
-              'dawn',
-              'night',
-              'warehouse',
-              'forest',
-              'apartment',
-              'studio',
-              'city',
-              'park',
-              'lobby',
-            ].map((o) => ({
-              label: o,
-              value: o,
-            }))}
-            value={selectedScene?.skyBox}
-            onChange={(val) => {
-              selectedScene &&
-                store.updateScene(selectedScene.uuid, {
-                  skyBox: val ?? undefined,
-                })
-            }}
-          />
+
           <Label className=" w-full text-sm font-medium">Background music</Label>
           <Select
             controlled
@@ -134,18 +126,88 @@ export function SceneModal(props: { onClick?: () => void; new?: boolean; childre
             }}
           />
 
-          <Label className=" mr-auto w-full text-sm font-medium">Color</Label>
-          <input
-            onChange={(evt) => {
-              selectedScene &&
-                store.updateScene(selectedScene.uuid, {
-                  color: evt.target.value,
-                })
-            }}
-            value={selectedScene?.color}
-            type="color"
-            className="w-20 h-10 appearance-none    p-0 file:hidden   file:text-end"
-          />
+          <Label className=" w-full text-sm font-medium">Background</Label>
+          <div className="grid  gap-4 grid-cols-2 items-center">
+            <Select
+              controlled
+              value={bg}
+              className="bg-background"
+              options={[
+                { label: 'Sky', value: 'Sky' },
+                { label: 'Equirect', value: 'Equirect' },
+                { label: 'Color', value: 'Color' },
+              ]}
+              onChange={(val) => val && setBg(val)}
+            />
+
+            {bg === 'Sky' && (
+              <Select
+                className="border-none bg-background"
+                options={[
+                  'sunset',
+                  'dawn',
+                  'night',
+                  'warehouse',
+                  'forest',
+                  'apartment',
+                  'studio',
+                  'city',
+                  'park',
+                  'lobby',
+                ].map((o) => ({
+                  label: o,
+                  value: o,
+                }))}
+                value={selectedScene?.skyBox}
+                onChange={(val) => {
+                  selectedScene &&
+                    store.updateScene(selectedScene.uuid, {
+                      skyBox: val ?? undefined,
+                      equirect: undefined,
+                      color: '#fff',
+                    })
+                }}
+              />
+            )}
+
+            {bg === 'Equirect' && (
+              <Select
+                className="border-none bg-background"
+                options={
+                  images?.map((o) => ({
+                    label: `${o.name}`,
+                    value: `${o.url}`,
+                  })) ?? []
+                }
+                value={selectedScene?.skyBox}
+                onChange={(val) => {
+                  selectedScene &&
+                    val &&
+                    store.updateScene(selectedScene.uuid, {
+                      skyBox: undefined,
+                      equirect: val,
+                      color: '#fff',
+                    })
+                }}
+              />
+            )}
+
+            {bg === 'Color' && (
+              <input
+                onChange={(evt) => {
+                  selectedScene &&
+                    store.updateScene(selectedScene.uuid, {
+                      color: evt.target.value,
+                      skyBox: undefined,
+                      equirect: undefined,
+                    })
+                }}
+                value={selectedScene?.color}
+                type="color"
+                className="w-full border-0 appearance-none    p-0 file:hidden   file:text-end"
+              />
+            )}
+          </div>
 
           <Separator />
 

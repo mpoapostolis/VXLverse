@@ -1,4 +1,5 @@
 import { useModels } from '@/lib/models/queries'
+import { getClientPocketBase } from '@/lib/pocketBase'
 import { gameTypes, useStore } from '@/store'
 import { SelectModal } from '.'
 
@@ -6,7 +7,12 @@ export function SelectModel(props: { children?: React.ReactNode; onChange?: (e?:
   const store = useStore()
   const selected = store.nodes.find((node) => node.uuid === store.selectedNode)
   const rot = selected?.rotation ?? [0, 0, 0]
+
+  const pb = getClientPocketBase()
+
   const { data: models } = useModels()
+
+  // const { data: models } = useModels()
   return (
     <SelectModal
       filters={gameTypes}
@@ -24,7 +30,7 @@ export function SelectModel(props: { children?: React.ReactNode; onChange?: (e?:
         if (props.onChange) return props.onChange(val)
         if (!selected?.uuid || !val) return
 
-        const model = models.find((model) => model.id === val)
+        const model = models?.find((model) => model.id === val)
         store.updateNode(selected.uuid, {
           ...selected,
           url: model?.url ?? '',

@@ -48,17 +48,18 @@ export default async function Page(router: {
         data-orientation="horizontal"
         className="px-4  w-full flex border-b sticky top-0 mb-2 h-10  items-center gap-4 z-50 bg-background"
       >
-        <picture>
-          <img
-            loading="lazy"
-            role="menuitem"
-            aria-label="logo"
-            src="/logo.webp"
-            className="w-6 h-6"
-            alt="VXLverse Logo"
-          />
-        </picture>
-
+        <Link href="/">
+          <picture>
+            <img
+              loading="lazy"
+              role="menuitem"
+              aria-label="logo"
+              src="/logo.webp"
+              className="w-6 h-6"
+              alt="VXLverse Logo"
+            />
+          </picture>
+        </Link>
         <Button role="menuitem" variant="link" className="ml-auto  text-foreground  hover:text-secondary">
           <Link href="/editor">Editor</Link>
         </Button>
@@ -89,7 +90,7 @@ export default async function Page(router: {
           {type === 'mp3' && <UploadMp3 />}
           {type === 'images' && <UploadSky />}
         </div>
-        <Separator className="my-8" />
+        <div className="my-8" />
 
         <div className="grid  gap-4 w-full h-full lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 xl:grid-cols-5">
           {data.items.map((item) => (
