@@ -24,7 +24,6 @@ import { SelectModel } from '@/components/selectModal/selectModel'
 import { useModels } from '@/lib/models/queries'
 import { ContextMenu } from '@radix-ui/react-context-menu'
 import {
-  CheckCircledIcon,
   DownloadIcon,
   EraserIcon,
   Pencil1Icon,
@@ -280,20 +279,11 @@ export function Menu() {
       <MenubarMenu>
         <MenubarTrigger>Help</MenubarTrigger>
         <MenubarContent>
-          <Link href={'https://docs.vxlverse.com/'} target="__blank">
+          <Link href={'https://www.youtube.com/playlist?list=PLRs4HvAKUjxJT2fjvXmb_MQfkO3PEgsxw'} target="__blank">
             <MenubarItem>
-              Documentation
+              How to use
               <MenubarShortcut>
                 <QuestionMarkCircledIcon />
-              </MenubarShortcut>
-            </MenubarItem>
-          </Link>
-          <MenubarSeparator />
-          <Link href={'https://github.com/users/mpoapostolis/projects/2/views/1'} target="__blank">
-            <MenubarItem>
-              RoadMap
-              <MenubarShortcut>
-                <CheckCircledIcon />
               </MenubarShortcut>
             </MenubarItem>
           </Link>
