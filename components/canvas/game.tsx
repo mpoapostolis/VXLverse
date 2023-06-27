@@ -11,7 +11,7 @@ import { Circle, Environment, Loader, OrbitControls, Preload, useProgress, useTe
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas } from '@react-three/fiber'
 import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
-import { Suspense, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
 import { Hero } from '../gameNode/hero'
 import { TypeWritter } from '../windText'
@@ -69,58 +69,56 @@ export function GameCanvas(props: { id?: string }) {
       )}
 
       <Canvas className="w-full h-full" camera={{ position: [0, 15, -15] }}>
-        <Suspense>
-          <fog attach="fog" args={[selectedScene?.color ?? '#000', 0, 120]} />
-          {selectedScene?.equirect ? (
-            <Env equirect={selectedScene.equirect} />
-          ) : (
-            <color attach="background" args={[selectedScene?.color ?? '#999999']} />
-          )}
-          {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
-          <Physics timeStep="vary">
-            {hero && <Hero {...hero} />}
-            {store.nodes
-              ?.filter((node) => node.scene === store.currentScene && node.gameType !== 'hero')
-              .map((node, idx) =>
-                lights.includes(node.type) ? (
-                  <mesh key={idx} position={new Vector3(...(node?.position ?? [0, 0, 0]))}>
-                    <Light type={node?.type ?? 'DirectionalLight'} />
-                  </mesh>
-                ) : (
-                  <GameNode key={idx} {...node} />
-                ),
-              )}
-            <CuboidCollider friction={0} position={[0, 0, 0]} args={[300 * 4, 0.1, 300 * 4]} />
-            {store?.goTo && hero?.uuid && (
-              <RigidBody
-                type="dynamic"
-                solverGroups={0}
-                onCollisionEnter={(t) => {
-                  if (t.target.rigidBodyObject?.name !== 'hero') return
-                  store.updateNode(hero?.uuid!, { status: 'idle' })
-                  store.setGoTo(undefined)
-                }}
-                name="goTo"
-                position={[store.goTo.x, 0.2, store.goTo.z]}
-                restitution={0}
-              >
-                <Circle rotation={[-Math.PI / 2, 0, 0]} args={[1, 32]}>
-                  <meshBasicMaterial color="blue" attach="material" transparent opacity={0.5} />
-                </Circle>
-              </RigidBody>
+        <fog attach="fog" args={[selectedScene?.color ?? '#000', 0, 120]} />
+        {selectedScene?.equirect ? (
+          <Env equirect={selectedScene.equirect} />
+        ) : (
+          <color attach="background" args={[selectedScene?.color ?? '#999999']} />
+        )}
+        {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
+        <Physics timeStep="vary">
+          {hero && <Hero key={hero.uuid} {...hero} />}
+          {store.nodes
+            ?.filter((node) => node.scene === store.currentScene && node.gameType !== 'hero')
+            .map((node, idx) =>
+              lights.includes(node.type) ? (
+                <mesh key={idx} position={new Vector3(...(node?.position ?? [0, 0, 0]))}>
+                  <Light type={node?.type ?? 'DirectionalLight'} />
+                </mesh>
+              ) : (
+                <GameNode key={node.uuid} {...node} />
+              ),
             )}
-            <OrbitControls
-              enablePan={false}
-              maxDistance={8.1}
-              maxPolarAngle={Math.PI / 2}
-              minDistance={4}
-              position={[0, -5, 0]}
-              makeDefault
-              enableDamping={false}
-            />
-          </Physics>
+          <CuboidCollider friction={0} position={[0, 0, 0]} args={[300 * 4, 0.1, 300 * 4]} />
+          {store?.goTo && hero?.uuid && (
+            <RigidBody
+              type="dynamic"
+              solverGroups={0}
+              onCollisionEnter={(t) => {
+                if (t.target.rigidBodyObject?.name !== 'hero') return
+                store.updateNode(hero?.uuid!, { status: 'idle' })
+                store.setGoTo(undefined)
+              }}
+              name="goTo"
+              position={[store.goTo.x, 0.2, store.goTo.z]}
+              restitution={0}
+            >
+              <Circle rotation={[-Math.PI / 2, 0, 0]} args={[1, 32]}>
+                <meshBasicMaterial color="blue" attach="material" transparent opacity={0.5} />
+              </Circle>
+            </RigidBody>
+          )}
+          <OrbitControls
+            enablePan={false}
+            maxDistance={8.1}
+            maxPolarAngle={Math.PI / 2}
+            minDistance={4}
+            position={[0, -5, 0]}
+            makeDefault
+            enableDamping={false}
+          />
           <Preload all />
-        </Suspense>
+        </Physics>
       </Canvas>
       <audio ref={ref} autoPlay loop controls className=" z-50 w-48 md:w-96 select-auto  pointer-events-auto " />
       <picture className="fixed top-4 left-4 z-50">
