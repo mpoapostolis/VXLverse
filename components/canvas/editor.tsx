@@ -4,20 +4,12 @@ import { Controls } from '@/components/controls'
 import { Node } from '@/components/node'
 import { useInitGame } from '@/hooks/useInitGame'
 import { GRID_SIZE, useStore } from '@/store'
-import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload, useTexture } from '@react-three/drei'
+import { Environment, GizmoHelper, GizmoViewport, OrbitControls, Preload } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas } from '@react-three/fiber'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef } from 'react'
-import { EquirectangularReflectionMapping, SRGBColorSpace } from 'three'
-
-function Env(props: { equirect: string }) {
-  const texture = useTexture(props.equirect ?? '')
-  // texture equriectangular
-  texture.mapping = EquirectangularReflectionMapping
-  texture.colorSpace = SRGBColorSpace
-  return <Environment background map={texture} />
-}
+import { Env } from '../enviroment'
 
 export function EditorCanvas() {
   const store = useStore()
@@ -46,6 +38,7 @@ export function EditorCanvas() {
   }, [])
 
   useInitGame()
+
   const cameraMoving = useRef<boolean>(false)
   const isMobile = typeof navigator !== 'undefined' && /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
   const ref = useRef<HTMLAudioElement>(null)

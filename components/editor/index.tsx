@@ -8,7 +8,7 @@ import { NodeList } from '@/components/settings/nodeList'
 import { Quests } from '@/components/settings/quests'
 import { TransformSettings } from '@/components/settings/transform'
 
-export default function Editor() {
+export function Editor() {
   return (
     <>
       <NodeList />

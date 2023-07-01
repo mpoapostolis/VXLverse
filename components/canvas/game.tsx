@@ -7,22 +7,15 @@ import { Light } from '@/components/lights'
 import { lights } from '@/components/node'
 import { useInitGame } from '@/hooks/useInitGame'
 import { useStore } from '@/store'
-import { Circle, Environment, Loader, OrbitControls, Preload, useProgress, useTexture } from '@react-three/drei'
+import { Circle, Environment, Loader, OrbitControls, Preload, useProgress } from '@react-three/drei'
 import { PresetsType } from '@react-three/drei/helpers/environment-assets'
 import { Canvas } from '@react-three/fiber'
 import { CuboidCollider, Physics, RigidBody } from '@react-three/rapier'
 import { useEffect, useRef, useState } from 'react'
-import { EquirectangularReflectionMapping, SRGBColorSpace, Vector3 } from 'three'
+import { Vector3 } from 'three'
+import { Env } from '../enviroment'
 import { Hero } from '../gameNode/hero'
 import { TypeWritter } from '../windText'
-
-function Env(props: { equirect: string }) {
-  const texture = useTexture(props.equirect ?? '')
-  // texture equriectangular
-  texture.mapping = EquirectangularReflectionMapping
-  texture.colorSpace = SRGBColorSpace
-  return <Environment background map={texture} />
-}
 
 export function GameCanvas(props: { id?: string }) {
   const store = useStore()
