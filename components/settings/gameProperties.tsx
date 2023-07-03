@@ -54,6 +54,7 @@ export function GameProperties() {
 
         <Label className=" w-full">Collectable</Label>
         <Switch
+          key={selected.uuid}
           checked={selected.collectable}
           onCheckedChange={(e) => {
             if (!selected?.uuid) return
