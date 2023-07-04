@@ -497,7 +497,8 @@ export function init() {
     user: parsedStore?.user,
     nodes: parsedStore?.nodes,
     scenes: parsedStore.scenes ?? defaultGameConf?.scenes,
-    inventory: parsedStore?.inventory ?? [],
+    // inventory: parsedStore?.inventory ?? [],
+    inventory: [],
     selectedNode: undefined,
     quests: parsedStore?.quests ?? [],
 

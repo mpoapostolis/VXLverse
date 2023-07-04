@@ -1,3 +1,4 @@
+import { getClientPocketBase } from '@/lib/pocketBase'
 import { cn } from '@/lib/utils'
 import { useStore } from '@/store'
 import { X } from 'lucide-react'
@@ -10,18 +11,12 @@ export function Dialogue() {
   const currentQuest = store.quests?.find((q) => q.uuid === store.selectedQuest)
   const currentNode = store.nodes?.find((o) => o.uuid === currentQuest?.nodeId)
   const [optionId, setOptionId] = useState<string | undefined>(undefined)
+  const [reward, setReward] = useState<string>()
 
   useEffect(() => {
     const id = currentQuest?.options?.at(0)?.uuid
     if (id) setOptionId(id)
   }, [currentQuest])
-
-  const heroNode = store.nodes?.find((n) => n.gameType === 'hero')
-
-  const npcDialogue =
-    optionId == 'false'
-      ? 'Sorry you dont have requiredItem'
-      : currentQuest?.options?.find((o) => o.uuid === optionId)?.npcText
 
   const options = currentQuest?.options?.filter((o) => o.parrentId === optionId)
 
@@ -32,6 +27,25 @@ export function Dialogue() {
   const nextDialogue = currentQuest?.options?.find((o) =>
     optionId ? o.parrentId === optionId : o.parrentId === currentQuest?.uuid,
   )
+
+  useEffect(() => {
+    if (currentOption?.action !== 'giveReward') return
+    store.addToInventory(currentOption.reward!)
+    const pb = getClientPocketBase()
+    pb.collection('models')
+      .getOne(currentOption.reward!)
+      .then((m) => {
+        setReward(`You got ${m.name}`)
+      })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentOption])
+
+  const npcDialogue = currentOption?.reward
+    ? reward
+    : optionId === 'false'
+    ? 'Sorry you dont have requiredItem'
+    : currentQuest?.options?.find((o) => o.uuid === optionId)?.npcText
+
   function close() {
     setOptionId(undefined)
     store.setSelectedQuest(undefined)
@@ -111,8 +125,10 @@ export function Dialogue() {
             <button
               onClick={() => {
                 if (!isFinished) return skip()
-
                 setOptionId(nextDialogue?.uuid)
+                if (currentOption?.action === 'giveReward') {
+                  store.updateQuest({ status: 'completed' })
+                }
                 if (!nextDialogue) store.setSelectedQuest(undefined)
               }}
               className="absolute animate-pulse border-none outline-none focus:outline-none bottom-4  right-4 font-bold text-xl w-fit"

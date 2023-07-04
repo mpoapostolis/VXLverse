@@ -2,6 +2,7 @@ import { SelectModal } from '@/components/selectModal'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
+import { useModels } from '@/lib/models/queries'
 
 import { useStore } from '@/store'
 
@@ -23,8 +24,16 @@ export function GameProperties() {
   //   .filter((reward) => reward)
 
   // const r = rewards.filter((reward) => questItems.includes(reward.id))
+  const { data: models } = useModels()
+  const r = store.quests
+    ?.map((q) => q.options)
+    .flat()
+    .map((o) => o?.reward)
+    .filter((reward) => reward)
 
-  const options = [...items].map((item) => ({
+  const rewards = models?.filter((model) => r?.includes(model.id))
+
+  const options = [...rewards, ...items].map((item) => ({
     label: `${item.name}`,
     value: `${item.id}`,
     src: `${item.img}`,

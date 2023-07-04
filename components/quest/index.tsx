@@ -1,7 +1,10 @@
+import { useModels } from '@/lib/models/queries'
 import { cn } from '@/lib/utils'
 import { OptionQuestType, useStore } from '@/store'
 import { useRef } from 'react'
 import { Select } from '../select'
+import { SelectModel } from '../selectModal/selectModel'
+import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import { Separator } from '../ui/separator'
@@ -31,6 +34,9 @@ export function Quest(
   const disabledOpts1 = children?.length > 1 ? ['think', 'say'] : []
   const parrent = quest?.options?.find((o) => o.uuid === props?.parrentId)
   const isParentThinkOrSay = ['say', 'think'].includes(`${parrent?.action}`)
+  const { data: models } = useModels()
+  const model = () => (props.reward ? models?.find((model) => model.id === props.reward)?.name : 'Select Reward')
+  console.log(store.nodes.map((e) => e.showWhenInventoryHas))
   return (
     <form
       className={cn('p-4 w-96  flex bg-card shadow-lg min-w-[200px]  z-50 gap-2 border', props.className, {
@@ -77,6 +83,7 @@ export function Quest(
             value={props?.action}
             onChange={(action) => {
               updateOption({
+                reward: undefined,
                 action: action ?? undefined,
               })
             }}
@@ -92,6 +99,31 @@ export function Quest(
             rows={2}
             className="flex w-full h-full p-2   bg-background  text-xs ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
           />
+        )}
+
+        {props?.action === 'giveReward' && (
+          <SelectModel
+            onChange={(id) => {
+              const selected = models.find((node) => node.id === id)
+              if (!selected) return
+              const nodesThatHaveOldReward = store.nodes?.filter((n) =>
+                n?.showWhenInventoryHas?.includes(`${props.reward}`),
+              )
+              nodesThatHaveOldReward?.forEach((n) => {
+                store.updateNode(n.uuid!, {
+                  showWhenInventoryHas: undefined,
+                })
+              })
+
+              updateOption({
+                reward: id,
+              })
+            }}
+          >
+            <Button size="sm" className="bg-background text-xs flex justify-start">
+              {model()}
+            </Button>
+          </SelectModel>
         )}
 
         {props?.action === 'goToScene' && (
