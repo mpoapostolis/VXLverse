@@ -42,7 +42,7 @@ export default async function Page(router: {
     owner: data.owner,
     public: data?.public,
     ...data?.store,
-    cratedBy: data?.expand?.owner?.name,
+    createdBy: data?.expand?.owner?.name,
     preview: data?.preview
       ? pb.getFileUrl(
           {
@@ -54,6 +54,7 @@ export default async function Page(router: {
         )
       : null,
   }))
+  console.log(items)
   return (
     <div className="h-screen w-screen  overflow-auto relative">
       <nav
@@ -91,6 +92,7 @@ export default async function Page(router: {
                 <GameCard
                   ownership={Boolean(pb.authStore?.model?.id && pb.authStore?.model?.id === game.owner)}
                   {...(game as Game)}
+                  createdBy={game.createdBy}
                   key={game.id}
                 />
               ))}

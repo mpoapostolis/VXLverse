@@ -12,7 +12,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 export function GameCard(
   props: Game & {
     ownership?: boolean
-    cratedBy?: string
+    createdBy?: string
   },
 ) {
   const store = useStore()
@@ -51,7 +51,7 @@ export function GameCard(
                 <h1 className="text-lg capitalize text-secondary truncate w-full font-bold">{props?.name ?? '-'}</h1>
               </div>
               <div className="flex items-center">
-                <span className="text-xs font-thin">{props?.cratedBy ?? '-'}</span>
+                <span className="text-xs font-thin">{props?.createdBy ?? '-'}</span>
                 {/*
                   No likes yet :( please implement this feature if you want to see this icon :)
                 <Button aria-label="favorite" className="w-fit ml-auto " size="sm" variant="ghost">
