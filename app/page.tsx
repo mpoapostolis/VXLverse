@@ -54,7 +54,6 @@ export default async function Page(router: {
         )
       : null,
   }))
-  console.log(items)
   return (
     <div className="h-screen w-screen  overflow-auto relative">
       <nav

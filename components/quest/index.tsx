@@ -36,7 +36,7 @@ export function Quest(
   const isParentThinkOrSay = ['say', 'think'].includes(`${parrent?.action}`)
   const { data: models } = useModels()
   const model = () => (props.reward ? models?.find((model) => model.id === props.reward)?.name : 'Select Reward')
-  console.log(store.nodes.map((e) => e.showWhenInventoryHas))
+
   return (
     <form
       className={cn('p-4 w-96  flex bg-card shadow-lg min-w-[200px]  z-50 gap-2 border', props.className, {

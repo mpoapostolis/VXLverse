@@ -71,6 +71,7 @@ export function EditorCanvas() {
           {selectedScene?.equirect ? (
             <Env equirect={selectedScene.equirect} />
           ) : (
+            // @ts-ignore
             <color attach="background" args={[selectedScene?.color ?? '#000']} />
           )}
           {selectedScene?.skyBox && <Environment background preset={selectedScene.skyBox as PresetsType} />}
