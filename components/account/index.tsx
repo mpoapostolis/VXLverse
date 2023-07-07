@@ -107,6 +107,10 @@ export function Account() {
           })
       }}
     >
+      <picture>
+
+      <img alt='google Login' src="/icons/google.svg" className="h-4 w-4 mr-2" />
+      </picture>
       Sign in
     </Button>
   )
