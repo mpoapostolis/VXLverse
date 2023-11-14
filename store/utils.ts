@@ -43,11 +43,11 @@ export const defaultNodes = [
   },
   {
     uuid: getUuid(),
-    img: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/272a4yltqlop3ry/screenshot_from_2023_05_18_11_26_08_229vE69PYJ.webp',
+    img: 'thumbnail.gif',
     gameType: 'hero',
     scene: 'main',
     position: [0, 0, 0],
-    url: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/272a4yltqlop3ry/model_vx0aomIwWV.gltf',
+    url: 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/korrigan-hat/model.gltf',
     type: 'GLTF',
     physics: 'fixed',
     animation: 'pose_chapeau',
@@ -59,16 +59,16 @@ export const defaultNodes = [
     scale: [4, 4, 4],
   },
   {
-    uuid: getUuid(),
-    img: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/94qi995e8fdxpsk/blob_4fsWvSgE0y.png',
+    uuid: "59ba755c-428e-42f6-935a-3d8022f997e7",
+    img: 'thumbnail_1.gif',
     gameType: 'characters',
     scene: 'main',
     position: [0.09574299132549347, 0, 7.714465982228768],
-    url: 'https://admin.vxlverse.com/api/files/qb8evtwonmik8ow/94qi995e8fdxpsk/model_R1EitgmWlH.gltf',
+    url: 'https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/ankou-with-cart/model.gltf',
     type: 'GLTF',
     physics: 'fixed',
     animation: '',
-    name: 'Male Skater',
+    name: 'Cart with Ankou',
 
     statusToAnimation: null,
     scale: [1, 1, 1],
@@ -90,7 +90,47 @@ export const defaultGameConf: Partial<Store> = {
   nodes: defaultNodes,
   scenes: defaultScenes,
   currentScene: defaultScenes?.at(0)?.uuid,
-  quests: [],
+  quests: [
+  {
+    "uuid": "8e77453b-f90f-44dc-8798-a6e33caf23a1",
+    "name": "Male Skater quest 1",
+    "status": "incomplete",
+    "nodeId": "59ba755c-428e-42f6-935a-3d8022f997e7",
+    "options": [
+      {
+        "uuid": "852e3975-7a27-4eca-9d20-b4b0fd78bb04",
+        "action": "ask",
+        "saidBy": "59ba755c-428e-42f6-935a-3d8022f997e7",
+        "name": "Quest 0",
+        "npcText": "Hey how are you ?"
+      },
+      {
+        "uuid": "d6a7fc44-7602-49a6-8199-3242d71da90f",
+        "name": "Bad",
+        "npcText": "😞😞",
+        "reward": "",
+        "requiredItem": "",
+        "action": "say",
+        "parrentId": "852e3975-7a27-4eca-9d20-b4b0fd78bb04",
+        "tree": [
+          "852e3975-7a27-4eca-9d20-b4b0fd78bb04"
+        ]
+      },
+      {
+        "uuid": "f173d024-33a0-43ab-9ae7-7e424c79804f",
+        "name": "Good",
+        "npcText": "😊",
+        "reward": "",
+        "requiredItem": "",
+        "action": "say",
+        "parrentId": "852e3975-7a27-4eca-9d20-b4b0fd78bb04",
+        "tree": [
+          "852e3975-7a27-4eca-9d20-b4b0fd78bb04"
+        ]
+      }
+    ]
+  }
+],
 }
 
 export const lights = ['AmbientLight', 'DirectionalLight', 'HemisphereLight', 'PointLight', 'SpotLight']
